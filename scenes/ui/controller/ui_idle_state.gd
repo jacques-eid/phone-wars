@@ -3,13 +3,13 @@ extends UIState
 
 
 func _enter(_params: Dictionary = {}) -> void:
-	controller.visible = controller.is_playable
-	controller.production_panel.hide()
-	controller.game_hud.show_idle_state()
+	ui_controller.visible = ui_controller.is_playable
+	ui_controller.production_panel.hide()
+	ui_controller.game_hud.show_idle_state()
 
 
 func _exit() -> void:
-	controller.game_hud.hide_idle_state()
+	ui_controller.game_hud.hide_idle_state()
 
 
 func _process(_delta: float) -> void:
@@ -21,25 +21,20 @@ func _physics_process(_delta: float) -> void:
 
 
 func _on_cell_tap(cell: Vector2i) -> void:
-	if controller.query_manager.get_unit_at(cell):
-		if controller.current_units_manager.can_select_unit_at_position(cell):
-			controller.current_units_manager.select_unit_at_position(cell)
-			controller.fsm.change_state(controller.unit_selected_state)
-		return
-
-	if controller.query_manager.get_building_at(cell):
-		if controller.current_buildings_manager.can_select_building_at_position(cell):
-			controller.current_buildings_manager.select_building_at_position(cell)
-			controller.fsm.change_state(controller.building_selected_state)
+	var selection_result: SelectionResult = ui_controller.active_controller.selection_attempt(cell)
+	if selection_result.value == SelectionResult.Values.UNIT:
+		ui_controller.fsm.change_state(ui_controller.unit_selected_state)
+	elif selection_result.value == SelectionResult.Values.BUILDING:
+		ui_controller.fsm.change_state(ui_controller.building_selected_state)
 
 
 func _on_long_press(cell: Vector2i) -> void:
-	controller.handle_long_press(cell)
+	ui_controller.handle_long_press(cell)
 
 
 func _on_long_press_release(_cell: Vector2i) -> void:
-	controller.game_hud.show()
-	controller.handle_long_press_release()
+	ui_controller.game_hud.show()
+	ui_controller.handle_long_press_release()
 
 	
 func _on_cancel_clicked() -> void:

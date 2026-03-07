@@ -1,11 +1,5 @@
 class_name CombatManager
 
-class CombatResult:
-	var attacker: Unit
-	var defender: Unit
-	var damage: float
-	var defender_killed: bool
-
 
 static func resolve_combat(attacker: Unit, defender: Unit, defense_terrain: float) -> CombatResult:
 	var result: CombatResult = CombatResult.new()

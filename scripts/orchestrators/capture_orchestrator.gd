@@ -11,8 +11,8 @@ func _init(cd: CapturePopup, fxs: FXService, audio: AudioService) -> void:
 	audio_service = audio
 
 
-func execute(units_manager: UnitsManager) -> void:
-	var unit: Unit = units_manager.selected_unit
+func execute(controller: HumanController) -> void:
+	var unit: Unit = controller.selected_unit
 	var result: CaptureProcess.CaptureResult = unit.capture()
 	
 	await load_capture_animation(result)
@@ -22,7 +22,7 @@ func execute(units_manager: UnitsManager) -> void:
 	await capture_dialog.animate_out()
 	clear_dialog()
 
-	units_manager.exhaust_unit()
+	controller.exhaust_unit()
 	if not result.capture_done:
 		return
 

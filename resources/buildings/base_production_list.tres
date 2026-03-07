@@ -15,28 +15,24 @@
 script = ExtResource("1_04o4c")
 unit_scene = ExtResource("2_pj11y")
 unit_profile = ExtResource("2_nu04p")
-cost = 300
 metadata/_custom_type_script = "uid://ebollv83fo6u"
 
 [sub_resource type="Resource" id="Resource_hwrbk"]
 script = ExtResource("1_04o4c")
 unit_scene = ExtResource("4_nu04p")
 unit_profile = ExtResource("4_hwrbk")
-cost = 600
 metadata/_custom_type_script = "uid://ebollv83fo6u"
 
 [sub_resource type="Resource" id="Resource_njqtt"]
 script = ExtResource("1_04o4c")
 unit_scene = ExtResource("6_3jkyn")
 unit_profile = ExtResource("6_njqtt")
-cost = 700
 metadata/_custom_type_script = "uid://ebollv83fo6u"
 
 [sub_resource type="Resource" id="Resource_m4cv5"]
 script = ExtResource("1_04o4c")
 unit_scene = ExtResource("8_gnolh")
 unit_profile = ExtResource("8_m4cv5")
-cost = 1100
 metadata/_custom_type_script = "uid://ebollv83fo6u"
 
 [resource]

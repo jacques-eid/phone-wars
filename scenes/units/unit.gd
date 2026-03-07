@@ -6,6 +6,7 @@ signal unit_killed(unit: Unit)
 
 @export var speed: float = 100.0
 @export var unit_profile: UnitProfile = null
+@export var team: Team
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
@@ -25,7 +26,6 @@ var movement_points: int
 
 var capturing_component: CapturingComponent
 
-var team: Team
 var facing: FaceDirection.Values
 
 var fsm: StateMachine
@@ -49,8 +49,8 @@ func _physics_process(delta: float) -> void:
 	fsm._physics_process(delta)
 
 
-func setup(p_team: Team) -> void:
-	set_team(p_team)
+func setup() -> void:
+	set_team(team)
 	gain_health(max_health())
 	reset_movement_points()
 	

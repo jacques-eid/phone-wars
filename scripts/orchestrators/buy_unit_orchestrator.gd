@@ -11,8 +11,8 @@ func _init(td: TeamDisplay, audio: AudioService) -> void:
 	audio_service = audio
 
 
-func execute(team: Team, entry: ProductionEntry, cell_pos: Vector2i) -> void:
-	team.buy_unit(entry, cell_pos)
+func execute(controller: HumanController, entry: ProductionEntry, cell_pos: Vector2i) -> void:
+	var funds_left: int = controller.buy_unit(entry, cell_pos)
 	var id: int = audio_service.play_loop(coin_audio, team_display.global_position)
-	await team_display.update_funds(team.funds)
+	await team_display.update_funds(funds_left)
 	audio_service.stop(id)

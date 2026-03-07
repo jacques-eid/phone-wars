@@ -12,7 +12,5 @@ metadata/_custom_type_script = "uid://cxpv1gdf3keog"
 [resource]
 script = ExtResource("1_0lp7m")
 team_name = "Grey team"
-original_colors = PackedColorArray(0.69803923, 0.0627451, 0.1882353, 1, 1, 0.4745098, 0.1882353, 1, 0.1882353, 0.31764707, 0.50980395, 1, 0.99607843, 0.6862745, 0.14509805, 1, 0, 0, 0, 1)
-replace_colors = PackedColorArray(0.32156864, 0.3764706, 0.4862745, 1, 0.54509807, 0.60784316, 0.7058824, 1, 0.1882353, 0.31764707, 0.50980395, 1, 0.7529412, 0.79607844, 0.8627451, 1, 0, 0, 0, 1)
 building_colors = SubResource("Resource_2rihq")
 metadata/_custom_type_script = "uid://ctrgdwokcfys3"

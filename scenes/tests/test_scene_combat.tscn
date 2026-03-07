@@ -23,10 +23,12 @@
 [ext_resource type="Script" uid="uid://cky8p0fqqxnii" path="res://scripts/managers/input_manager.gd" id="16_xfvij"]
 [ext_resource type="PackedScene" uid="uid://baity5p4rgu1j" path="res://scenes/ui/controller/ui_controller.tscn" id="17_px0mx"]
 [ext_resource type="Resource" uid="uid://bjb1hhcw53ena" path="res://resources/teams/blue_team.tres" id="19_k53m2"]
+[ext_resource type="Script" uid="uid://kqyvrw5mibew" path="res://scripts/managers/units_manager.gd" id="19_px0mx"]
 [ext_resource type="Resource" uid="uid://c6scialk58fws" path="res://resources/teams/grey_team.tres" id="20_n3opb"]
 [ext_resource type="PackedScene" uid="uid://qhm0o8ol2yhy" path="res://scenes/buildings/hq.tscn" id="21_l50gb"]
 [ext_resource type="Script" uid="uid://dnrk6k26be4ly" path="res://scripts/services/fx_service.gd" id="22_rqq3m"]
 [ext_resource type="Script" uid="uid://datlrsmxx1ofs" path="res://scripts/managers/music_manager.gd" id="23_rbirq"]
+[ext_resource type="Script" uid="uid://dyuwg222aiubv" path="res://scripts/managers/buildings_manager.gd" id="24_xao8q"]
 [ext_resource type="Script" uid="uid://bq66fyhh6afgc" path="res://scripts/services/audio_service.gd" id="25_r8exw"]
 [ext_resource type="PackedScene" uid="uid://bqqubrlum3m1c" path="res://scenes/services/music_service.tscn" id="27_viv5u"]
 [ext_resource type="Script" uid="uid://d1wjv47jtbmh4" path="res://scripts/services/economy_service.gd" id="29_qrvgh"]
@@ -75,69 +77,12 @@ team_profile = ExtResource("13_3tgvs")
 team_type = 0
 face_direction = 1
 
-[node name="Soldier" parent="Teams/RedTeam/UnitsManager" index="0" unique_id=1636509689 instance=ExtResource("13_v1tfe")]
-position = Vector2(216, 224)
-
-[node name="Soldier2" parent="Teams/RedTeam/UnitsManager" index="1" unique_id=666268999 instance=ExtResource("13_v1tfe")]
-position = Vector2(336, 80)
-
-[node name="Soldier3" parent="Teams/RedTeam/UnitsManager" index="2" unique_id=249402440 instance=ExtResource("13_v1tfe")]
-position = Vector2(464, 80)
-
-[node name="Soldier5" parent="Teams/RedTeam/UnitsManager" index="3" unique_id=1261344568 instance=ExtResource("13_v1tfe")]
-position = Vector2(432, 112)
-
-[node name="Soldier4" parent="Teams/RedTeam/UnitsManager" index="4" unique_id=1003911693 instance=ExtResource("13_v1tfe")]
-position = Vector2(432, 48)
-
-[node name="Recon" parent="Teams/RedTeam/UnitsManager" index="5" unique_id=138617836 instance=ExtResource("14_h65yf")]
-position = Vector2(336, 136)
-
-[node name="LightTank" parent="Teams/RedTeam/UnitsManager" index="6" unique_id=1263502315 instance=ExtResource("15_8kiat")]
-position = Vector2(176, 136)
-
-[node name="Artillery" parent="Teams/RedTeam/UnitsManager" index="7" unique_id=1470746674 instance=ExtResource("16_xdr7y")]
-position = Vector2(80, 144)
-
-[node name="Base" parent="Teams/RedTeam/BuildingsManager" index="0" unique_id=1710557616 instance=ExtResource("14_qrvgh")]
-position = Vector2(144, 80)
-
-[node name="City3" parent="Teams/RedTeam/BuildingsManager" index="1" unique_id=1881470659 instance=ExtResource("15_l50gb")]
-position = Vector2(240, 80)
-
 [node name="BlueTeam" parent="Teams" unique_id=704522067 instance=ExtResource("12_n3opb")]
 team_profile = ExtResource("19_k53m2")
 team_type = 0
 
-[node name="Soldier3" parent="Teams/BlueTeam/UnitsManager" index="0" unique_id=819430262 instance=ExtResource("13_v1tfe")]
-position = Vector2(432, 80)
-
-[node name="Recon" parent="Teams/BlueTeam/UnitsManager" index="1" unique_id=1838461170 instance=ExtResource("14_h65yf")]
-position = Vector2(240, 144)
-
-[node name="LightTank" parent="Teams/BlueTeam/UnitsManager" index="2" unique_id=1024202311 instance=ExtResource("15_8kiat")]
-position = Vector2(152, 224)
-
-[node name="Artillery" parent="Teams/BlueTeam/UnitsManager" index="3" unique_id=690157983 instance=ExtResource("16_xdr7y")]
-position = Vector2(144, 176)
-
-[node name="City2" parent="Teams/BlueTeam/BuildingsManager" index="0" unique_id=1392608708 instance=ExtResource("15_l50gb")]
-position = Vector2(176, 16)
-
-[node name="Hq" parent="Teams/BlueTeam/BuildingsManager" index="1" unique_id=1276516715 instance=ExtResource("21_l50gb")]
-position = Vector2(368, 16)
-
-[node name="Base2" parent="Teams/BlueTeam/BuildingsManager" index="2" unique_id=1229261634 instance=ExtResource("14_qrvgh")]
-position = Vector2(304, 48)
-
 [node name="NeutralTeam" parent="Teams" unique_id=103368924 instance=ExtResource("12_n3opb")]
 team_profile = ExtResource("20_n3opb")
-
-[node name="City" parent="Teams/NeutralTeam/BuildingsManager" index="0" unique_id=221388848 instance=ExtResource("15_l50gb")]
-position = Vector2(400, 80)
-
-[node name="City2" parent="Teams/NeutralTeam/BuildingsManager" index="1" unique_id=2003710634 instance=ExtResource("15_l50gb")]
-position = Vector2(304, 80)
 
 [node name="Managers" type="Node" parent="." unique_id=1967347818]
 
@@ -147,6 +92,88 @@ script = ExtResource("16_xfvij")
 [node name="MusicManager" type="Node" parent="Managers" unique_id=533400057]
 script = ExtResource("23_rbirq")
 playlist = ExtResource("2_viv5u")
+
+[node name="UnitsManager" type="Node" parent="Managers" unique_id=1341556319]
+script = ExtResource("19_px0mx")
+
+[node name="Soldier" parent="Managers/UnitsManager" unique_id=1636509689 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
+position = Vector2(216, 224)
+team = NodePath("../../../Teams/RedTeam")
+
+[node name="Soldier2" parent="Managers/UnitsManager" unique_id=666268999 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
+position = Vector2(336, 80)
+team = NodePath("../../../Teams/RedTeam")
+
+[node name="Soldier3" parent="Managers/UnitsManager" unique_id=249402440 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
+position = Vector2(464, 80)
+team = NodePath("../../../Teams/RedTeam")
+
+[node name="Soldier5" parent="Managers/UnitsManager" unique_id=1261344568 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
+position = Vector2(432, 112)
+team = NodePath("../../../Teams/RedTeam")
+
+[node name="Soldier4" parent="Managers/UnitsManager" unique_id=1003911693 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
+position = Vector2(432, 48)
+team = NodePath("../../../Teams/RedTeam")
+
+[node name="Recon" parent="Managers/UnitsManager" unique_id=138617836 node_paths=PackedStringArray("team") instance=ExtResource("14_h65yf")]
+position = Vector2(336, 136)
+team = NodePath("../../../Teams/RedTeam")
+
+[node name="LightTank" parent="Managers/UnitsManager" unique_id=1263502315 node_paths=PackedStringArray("team") instance=ExtResource("15_8kiat")]
+position = Vector2(176, 136)
+team = NodePath("../../../Teams/RedTeam")
+
+[node name="Artillery" parent="Managers/UnitsManager" unique_id=1470746674 node_paths=PackedStringArray("team") instance=ExtResource("16_xdr7y")]
+position = Vector2(80, 144)
+team = NodePath("../../../Teams/RedTeam")
+
+[node name="Soldier6" parent="Managers/UnitsManager" unique_id=819430262 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
+position = Vector2(432, 80)
+team = NodePath("../../../Teams/BlueTeam")
+
+[node name="Recon2" parent="Managers/UnitsManager" unique_id=1838461170 node_paths=PackedStringArray("team") instance=ExtResource("14_h65yf")]
+position = Vector2(240, 144)
+team = NodePath("../../../Teams/BlueTeam")
+
+[node name="LightTank2" parent="Managers/UnitsManager" unique_id=1024202311 node_paths=PackedStringArray("team") instance=ExtResource("15_8kiat")]
+position = Vector2(152, 224)
+team = NodePath("../../../Teams/BlueTeam")
+
+[node name="Artillery2" parent="Managers/UnitsManager" unique_id=690157983 node_paths=PackedStringArray("team") instance=ExtResource("16_xdr7y")]
+position = Vector2(144, 176)
+team = NodePath("../../../Teams/BlueTeam")
+
+[node name="BuildingsManager" type="Node" parent="Managers" unique_id=745942268]
+script = ExtResource("24_xao8q")
+
+[node name="Base" parent="Managers/BuildingsManager" unique_id=1710557616 node_paths=PackedStringArray("team") instance=ExtResource("14_qrvgh")]
+position = Vector2(144, 80)
+team = NodePath("../../../Teams/RedTeam")
+
+[node name="City4" parent="Managers/BuildingsManager" unique_id=1881470659 node_paths=PackedStringArray("team") instance=ExtResource("15_l50gb")]
+position = Vector2(240, 80)
+team = NodePath("../../../Teams/RedTeam")
+
+[node name="City3" parent="Managers/BuildingsManager" unique_id=1392608708 node_paths=PackedStringArray("team") instance=ExtResource("15_l50gb")]
+position = Vector2(176, 16)
+team = NodePath("../../../Teams/BlueTeam")
+
+[node name="Hq" parent="Managers/BuildingsManager" unique_id=1276516715 node_paths=PackedStringArray("team") instance=ExtResource("21_l50gb")]
+position = Vector2(368, 16)
+team = NodePath("../../../Teams/BlueTeam")
+
+[node name="Base2" parent="Managers/BuildingsManager" unique_id=1229261634 node_paths=PackedStringArray("team") instance=ExtResource("14_qrvgh")]
+position = Vector2(304, 48)
+team = NodePath("../../../Teams/BlueTeam")
+
+[node name="City" parent="Managers/BuildingsManager" unique_id=221388848 node_paths=PackedStringArray("team") instance=ExtResource("15_l50gb")]
+position = Vector2(400, 80)
+team = NodePath("../../../Teams/NeutralTeam")
+
+[node name="City2" parent="Managers/BuildingsManager" unique_id=2003710634 node_paths=PackedStringArray("team") instance=ExtResource("15_l50gb")]
+position = Vector2(304, 80)
+team = NodePath("../../../Teams/NeutralTeam")
 
 [node name="UIController" parent="." unique_id=1381616140 instance=ExtResource("17_px0mx")]
 visible = false

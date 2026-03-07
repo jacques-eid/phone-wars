@@ -13,17 +13,20 @@ enum Type {
 @export var face_direction: FaceDirection.Values = FaceDirection.Values.LEFT
 @export var funds: int = 1500
 
-@onready var units_manager: UnitsManager = $UnitsManager
-@onready var buildings_manager: BuildingsManager = $BuildingsManager
+var controller: TeamController
 
 
-func setup(grid: Grid, query_manager: QueryManager) -> void:
-	units_manager.setup(grid, query_manager, self)
-	buildings_manager.setup(grid, query_manager, self)
+func setup(
+	units_manager: UnitsManager,
+	buildings_manager: BuildingsManager,
+	terrain_manager: TerrainManager) -> void:
+	
+	if team_type == Type.PLAYABLE:
+		controller = HumanController.new(self, units_manager, buildings_manager, terrain_manager)
 	
 
 func end_turn() -> void:
-	units_manager.reset_units()
+	controller.end_turn()
 
 
 func is_playable() -> bool:
@@ -40,20 +43,7 @@ func is_same_team(team: Team) -> bool:
 
 func can_buy(entry: ProductionEntry) -> bool:
 	return entry.cost() <= funds
-
-
-func buy_unit(entry: ProductionEntry, cell_pos: Vector2i) -> void:
-	funds -= entry.cost()
-	units_manager.add_unit(entry, cell_pos, self)
 	
-
-func get_hq_count() -> int:
-	var count: int = 0
-	for building: Building in buildings_manager.buildings.values():
-		if building.type() == BuildingType.Values.HQ:
-			count +=1
-
-	return count
 
 
 # Team profile getters
@@ -80,8 +70,4 @@ func team_name() -> String:
 
 
 func get_focus_point() -> Vector2:
-	for building: Building in buildings_manager.buildings.values():
-		if building.type() == BuildingType.Values.HQ:
-			return building.position
-
-	return Vector2.ZERO
+	return controller.get_focus_point()

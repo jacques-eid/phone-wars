@@ -23,7 +23,7 @@ func _draw() -> void:
 
 	var pos: Vector2 = grid.get_world_position_from_cell(selected_pos)
 	draw_rect(
-		Rect2(pos-grid.cell_size*0.5, grid.cell_size),
+		Rect2(pos-Const.CELL_SIZE*0.5, Const.CELL_SIZE),
 		color,
 	)
 

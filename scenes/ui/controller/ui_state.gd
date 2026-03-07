@@ -2,11 +2,11 @@ class_name UIState
 extends State
 
 
-var controller: UIController
+var ui_controller: UIController
 
 func _init(state_name: String, p_controller: UIController) -> void:
 	super._init(state_name)
-	controller = p_controller
+	ui_controller = p_controller
 
 func _enter(_params: Dictionary = {}) -> void:
 	pass

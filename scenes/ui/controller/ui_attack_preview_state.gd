@@ -3,8 +3,8 @@ extends UIState
 
 
 func _enter(_params: Dictionary = {}) -> void:
-	controller.game_hud.show_attack_preview_state()
-	controller.show_combat_dialog()
+	ui_controller.game_hud.show_attack_preview_state()
+	ui_controller.show_combat_dialog()
 
 
 func _exit() -> void:
@@ -20,27 +20,17 @@ func _physics_process(_delta: float) -> void:
 
 
 func _on_cancel_clicked() -> void:
-	controller.combat_popup.animate_out()
-	controller.team_display.animate_in()
-	controller.camera_pan_enabled.emit(true)
-	controller.fsm.switch_to_previous_state()
+	ui_controller.combat_popup.animate_out()
+	ui_controller.team_display.animate_in()
+	ui_controller.camera_pan_enabled.emit(true)
+	ui_controller.fsm.switch_to_previous_state()
 
 
 func _on_attack_clicked() -> void:
-	var attacker: Unit = controller.current_units_manager.selected_unit
-	var defender: Unit = controller.current_units_manager.target_unit
-	var terrain_data: TerrainData = controller.grid.terrain_manager.get_terrain_data(defender.cell_pos)
-	var building: Building = controller.query_manager.get_building_at(defender.cell_pos)
-	var terrain_defense: float = terrain_data.defense_bonus
-
-	if building != null:
-		terrain_defense = building.defense()
-
-	controller.combat_popup.animate_out()
-	controller.game_hud.hide()
-	await controller.combat_orchestrator.execute(attacker, defender, terrain_defense)
-	controller.game_hud.show()
-	controller.team_display.animate_in()
-	controller.camera_pan_enabled.emit(true)
-	controller.fsm.change_state(controller.idle_state)
-	controller.current_units_manager.unit_attack_done()
+	ui_controller.combat_popup.animate_out()
+	ui_controller.game_hud.hide()
+	await ui_controller.combat_orchestrator.execute(ui_controller.active_controller)
+	ui_controller.game_hud.show()
+	ui_controller.team_display.animate_in()
+	ui_controller.camera_pan_enabled.emit(true)
+	ui_controller.fsm.change_state(ui_controller.idle_state)

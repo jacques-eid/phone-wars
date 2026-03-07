@@ -5,16 +5,15 @@ signal cell_short_tap(cell_position: Vector2i)
 signal cell_long_press(cell_position: Vector2i)
 signal cell_long_press_release(cell_position: Vector2i)
 
-var query_manager: QueryManager
+var units_manager: UnitsManager
 var terrain_manager: TerrainManager
 
 var building_cells := {}  # Vector2i → building
 
-var cell_size: Vector2 = Vector2(32, 32)  # default cell size
 
-func setup(input_manager: InputManager, p_query_manager: QueryManager, p_terrain_manager) -> void:
+func setup(input_manager: InputManager, p_units_manager: UnitsManager, p_terrain_manager) -> void:
 	terrain_manager = p_terrain_manager
-	query_manager = p_query_manager
+	units_manager = p_units_manager
 
 	# subscribe to input events
 	input_manager.short_tap.connect(on_short_tap)
@@ -66,7 +65,7 @@ func get_reachable_cells(unit: Unit) -> Array[Vector2i]:
 			if new_cost > unit.movement_points:
 				continue
 
-			var target_unit: Unit = query_manager.get_unit_at(neighbor)
+			var target_unit: Unit = units_manager.get_unit_at(neighbor)
 			if target_unit != null:
 				# cannot walk through enemy units
 				if not target_unit.team.is_same_team(unit.team):

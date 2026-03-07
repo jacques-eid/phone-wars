@@ -5,11 +5,11 @@ signal owner_changed()
 
 @export var building_profile: BuildingProfile
 @export var production_list: ProductionList
+@export var team: Team
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 var cell_pos: Vector2i = Vector2i.ZERO
-var team: Team
 
 var fsm: StateMachine
 var idle_state: BuildingIdleState
@@ -24,8 +24,8 @@ func _ready() -> void:
 	add_to_group("buildings")
 	
 
-func setup(p_team: Team) -> void:
-	set_team(p_team)
+func setup() -> void:
+	set_team(team)
 
 	idle_state = BuildingIdleState.new("building_idle", self)
 	selected_state = BuildingSelectedState.new("building_selected", self)
@@ -40,10 +40,7 @@ func set_team(p_team: Team) -> void:
 
 
 func captured(new_team: Team) -> void:
-	team.buildings_manager.remove_building(self)
 	set_team(new_team)
-	new_team.buildings_manager.add_building(self)
-
 	owner_changed.emit()
 
 

@@ -2,23 +2,23 @@ class_name UIBuildingSelectedState
 extends UIState
 
 func _enter(_params: Dictionary = {}) -> void:
-	controller.visible = true
-	controller.game_hud.hide()
-	controller.production_panel.show()
-	controller.team_display.animate_out()
+	ui_controller.visible = true
+	ui_controller.game_hud.hide()
+	ui_controller.production_panel.show()
+	ui_controller.team_display.animate_out()
 
-	var selected_building: Building = controller.current_buildings_manager.selected_building
-	controller.production_panel.load_production_list(
+	var selected_building: Building = ui_controller.active_controller.selected_building
+	ui_controller.production_panel.load_production_list(
 		selected_building.production_list, 
 		selected_building.team)
-	controller.show_selection_indicator()
+	ui_controller.show_selection_indicator()
 
 
 func _exit() -> void:
-	controller.game_hud.show()
-	controller.production_panel.hide()
-	controller.team_display.animate_in()
-	controller.clear_selected.emit()
+	ui_controller.game_hud.show()
+	ui_controller.production_panel.hide()
+	ui_controller.team_display.animate_in()
+	ui_controller.clear_selected.emit()
 
 
 func _process(_delta: float) -> void:
@@ -34,17 +34,17 @@ func _on_cancel_clicked() -> void:
 
 
 func _on_build_clicked(entry: ProductionEntry) -> void:
-	var selected_building: Building = controller.current_buildings_manager.selected_building
+	var selected_building: Building = ui_controller.active_controller.selected_building
 	var team: Team = selected_building.team
 	if not team.can_buy(entry):
 		return
 	
-	controller.production_panel.hide()
-	await controller.team_display.animate_in()
-	await controller.buy_unit_orchestrator.execute(team, entry, selected_building.cell_pos)
+	ui_controller.production_panel.hide()
+	await ui_controller.team_display.animate_in()
+	await ui_controller.buy_unit_orchestrator.execute(ui_controller.active_controller, entry, selected_building.cell_pos)
 	deselect_building()
 
 
 func deselect_building() -> void:
-	controller.current_buildings_manager.deselect_building()
-	controller.fsm.change_state(controller.idle_state)
+	ui_controller.active_controller.deselect_building()
+	ui_controller.fsm.change_state(ui_controller.idle_state)
