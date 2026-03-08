@@ -11,7 +11,6 @@ func _setup() -> void:
 
 
 func _enter() -> void:
-	print('entering moving state')
 	unit.animated_sprite.play("move_left")
 	currentPathIndex = 0
 

@@ -9,7 +9,6 @@ func _setup() -> void:
 
 
 func _enter() -> void:
-	print('entering done state')
 	unit.exhausted = true
 	unit.facing = unit.team.face_direction
 	unit.reset_movement_points()

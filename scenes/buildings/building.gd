@@ -11,11 +11,6 @@ signal owner_changed()
 
 var cell_pos: Vector2i = Vector2i.ZERO
 
-var fsm: StateMachine
-var idle_state: BuildingIdleState
-var selected_state: BuildingSelectedState
-var done_state: BuildingDoneState
-
 
 func _ready() -> void:
 	# Make the material unique to this instance
@@ -26,12 +21,6 @@ func _ready() -> void:
 
 func setup() -> void:
 	set_team(team)
-
-	idle_state = BuildingIdleState.new("building_idle", self)
-	selected_state = BuildingSelectedState.new("building_selected", self)
-	done_state = BuildingDoneState.new("building_done", self)
-
-	fsm = StateMachine.new(name, idle_state)
 
 
 func set_team(p_team: Team) -> void:

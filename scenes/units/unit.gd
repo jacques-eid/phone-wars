@@ -102,7 +102,6 @@ func set_capture_component() -> void:
 
 
 func select() -> void:
-	print('SELECT UNIT')
 	state_machine.dispatch(SELECTED_SIGNAL)
 
 

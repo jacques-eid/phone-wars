@@ -20,6 +20,24 @@ signal end_turn()
 signal exit_level()
 
 
+const ATTACK_CLICKED = "attack_clicked"
+const BUILD_CLICKED = "build_clicked"
+const CANCEL_CLICKED = "cancel_clicked"
+const CELL_TAP = "cell_tap"
+const LONG_PRESS = "long_press"
+const LONG_PRESS_RELEASE = "long_press_release"
+
+
+const UNIT_SELECTED_SIGNAL = "unit_selected_signal"
+const UNIT_DESELECTED_SIGNAL = "unit_deselected_signal"
+const BUILDING_SELECTED_SIGNAL = "building_selected_signal"
+const BUILDING_DESELECTED_SIGNAL = "building_deselected_signal"
+const ATTACK_SIGNAL = "attack_signal"
+const ATTACK_CANCELLED_SIGNAL = "attack_cancelled_signal"
+const ATTACK_DONE_SIGNAL = "attack_done_signal"
+const RESET_SIGNAL = "reset_signal"
+
+
 @onready var game_hud: GameHUD = $GameHUD
 @onready var settings_hud: SettingsHUD = $SettingsHud
 @onready var team_display: TeamDisplay = $TeamDisplay
@@ -43,11 +61,10 @@ var merge_units_orchestrator: MergeUnitsOrchestrator
 var movement_orchestrator: MovementOrchestrator
 var start_turn_orchestrator: StartTurnOrchestrator
 
-var fsm: StateMachine
+var state_machine: LimboHSM
 var idle_state: UIIdleState
 var unit_selected_state: UIUnitSelectedState
 var building_selected_state: UIBuildingSelectedState
-var moved_state: UIMovedState
 var attack_preview_state: UIAttackPreviewState
 
 var active_controller: HumanController
@@ -62,13 +79,8 @@ func setup(p_level_manager: LevelManager) -> void:
 	movement_orchestrator = MovementOrchestrator.new(p_level_manager.audio_service)
 	start_turn_orchestrator = StartTurnOrchestrator.new(start_turn_animation, team_display, p_level_manager.audio_service)
 
-	idle_state = UIIdleState.new("ui_idle", self)
-	unit_selected_state = UIUnitSelectedState.new("ui_unit_selected", self)
-	building_selected_state = UIBuildingSelectedState.new("ui_building_selected", self)
-	moved_state = UIMovedState.new("ui_moved", self)
-	attack_preview_state = UIAttackPreviewState.new("ui_attack_preview", self)
 
-	fsm = StateMachine.new(name, idle_state)
+	init_state_machine()
 
 	grid.cell_short_tap.connect(on_cell_tap)
 	grid.cell_long_press.connect(on_long_press)
@@ -91,29 +103,51 @@ func setup(p_level_manager: LevelManager) -> void:
 	production_panel.build_clicked.connect(on_build_clicked)
 
 
+func init_state_machine() -> void:
+	idle_state = UIIdleState.new()
+	unit_selected_state = UIUnitSelectedState.new()
+	building_selected_state = UIBuildingSelectedState.new()
+	attack_preview_state = UIAttackPreviewState.new()
+	
+	state_machine = LimboHSM.new()
+	add_child(state_machine)
+	state_machine.add_child(idle_state)
+	state_machine.add_child(unit_selected_state)
+	state_machine.add_child(building_selected_state)
+	state_machine.add_child(attack_preview_state)
+
+	state_machine.add_transition(idle_state, unit_selected_state, UNIT_SELECTED_SIGNAL)
+	state_machine.add_transition(idle_state, building_selected_state, BUILDING_SELECTED_SIGNAL)
+	state_machine.add_transition(unit_selected_state, idle_state, UNIT_DESELECTED_SIGNAL)
+	state_machine.add_transition(building_selected_state, idle_state, BUILDING_DESELECTED_SIGNAL)
+	state_machine.add_transition(unit_selected_state, attack_preview_state, ATTACK_SIGNAL)
+	state_machine.add_transition(attack_preview_state, unit_selected_state, ATTACK_CANCELLED_SIGNAL)
+	state_machine.add_transition(attack_preview_state, idle_state, ATTACK_DONE_SIGNAL)
+	state_machine.add_transition(state_machine.ANYSTATE, idle_state, RESET_SIGNAL)
+
+	state_machine.initial_state = idle_state
+	state_machine.initialize(self)
+	state_machine.set_active(true)
+
+
 func on_cell_tap(cell: Vector2i) -> void:
-	var state: UIState = fsm.current_state as UIState
-	state._on_cell_tap(cell)
+	state_machine.dispatch(CELL_TAP, cell)
 
 
 func on_long_press(cell: Vector2i) -> void:
-	var state: UIState = fsm.current_state as UIState
-	state._on_long_press(cell)
+	state_machine.dispatch(LONG_PRESS, cell)
 
 	
-func on_long_press_release(cell: Vector2i) -> void:
-	var state: UIState = fsm.current_state as UIState
-	state._on_long_press_release(cell)
+func on_long_press_release(_cell: Vector2i) -> void:
+	state_machine.dispatch(LONG_PRESS_RELEASE)
 
 
 func on_cancel_clicked() -> void:
-	var state: UIState = fsm.current_state as UIState
-	state._on_cancel_clicked()
+	state_machine.dispatch(CANCEL_CLICKED)
 
 
-func on_build_clicked(entry: ProductionEntry) ->void:
-	var state: UIState = fsm.current_state as UIState
-	state._on_build_clicked(entry)
+func on_build_clicked(entry: ProductionEntry) -> void:
+	state_machine.dispatch(BUILD_CLICKED, entry)
 
 
 func on_settings_clicked() -> void:
@@ -132,7 +166,7 @@ func on_resume_clicked() -> void:
 
 func on_idle_clicked() -> void:
 	active_controller.exhaust_unit()
-	fsm.change_state(idle_state)
+	state_machine.dispatch(UNIT_DESELECTED_SIGNAL)
 
 
 func on_capture_clicked() -> void:
@@ -147,24 +181,23 @@ func on_capture_clicked() -> void:
 	game_hud.show()
 	team_display.animate_in()
 	camera_pan_enabled.emit(true)
-	fsm.change_state(idle_state)
+	state_machine.dispatch(UNIT_DESELECTED_SIGNAL)
 
 
 func on_merge_clicked() -> void:
 	await merge_units_orchestrator.execute(active_controller)
-	fsm.change_state(idle_state)
+	state_machine.dispatch(UNIT_DESELECTED_SIGNAL)
 
 
 func on_attack_clicked() -> void:
-	var state: UIState = fsm.current_state as UIState
-	state._on_attack_clicked()
+	state_machine.dispatch(ATTACK_CLICKED)
 	
 
 func switch_team(new_team: Team) -> void:
 	is_playable = new_team.is_playable()
 	if is_playable:
 		active_controller = new_team.controller
-	fsm.change_state(idle_state)
+	state_machine.dispatch(RESET_SIGNAL)
 
 
 func show_start_turn_intro(team: Team, new_funds: int) -> void:
@@ -208,14 +241,13 @@ func handle_unit_movement(cell: Vector2i) -> void:
 	clear_movement_range.emit()
 	clear_selected.emit()
 	await movement_orchestrator.execute(active_controller, cell)
-	fsm.change_state(moved_state)
 
 
 func handle_unit_attack(cell: Vector2i) -> void:
 	# Selected unit can attack without moving
 	if active_controller.can_attack_without_moving(cell):
 		active_controller.set_target_unit(cell)
-		fsm.change_state(attack_preview_state)
+		state_machine.dispatch(ATTACK_SIGNAL)
 		return
 
 	# Unit first need to move
@@ -226,8 +258,7 @@ func handle_unit_attack(cell: Vector2i) -> void:
 	var best_cell: Vector2i = active_controller.choose_best_attack_position(cell)
 	active_controller.set_target_unit(cell)
 	await movement_orchestrator.execute(active_controller, best_cell)
-	fsm.change_state(moved_state)
-	fsm.change_state(attack_preview_state)
+	state_machine.dispatch(ATTACK_SIGNAL)
 
 
 func handle_long_press(cell: Vector2i) -> void:

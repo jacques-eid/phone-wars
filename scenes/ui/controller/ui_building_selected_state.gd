@@ -1,7 +1,18 @@
 class_name UIBuildingSelectedState
-extends UIState
+extends LimboState
 
-func _enter(_params: Dictionary = {}) -> void:
+
+var ui_controller: UIController
+
+
+func _setup() -> void:
+	ui_controller = agent
+
+	add_event_handler(ui_controller.CANCEL_CLICKED, _on_cancel_clicked)
+	add_event_handler(ui_controller.BUILD_CLICKED, _on_build_clicked)
+
+
+func _enter() -> void:
 	ui_controller.visible = true
 	ui_controller.game_hud.hide()
 	ui_controller.production_panel.show()
@@ -21,30 +32,30 @@ func _exit() -> void:
 	ui_controller.clear_selected.emit()
 
 
-func _process(_delta: float) -> void:
-	pass
-
-
-func _physics_process(_delta: float) -> void:
-	pass
-
-
-func _on_cancel_clicked() -> void:
+func _on_cancel_clicked() -> bool:
 	deselect_building()
+	return true
 
 
-func _on_build_clicked(entry: ProductionEntry) -> void:
+func _on_build_clicked(cargo: Variant) -> bool:
+	if not cargo is ProductionEntry:
+		return true
+
+	var entry: ProductionEntry = cargo as ProductionEntry
+
 	var selected_building: Building = ui_controller.active_controller.selected_building
 	var team: Team = selected_building.team
 	if not team.can_buy(entry):
-		return
+		return true
 	
 	ui_controller.production_panel.hide()
 	await ui_controller.team_display.animate_in()
 	await ui_controller.buy_unit_orchestrator.execute(ui_controller.active_controller, entry, selected_building.cell_pos)
 	deselect_building()
 
+	return true
+
 
 func deselect_building() -> void:
 	ui_controller.active_controller.deselect_building()
-	ui_controller.fsm.change_state(ui_controller.idle_state)
+	ui_controller.state_machine.dispatch(ui_controller.BUILDING_DESELECTED_SIGNAL)

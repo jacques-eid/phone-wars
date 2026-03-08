@@ -9,7 +9,6 @@ func _setup() -> void:
 
 
 func _enter(_params: Dictionary = {}) -> void:
-	print('entering selected state')
 	unit.idling()
 	unit.animated_sprite.modulate = Color(0, 1, 0)  # Change color to green when selected
 	
