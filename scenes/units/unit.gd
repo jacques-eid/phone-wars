@@ -28,25 +28,23 @@ var capturing_component: CapturingComponent
 
 var facing: FaceDirection.Values
 
-var fsm: StateMachine
+var state_machine: LimboHSM
 var idle_state: UnitIdleState
 var moving_state: UnitMovingState
 var selected_state: UnitSelectedState
 var done_state: UnitDoneState
+
+const SELECTED_SIGNAL: String = "selected"
+const DESELECTED_SIGNAL: String = "deselected"
+const MOVE_SIGNAL: String = "move"
+const EXHAUSTED_SIGNAL: String = "exhausted"
+const RESET_SIGNAL: String = "reset"
 
 
 func _ready() -> void:
 	# Make the material unique to this instance
 	animated_sprite.material = animated_sprite.material.duplicate()
 	z_index = Ordering.UNITS
-
-
-func _process(delta: float) -> void:
-	fsm._process(delta)
-
-
-func _physics_process(delta: float) -> void:
-	fsm._physics_process(delta)
 
 
 func setup() -> void:
@@ -57,12 +55,33 @@ func setup() -> void:
 	if unit_profile.capture_capacity > 0:
 		set_capture_component()
 	
-	idle_state = UnitIdleState.new("unit_idle", self)
-	moving_state = UnitMovingState.new("unit_moving", self)
-	selected_state = UnitSelectedState.new("unit_selected", self)
-	done_state = UnitDoneState.new("unit_done", self)
+	init_state_machine()
 
-	fsm = StateMachine.new(name, idle_state)
+
+func init_state_machine() -> void:
+	idle_state = UnitIdleState.new()
+	moving_state = UnitMovingState.new()
+	selected_state = UnitSelectedState.new()
+	done_state = UnitDoneState.new()
+
+	state_machine = LimboHSM.new()
+	add_child(state_machine)
+	state_machine.add_child(idle_state)
+	state_machine.add_child(moving_state)
+	state_machine.add_child(selected_state)
+	state_machine.add_child(done_state)
+
+	state_machine.add_transition(idle_state, selected_state, SELECTED_SIGNAL)
+	state_machine.add_transition(selected_state, idle_state, DESELECTED_SIGNAL)
+	state_machine.add_transition(selected_state, moving_state, MOVE_SIGNAL)
+	state_machine.add_transition(moving_state, selected_state, moving_state.EVENT_FINISHED)
+	state_machine.add_transition(state_machine.ANYSTATE, done_state, EXHAUSTED_SIGNAL)
+	state_machine.add_transition(done_state, idle_state, RESET_SIGNAL)
+
+	state_machine.initial_state = idle_state
+	state_machine.initialize(self)
+	state_machine.set_active(true)
+
 
 
 func set_team(p_team: Team) -> void:
@@ -83,19 +102,20 @@ func set_capture_component() -> void:
 
 
 func select() -> void:
-	fsm.change_state(selected_state)
+	print('SELECT UNIT')
+	state_machine.dispatch(SELECTED_SIGNAL)
 
 
 func deselect() -> void:
-	fsm.change_state(idle_state)
+	state_machine.dispatch(DESELECTED_SIGNAL)
 
 
 func exhaust() -> void:
-	fsm.change_state(done_state)
+	state_machine.dispatch(EXHAUSTED_SIGNAL)
 
 
 func ready_to_move() -> void:
-	fsm.change_state(idle_state)
+	state_machine.dispatch(RESET_SIGNAL)
 	
 
 func idling() -> void:
@@ -109,7 +129,8 @@ func move_following_path(p: Array[Vector2]) -> void:
 
 	print("Unit moving along path: %s" % str(p))
 
-	fsm.change_state(moving_state, {"path": p})
+	moving_state.path = p
+	state_machine.dispatch(MOVE_SIGNAL)
 
 
 func reset_movement_points() -> void:

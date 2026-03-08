@@ -1,28 +1,26 @@
 class_name UnitMovingState
-extends State
+extends LimboState
 
 var unit: Unit
 
 var path: Array[Vector2] = []
 var currentPathIndex: int = 0
 
-func _init(state_name: String, p_unit: Unit) -> void:
-	super._init(state_name)
-	unit = p_unit
+func _setup() -> void:
+	unit = agent
 
 
-func _enter(params: Dictionary = {}) -> void:
+func _enter() -> void:
+	print('entering moving state')
 	unit.animated_sprite.play("move_left")
 	currentPathIndex = 0
-	path = params.get("path", [])
 
 	# means that the unit stick on the same cell
 	if path.size() <= 1:
-		unit.fsm.change_state(unit.idle_state)
+		dispatch(EVENT_FINISHED)
 		unit.unit_moved.emit()
 		return
 
-	print("stop_capture")
 	unit.stop_capture()
 
 
@@ -31,13 +29,9 @@ func _exit() -> void:
 	path.clear()
 
 
-func _process(_delta: float) -> void:
-	pass
-
-
-func _physics_process(delta: float) -> void:
+func _update(delta: float) -> void:
 	if currentPathIndex >= path.size():
-		unit.fsm.change_state(unit.idle_state)
+		dispatch(EVENT_FINISHED)
 		unit.unit_moved.emit()
 		return
 

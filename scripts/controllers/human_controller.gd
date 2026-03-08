@@ -41,6 +41,7 @@ func selection_attempt(cell: Vector2i) -> SelectionResult:
 		if not unit.exhausted and unit.team == team:
 			selected_unit = unit
 			selected_unit.reachable_cells = units_manager.compute_reachable_cells(selected_unit)
+			selected_unit.select()
 			return SelectionResult.new(SelectionResult.Values.UNIT)
 		return SelectionResult.new(SelectionResult.Values.NONE)
 
