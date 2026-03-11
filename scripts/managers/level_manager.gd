@@ -18,9 +18,9 @@ extends Node2D
 @onready var input_manager: InputManager = $Managers/InputManager
 @onready var music_manager: MusicManager = $Managers/MusicManager
 @onready var fx_service: FXService = $Services/FXService
-@onready var audio_service: AudioService = $Services/AudioService
 @onready var music_service: MusicService = $Services/MusicService
 @onready var economy_service: EconomyService = $Services/EconomyService
+
 
 var teams: Array[Team] = []
 var active_team: Team
@@ -38,10 +38,10 @@ func _ready() -> void:
 
 	init_teams()
 
-	ui_controller.game_paused.connect(on_game_paused)
-	ui_controller.game_resumed.connect(on_game_resumed)
-	ui_controller.exit_level.connect(exit_level)
-	ui_controller.end_turn.connect(on_end_turn)
+	ui_controller.game_paused.connect(_on_game_paused)
+	ui_controller.game_resumed.connect(_on_game_resumed)
+	ui_controller.exit_level.connect(_on_exit_level)
+	ui_controller.end_turn.connect(_on_end_turn)
 
 	call_deferred("connect_buildings")
 	
@@ -77,7 +77,7 @@ func start_turn() -> void:
 	await camera_controller.focus_on(focus_point)
 
 
-func on_end_turn() -> void:
+func _on_end_turn() -> void:
 	active_team.end_turn()
 	active_team = next_team(active_team)
 
@@ -85,11 +85,11 @@ func on_end_turn() -> void:
 	start_turn()
 
 
-func on_game_paused() -> void:
+func _on_game_paused() -> void:
 	input_manager.lock()
 
 
-func on_game_resumed() -> void:
+func _on_game_resumed() -> void:
 	input_manager.unlock()
 
 
@@ -116,8 +116,8 @@ func connect_buildings() -> void:
 func building_owner_changed() -> void:
 	for team: Team in teams:
 		if buildings_manager.get_hq_count(team) == 0:
-			exit_level()
+			_on_exit_level()
 
 
-func exit_level() -> void:
+func _on_exit_level() -> void:
 	get_tree().change_scene_to_packed(main_menu_scene)

@@ -29,7 +29,6 @@
 [ext_resource type="Script" uid="uid://dnrk6k26be4ly" path="res://scripts/services/fx_service.gd" id="22_rqq3m"]
 [ext_resource type="Script" uid="uid://datlrsmxx1ofs" path="res://scripts/managers/music_manager.gd" id="23_rbirq"]
 [ext_resource type="Script" uid="uid://dyuwg222aiubv" path="res://scripts/managers/buildings_manager.gd" id="24_xao8q"]
-[ext_resource type="Script" uid="uid://bq66fyhh6afgc" path="res://scripts/services/audio_service.gd" id="25_r8exw"]
 [ext_resource type="PackedScene" uid="uid://bqqubrlum3m1c" path="res://scenes/services/music_service.tscn" id="27_viv5u"]
 [ext_resource type="Script" uid="uid://d1wjv47jtbmh4" path="res://scripts/services/economy_service.gd" id="29_qrvgh"]
 [ext_resource type="Script" uid="uid://cat2b24w7wkt2" path="res://scripts/controllers/camera_controller.gd" id="30_v1tfe"]
@@ -182,9 +181,6 @@ visible = false
 
 [node name="FXService" type="Node2D" parent="Services" unique_id=697795366]
 script = ExtResource("22_rqq3m")
-
-[node name="AudioService" type="Node" parent="Services" unique_id=1762001821]
-script = ExtResource("25_r8exw")
 
 [node name="MusicService" parent="Services" unique_id=1899524217 instance=ExtResource("27_viv5u")]
 

@@ -33,7 +33,8 @@ func _exit() -> void:
 
 
 func _on_cancel_clicked() -> bool:
-	deselect_building()
+	ui_controller.active_controller.deselect_building()
+	ui_controller.state_machine.dispatch(ui_controller.RESET_SIGNAL)
 	return true
 
 
@@ -41,21 +42,5 @@ func _on_build_clicked(cargo: Variant) -> bool:
 	if not cargo is ProductionEntry:
 		return true
 
-	var entry: ProductionEntry = cargo as ProductionEntry
-
-	var selected_building: Building = ui_controller.active_controller.selected_building
-	var team: Team = selected_building.team
-	if not team.can_buy(entry):
-		return true
-	
-	ui_controller.production_panel.hide()
-	await ui_controller.team_display.animate_in()
-	await ui_controller.buy_unit_orchestrator.execute(ui_controller.active_controller, entry, selected_building.cell_pos)
-	deselect_building()
-
+	ui_controller.handle_build_async(cargo as ProductionEntry)
 	return true
-
-
-func deselect_building() -> void:
-	ui_controller.active_controller.deselect_building()
-	ui_controller.state_machine.dispatch(ui_controller.BUILDING_DESELECTED_SIGNAL)

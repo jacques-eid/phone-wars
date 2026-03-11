@@ -29,7 +29,7 @@ func _draw() -> void:
 
 
 func show_cells(new_cells: Array[Vector2i]):
-	cells = new_cells
+	cells = new_cells.duplicate()
 	queue_redraw()
 
 

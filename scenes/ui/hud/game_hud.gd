@@ -45,6 +45,7 @@ func show_attack_preview_state() -> void:
 
 
 func show_idle_state() -> void:
+	visible = true
 	action_panel.visible = false
 	cancel_button.visible = false
 	end_turn_button.visible = true

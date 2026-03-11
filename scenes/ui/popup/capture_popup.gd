@@ -12,7 +12,7 @@ extends BasePopup
 @onready var building_icon_wrapper: Control = $PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2/BuildingIconWrapper
 
 
-func load(result: CaptureProcess.CaptureResult) -> void:
+func load(result: CaptureResult) -> void:
     capture_points_label.text = "%s" % result.previous_capture_points
     max_capture_points_label.text = "%s" % result.max_capture_points
 
@@ -32,7 +32,7 @@ func load(result: CaptureProcess.CaptureResult) -> void:
     result.building.team.replace_building_colors(building_icon.material)
 
 
-func update(result: CaptureProcess.CaptureResult) -> void:
+func update(result: CaptureResult) -> void:
     var tween = create_tween()
     tween.set_parallel(true)
 
@@ -55,10 +55,10 @@ func update(result: CaptureProcess.CaptureResult) -> void:
 
 
 
-func play_unit_attack(fx_service: FXService, audio_service: AudioService) -> void:
-    await unit_proxy.play_attack(fx_service, audio_service)
+func play_unit_attack(fx_service: FXService) -> void:
+    await unit_proxy.play_attack(fx_service)
 
 
-func play_building_impacts(fx_service: FXService, audio_service: AudioService) -> void:
+func play_building_impacts(fx_service: FXService) -> void:
     var weapon: Weapon = unit_proxy.weapon
-    weapon._play_impact(unit_proxy.facing, building_icon, fx_service.play_ui_fx, audio_service)
+    weapon._play_impact(unit_proxy.facing, building_icon, fx_service.play_ui_fx)

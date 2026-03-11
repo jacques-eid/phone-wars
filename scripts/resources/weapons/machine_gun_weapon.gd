@@ -7,13 +7,13 @@ extends Weapon
 @export var spread_radius := 2.0
 
 
-func _play_fire(attacker: Node2D, spawn_pos: Vector2, play_fx_func: Callable, audio_service: AudioService) -> void:
+func _play_fire(attacker: Node2D, spawn_pos: Vector2, play_fx_func: Callable) -> void:
 	for i in burst_count:
-		spawn_bullet_flash(attacker, spawn_pos, play_fx_func, audio_service)
+		spawn_bullet_flash(attacker, spawn_pos, play_fx_func)
 		await attacker.get_tree().create_timer(burst_interval).timeout
 
 
-func spawn_bullet_flash(attacker: Node2D, spawn_pos: Vector2, play_fx_func: Callable, audio_service: AudioService):
+func spawn_bullet_flash(attacker: Node2D, spawn_pos: Vector2, play_fx_func: Callable):
 	# Anchor around attacker, biased toward target
 	var dir: Vector2 = Vector2(-1, 0)
 	var base_pos: Vector2 = spawn_pos
@@ -29,16 +29,16 @@ func spawn_bullet_flash(attacker: Node2D, spawn_pos: Vector2, play_fx_func: Call
 	
 	var world_pos: Vector2 = base_pos+offset
 	play_fx_func.call(fire_scene, world_pos, dir.angle())
-	audio_service.play_sfx(fire_sound, world_pos)
+	AudioService.play_sfx(fire_sound, world_pos)
 
 
-func _play_impact(attacker_facing: FaceDirection.Values, defender: Node2D, play_fx_func: Callable, audio_service: AudioService) -> void:
+func _play_impact(attacker_facing: FaceDirection.Values, defender: Node2D, play_fx_func: Callable) -> void:
 	for i in burst_count:
-		spawn_bullet_impact(attacker_facing, defender, play_fx_func, audio_service)
+		spawn_bullet_impact(attacker_facing, defender, play_fx_func)
 		await defender.get_tree().create_timer(burst_interval).timeout
 
 
-func spawn_bullet_impact(attacker_facing: FaceDirection.Values, defender: Node2D, play_fx_func: Callable, audio_service: AudioService):
+func spawn_bullet_impact(attacker_facing: FaceDirection.Values, defender: Node2D, play_fx_func: Callable):
 	# Anchor around attacker, biased toward target
 	var dir: Vector2 = Vector2(-1, 0)
 	var base_pos: Vector2 = defender.global_position
@@ -55,4 +55,4 @@ func spawn_bullet_impact(attacker_facing: FaceDirection.Values, defender: Node2D
 	
 	var world_pos: Vector2 = base_pos+offset
 	play_fx_func.call(hit_scene, world_pos, dir.angle())
-	audio_service.play_sfx(hit_sound, world_pos)
+	AudioService.play_sfx(hit_sound, world_pos)

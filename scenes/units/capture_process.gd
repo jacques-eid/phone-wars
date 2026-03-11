@@ -2,26 +2,14 @@ class_name CaptureProcess
 extends Resource
 
 
-class CaptureResult:
-	var building: Building
-	var unit: Unit
-
-	var max_capture_points: int
-	var previous_capture_points: int
-	var new_capture_points: int
-	var capture_done: bool
-
-
 var building: Building
-var unit: Unit
 var capturing_component: CapturingComponent
 var progress: int
 
-func _init(build: Building, u: Unit) -> void:
+func _init(build: Building, unit: Unit) -> void:
 	building = build
 	progress = building.max_capture_points()
-	unit = u
-	capturing_component = u.capturing_component
+	capturing_component = unit.capturing_component
 	capturing_component.show()
 	
 
@@ -32,7 +20,7 @@ static func load_from_capture_process(cp: CaptureProcess) -> CaptureProcess:
 	return new_cp
 	
 
-func resolve() -> CaptureResult:
+func resolve(unit: Unit) -> CaptureResult:
 	var result: CaptureResult = CaptureResult.new()
 	result.building = building
 	result.unit = unit
@@ -54,7 +42,7 @@ func resolve() -> CaptureResult:
 	return result
 
 	
-func capture_done() -> void:	
+func capture_done(unit: Unit) -> void:	
 	if progress > 0:
 		return
 

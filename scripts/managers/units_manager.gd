@@ -22,9 +22,13 @@ func init_unit(unit: Unit, cell_pos: Vector2i) -> void:
 	units[cell_pos] = unit
 	unit.cell_pos = cell_pos
 	unit.position = Vector2(cell_pos) * Vector2(Const.CELL_SIZE) + Const.CELL_SIZE*0.5
-	unit.unit_killed.connect(on_unit_killed)
+	unit.unit_killed.connect(_on_unit_killed)
 	unit.setup()
 
+
+func _on_unit_killed(unit: Unit) -> void:
+	remove_unit(unit)
+	
 
 func remove_unit(unit: Unit) -> void:
 	print("removing unit %s at %s" % [unit.name, unit.cell_pos])
@@ -73,10 +77,6 @@ func get_units_positions(p_units: Array[Unit]) -> Array[Vector2i]:
 
 func has_unit(unit: Unit) -> bool:
 	return units.get(unit.cell_pos, null) != null
-
-
-func on_unit_killed(unit: Unit) -> void:
-	remove_unit(unit)
 
 
 func compute_unit_path(unit: Unit, target_cell: Vector2i) -> Pathfinding.Path:

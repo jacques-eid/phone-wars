@@ -7,9 +7,9 @@ extends Resource
 @export var hit_sound: AudioStream
 
 
-func _play_fire(_attacker: Node2D, _spawn_pos: Vector2, _play_fx_func: Callable, _audio_service: AudioService) -> void:
+func _play_fire(_attacker: Node2D, _spawn_pos: Vector2, _play_fx_func: Callable) -> void:
 	pass
 
 	
-func _play_impact(_attacker_facing: FaceDirection.Values, _defender: Node2D, _play_fx_func: Callable, _audio_service: AudioService) -> void:
+func _play_impact(_attacker_facing: FaceDirection.Values, _defender: Node2D, _play_fx_func: Callable) -> void:
 	pass

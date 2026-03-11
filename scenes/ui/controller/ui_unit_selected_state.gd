@@ -34,24 +34,25 @@ func _exit() -> void:
 func _on_cell_tap(cargo: Variant) -> bool:
 	if not cargo is Vector2i:
 		return true
+		
+	ui_controller.action_running_state.clear_selections = true
+	ui_controller.state_machine.dispatch(ui_controller.ACTION_RUNNING_SIGNAL)
 
 	var cell: Vector2i = cargo as Vector2i
-	if ui_controller.can_move_to_cell(cell):
-		ui_controller.handle_unit_movement(cell)
-		return true
-
-	if ui_controller.active_controller.merge_available():
-		return true
-
-	if ui_controller.can_attack_cell(cell):
-		ui_controller.handle_unit_attack(cell)
-		
+	ui_controller.handle_cell_tap_async(cell)
 	return true
 
 
 func _on_cancel_clicked() -> bool:
-	ui_controller.active_controller.deselect_unit()
-	ui_controller.state_machine.dispatch(ui_controller.UNIT_DESELECTED_SIGNAL)
+	var result: CancelResult.Values = ui_controller.active_controller.handle_cancel_on_movement()
+	match result:
+		CancelResult.Values.NONE:
+			ui_controller.show_attack_indicator()
+			ui_controller.show_movement_indicator()
+			ui_controller.show_selection_indicator()
+		CancelResult.Values.DESELECT:
+			ui_controller.state_machine.dispatch(ui_controller.RESET_SIGNAL)
+	
 	return true
 
 
@@ -65,7 +66,6 @@ func _on_long_press(cargo: Variant) -> bool:
 
 
 func _on_long_press_release() -> bool:
-	ui_controller.handle_long_press_release()
 	ui_controller.show_attack_indicator()
 	return true
 

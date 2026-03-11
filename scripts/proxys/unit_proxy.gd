@@ -24,10 +24,10 @@ func load_from_unit(unit: Unit) -> void:
 	add_child(weapon_muzzle)
 
 
-func play_attack(fx_service: FXService, audio_service: AudioService) -> void:
+func play_attack(fx_service: FXService) -> void:
 	animated_sprite.flip_h = facing == FaceDirection.Values.RIGHT
 	animation_player.play("attack")
-	weapon._play_fire(self, weapon_muzzle.global_position, fx_service.play_ui_fx, audio_service)
+	weapon._play_fire(self, weapon_muzzle.global_position, fx_service.play_ui_fx)
 
 	await animation_player.animation_finished
 

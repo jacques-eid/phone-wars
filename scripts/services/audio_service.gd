@@ -1,4 +1,3 @@
-class_name AudioService
 extends Node
 
 @export var sfx_bus: String = "SFX"

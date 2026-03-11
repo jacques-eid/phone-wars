@@ -16,10 +16,10 @@ func setup(ms: MusicService) -> void:
 	current_track = track
 	play()
 
-	music_service.track_finished.connect(on_track_finished)
+	music_service.track_finished.connect(_on_track_finished)
 
 
-func on_track_finished() -> void:
+func _on_track_finished() -> void:
 	play_next()
 
 

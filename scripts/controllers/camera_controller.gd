@@ -10,8 +10,8 @@ var pan_enabled: bool = false
 
 
 func setup(ui_controller: UIController, input_manager: InputManager, terrain_manager: TerrainManager) -> void:
-	ui_controller.camera_pan_enabled.connect(on_camera_pan_enabled)
-	input_manager.pan_requested.connect(on_pan_requested)
+	ui_controller.camera_pan_enabled.connect(_on_camera_pan_enabled)
+	input_manager.pan_requested.connect(_on_pan_requested)
 
 	camera.limit_left = terrain_manager.terrain_start_pos.x * Const.CELL_SIZE.x
 	camera.limit_top = terrain_manager.terrain_start_pos.y * Const.CELL_SIZE.y
@@ -20,11 +20,11 @@ func setup(ui_controller: UIController, input_manager: InputManager, terrain_man
 	camera.limit_enabled = true
 
 
-func on_camera_pan_enabled(enabled: bool) -> void:
+func _on_camera_pan_enabled(enabled: bool) -> void:
 	pan_enabled = enabled
 
 
-func on_pan_requested(delta: Vector2) -> void:
+func _on_pan_requested(delta: Vector2) -> void:
 	if not pan_enabled:
 		return
 

@@ -24,7 +24,7 @@ func _draw() -> void:
 
 
 func show_cells(reachable_cells: Array[Vector2i]):
-	cells = reachable_cells
+	cells = reachable_cells.duplicate()
 	queue_redraw()
 
 

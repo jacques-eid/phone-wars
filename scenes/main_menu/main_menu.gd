@@ -16,18 +16,18 @@ extends Control
 func _ready() -> void:
 	music_manager.setup(music_service)
 
-	play_button.pressed.connect(on_play_button_pressed)
-	credits_button.pressed.connect(on_credits_button_pressed)
-	exit_button.pressed.connect(on_exit_button_pressed)
+	play_button.pressed.connect(_on_play_button_pressed)
+	credits_button.pressed.connect(_on_credits_button_pressed)
+	exit_button.pressed.connect(_on_exit_button_pressed)
 
 
-func on_play_button_pressed() -> void:
+func _on_play_button_pressed() -> void:
 	get_tree().change_scene_to_packed(level1_scene)
 
 
-func on_credits_button_pressed() -> void:
+func _on_credits_button_pressed() -> void:
 	print("transition to credits screen")
 
 
-func on_exit_button_pressed() -> void:
+func _on_exit_button_pressed() -> void:
 	get_tree().quit()

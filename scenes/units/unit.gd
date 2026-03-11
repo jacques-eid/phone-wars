@@ -49,7 +49,7 @@ func _ready() -> void:
 
 func setup() -> void:
 	set_team(team)
-	gain_health(max_health())
+	gain_health(max_health() / 2.5)
 	reset_movement_points()
 	
 	if unit_profile.capture_capacity > 0:
@@ -166,8 +166,8 @@ func start_capture(building: Building) -> void:
 	capture_process = CaptureProcess.new(building, self)
 
 
-func capture() -> CaptureProcess.CaptureResult:
-	return capture_process.resolve()
+func capture() -> CaptureResult:
+	return capture_process.resolve(self)
 	
 
 func stop_capture() -> void:
@@ -206,21 +206,21 @@ func take_dmg(dmg: float) -> void:
 	hp_label_component.update(actual_health)
 
 
-func die(audio_service: AudioService) -> void:
+func die() -> void:
 	stop_capture()
 	animated_sprite.visible = false
 
 	var explosion: Explosion = death_scene.instantiate()
 	explosion.global_position = global_position
 	get_tree().root.add_child(explosion)
-	audio_service.play_sfx(death_sound, global_position)
+	AudioService.play_sfx(death_sound, global_position)
 
 	await explosion.finished
 
 	unit_killed.emit(self)
 
 
-func attack(defender: Unit, fx_service: FXService, audio_service: AudioService) -> void:
+func attack(defender: Unit, fx_service: FXService) -> void:
 	if defender.global_position.x < global_position.x:
 		facing = FaceDirection.Values.LEFT
 	elif defender.global_position.x < global_position.x:
@@ -228,7 +228,7 @@ func attack(defender: Unit, fx_service: FXService, audio_service: AudioService) 
 
 	animated_sprite.flip_h = facing == FaceDirection.Values.RIGHT
 	animation_player.play("attack")
-	unit_profile.weapon._play_fire(self, weapon_muzzle.global_position, fx_service.play_world_fx, audio_service)
+	unit_profile.weapon._play_fire(self, weapon_muzzle.global_position, fx_service.play_world_fx)
 
 	await animation_player.animation_finished
 

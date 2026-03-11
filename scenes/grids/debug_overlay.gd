@@ -7,7 +7,7 @@ extends Node2D
 
 
 func _ready() -> void:
-	grid.cell_short_tap.connect(on_cell_clicked)
+	grid.cell_short_tap.connect(_on_cell_clicked)
 
 func _draw():
 	for grid_map in grid.terrain_manager.terrain_layers:			
@@ -23,6 +23,6 @@ func _draw():
 		# 	draw_rect(Rect2(local_pos, cell_size), Color(0, 1, 0, 0.3), true)
 
 
-func on_cell_clicked(cell: Vector2i) -> void:
+func _on_cell_clicked(cell: Vector2i) -> void:
 	highlight_cell = cell
 	queue_redraw()  # triggers _draw()

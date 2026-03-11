@@ -16,22 +16,22 @@ func setup(input_manager: InputManager, p_units_manager: UnitsManager, p_terrain
 	units_manager = p_units_manager
 
 	# subscribe to input events
-	input_manager.short_tap.connect(on_short_tap)
-	input_manager.long_press.connect(on_long_press)
-	input_manager.long_press_release.connect(on_long_press_release)
+	input_manager.short_tap.connect(_on_short_tap)
+	input_manager.long_press.connect(_on_long_press)
+	input_manager.long_press_release.connect(_on_long_press_release)
 
 
-func on_short_tap(world_pos: Vector2) -> void:
+func _on_short_tap(world_pos: Vector2) -> void:
 	var cell_pos: Vector2i = terrain_manager.world_to_cell(world_pos)
 	cell_short_tap.emit(cell_pos)
 
 
-func on_long_press(world_pos: Vector2) -> void:
+func _on_long_press(world_pos: Vector2) -> void:
 	var cell_pos: Vector2i = terrain_manager.world_to_cell(world_pos)
 	cell_long_press.emit(cell_pos)
 
 
-func on_long_press_release(world_pos: Vector2) -> void:
+func _on_long_press_release(world_pos: Vector2) -> void:
 	var cell_pos: Vector2i = terrain_manager.world_to_cell(world_pos)
 	cell_long_press_release.emit(cell_pos)
 

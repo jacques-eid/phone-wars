@@ -5,6 +5,7 @@ var unit: Unit
 
 var path: Array[Vector2] = []
 var currentPathIndex: int = 0
+var sound_id: int = 0
 
 func _setup() -> void:
 	unit = agent
@@ -21,11 +22,13 @@ func _enter() -> void:
 		return
 
 	unit.stop_capture()
-
+	sound_id = AudioService.play_loop(unit.move_sound(), unit.global_position)
+	
 
 func _exit() -> void:
 	unit.animated_sprite.stop()
 	path.clear()
+	AudioService.stop(sound_id)
 
 
 func _update(delta: float) -> void:
