@@ -2,29 +2,7 @@ class_name HumanController
 extends TeamController
 
 
-signal gameplay_event(event: GameplayEvent.Values, cargo: Variant)
-signal animation_finished()
-
-
-var team: Team
-var units_manager: UnitsManager
-var buildings_manager: BuildingsManager
-var terrain_manager: TerrainManager
-
-var selected_unit: Unit = null
-var target_unit: Unit = null
-
-var selected_building: Building = null
-
 var move_unit_commands: Array[MoveUnitCommand]
-
-
-func _init(t: Team, um: UnitsManager, bm: BuildingsManager, tm: TerrainManager) -> void:
-	team = t
-	units_manager = um
-	buildings_manager = bm
-	terrain_manager = tm
-
 
 ### GENERAL
 func get_focus_point() -> Vector2:
@@ -33,6 +11,14 @@ func get_focus_point() -> Vector2:
 			return building.position
 
 	return Vector2.ZERO
+
+
+func play_turn() -> void:
+	pass
+
+
+func end_turn() -> void:
+	units_manager.reset_units()
 
 
 ### SELECTION
@@ -83,7 +69,7 @@ func deselect_building() -> void:
 
 func handle_cell_tap(cell: Vector2i) -> CellTapResult.Values:
 	if can_move_to_cell(cell):
-		await move_unit_to_cell(cell)
+		move_unit_commands.append(await move_unit_to_cell(cell))
 		return CellTapResult.Values.UNIT_MOVED
 
 	if merge_available() or not can_attack_cell(cell):
@@ -91,7 +77,7 @@ func handle_cell_tap(cell: Vector2i) -> CellTapResult.Values:
 
 	if not can_attack_without_moving(cell):
 		var best_cell: Vector2i = choose_best_attack_position(cell)
-		await move_unit_to_cell(best_cell)
+		move_unit_commands.append(await move_unit_to_cell(best_cell))
 
 	set_target_unit(cell)
 	return CellTapResult.Values.ENTER_ATTACK_MODE
@@ -135,16 +121,6 @@ func can_move_to_cell(cell: Vector2i) -> bool:
 	return selected_unit.reachable_cells.has(cell)
 
 
-func move_unit_to_cell(cell: Vector2i) -> void:
-	var path: Pathfinding.Path = units_manager.compute_unit_path(selected_unit, cell)
-
-	var move_unit_command: MoveUnitCommand = MoveUnitCommand.new(selected_unit, cell, path)
-	move_unit_command.execute()
-	move_unit_commands.append(move_unit_command)
-
-	await selected_unit.unit_moved
-
-
 func cancel_unit_movement() -> void:
 	var move_unit_command: MoveUnitCommand = move_unit_commands.pop_back()
 	move_unit_command.undo()
@@ -164,30 +140,6 @@ func capture_available() -> bool:
 	return selected_unit.can_capture_building(building)
 
 
-func capture_building() -> void:
-	if selected_unit == null:
-		return
-	var unit: Unit = selected_unit
-	var unit_pos: Vector2i = unit.cell_pos
-	var building: Building = buildings_manager.get_building_at(unit_pos)
-	if building == null:
-		return
-
-	unit.start_capture(building)
-	
-	var result: CaptureResult = unit.capture()
-
-	gameplay_event.emit(GameplayEvent.Values.CAPTURE, result)
-	await animation_finished
-
-	exhaust_unit()
-	if not result.capture_done:
-		return
-
-	unit.capture_process.capture_done(unit)
-	unit.stop_capture()
-
-
 ### MERGING
 func merge_available() -> bool:
 	if selected_unit == null:
@@ -201,28 +153,6 @@ func merge_available() -> bool:
 	return selected_unit.can_merge_with_unit(unit)
 
 
-func merge_units() -> void:
-	if selected_unit == null:
-		return
-
-	var unit_pos: Vector2i = selected_unit.cell_pos
-	var unit: Unit = units_manager.get_unit_at(unit_pos)
-	
-	if unit == null:
-		return
-
-	var money_gain: int = units_manager.merge_units(selected_unit, unit)
-	team.funds += money_gain
-
-	exhaust_unit()
-
-	if money_gain <= 0:
-		return
-
-	gameplay_event.emit(GameplayEvent.Values.FUNDS_EARNED, team)
-	await animation_finished
-
-
 ### ATTACK
 func can_attack_cell(cell: Vector2i) -> bool:
 	var unit: Unit = selected_unit
@@ -234,20 +164,6 @@ func can_attack_cell(cell: Vector2i) -> bool:
 func can_attack_without_moving(cell: Vector2i) -> bool:
 	var unit_context: UnitContext = UnitContext.create_unit_context(selected_unit)
 	return units_manager.can_attack_cell_without_moving(unit_context, cell)
-
-
-# Later on, add a movement service to compute such movements
-func choose_best_attack_position(cell: Vector2i) -> Vector2i:
-	return units_manager.choose_best_attack_position(selected_unit, cell, buildings_manager)
-
-
-func score_cell_for_attack(cell: Vector2i) -> int:
-	var building: Building = buildings_manager.get_building_at(cell)
-	if building != null:
-		return building.defense()
-
-	var terrain_data: TerrainData = terrain_manager.get_terrain_data(cell)
-	return terrain_data.defense_bonus
 
 
 func set_target_unit(cell: Vector2i) -> void:
@@ -273,31 +189,6 @@ func estimate_damage() -> EstimatedDamageResult:
 	return edr
 
 
-func perform_combat() -> void:
-	var attacker: Unit = selected_unit
-	var defender: Unit = target_unit
-	var terrain_data: TerrainData = terrain_manager.get_terrain_data(defender.cell_pos)
-	var building: Building = buildings_manager.get_building_at(defender.cell_pos)
-	var terrain_defense: float = terrain_data.defense_bonus
-
-	if building != null:
-		terrain_defense = building.defense() 
-	var result = CombatManager.resolve_combat(attacker, defender, terrain_defense)
-
-	gameplay_event.emit(GameplayEvent.Values.COMBAT, result)
-	await animation_finished
-	result.defender.take_dmg(result.damage)
-
-	if result.defender_killed:
-		result.defender.die()
-	combat_done()
-
-
-func combat_done() -> void:
-	selected_unit.exhaust()
-	selected_unit = null
-
-
 func get_units_in_attack_range_with_movement() -> Array[Vector2i]:
 	if selected_unit == null:
 		return []
@@ -307,11 +198,7 @@ func get_units_in_attack_range_with_movement() -> Array[Vector2i]:
 
 
 ### EXHAUST
-func exhaust_unit() -> void:
-	if selected_unit == null:
-		return
-
-	selected_unit.exhaust()
+func _confirm_movement() -> void:
 	if len(move_unit_commands) == 0:
 		selected_unit = null
 		return
@@ -320,27 +207,8 @@ func exhaust_unit() -> void:
 	units_manager.move_unit(selected_unit, first_move_unit_command.start_cell, selected_unit.cell_pos)
 
 	move_unit_commands.clear()
-	selected_unit = null   
 
 
-func play_turn() -> void:
-	pass
-
-
-func end_turn() -> void:
-	units_manager.reset_units()
-
-
-### BUYING
-func buy_unit(entry: ProductionEntry) -> void:
-	if team.funds < entry.cost():
-		return
-		
-	var cell: Vector2i = selected_building.cell_pos
-	team.funds -= entry.cost()
-	units_manager.add_unit(entry, cell, team)
-
-	gameplay_event.emit(GameplayEvent.Values.FUNDS_SPENT, team)
-	await animation_finished
-	
+func on_buy_unit(entry: ProductionEntry) -> void:
+	buy_unit(entry)
 	deselect_building()
