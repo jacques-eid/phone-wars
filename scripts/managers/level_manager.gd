@@ -2,9 +2,6 @@ class_name LevelManager
 extends Node2D
 
 
-@export var disable_animations: bool = false
-
-
 @onready var main_menu_scene: PackedScene = preload("res://scenes/main_menu/main_menu.tscn")
 
 
@@ -41,7 +38,6 @@ func _ready() -> void:
 	ui_controller.game_paused.connect(_on_game_paused)
 	ui_controller.game_resumed.connect(_on_game_resumed)
 	ui_controller.exit_level.connect(_on_exit_level)
-	ui_controller.end_turn.connect(_on_end_turn)
 
 	call_deferred("connect_buildings")
 	
@@ -53,6 +49,9 @@ func init_teams() -> void:
 			teams.append(team)
 			team.setup(units_manager, buildings_manager, grid.terrain_manager)
 			print("team added: %s" % team.name)
+			if team.controller != null:
+				team.controller.turn_end.connect(_on_turn_ended)
+				team.controller.focus_on.connect(_on_focus_on)
 
 	active_team = teams[0]
 	start_turn()
@@ -62,23 +61,21 @@ func start_turn() -> void:
 	ui_controller.switch_team(active_team)
 	var new_income: int = economy_service.calculate_income(buildings_manager, active_team)
 
-	if disable_animations:
-		ui_controller.show_start_turn_intro(active_team, active_team.funds+new_income)
-		economy_service.add_money(active_team, new_income)
-		return
-
 	input_manager.lock()
 	await ui_controller.show_start_turn_intro(active_team, active_team.funds+new_income)
 	input_manager.unlock()
 
 	economy_service.add_money(active_team, new_income)
+	await active_team.controller.focus(active_team.controller.get_default_focus_point())
+	active_team.controller._play_turn()
 
-	var focus_point: Vector2 = active_team.get_focus_point()
+
+func _on_focus_on(controller: TeamController, focus_point: Vector2) -> void:
 	await camera_controller.focus_on(focus_point)
+	controller.focused_on.emit()
 
 
-func _on_end_turn() -> void:
-	active_team.end_turn()
+func _on_turn_ended() -> void:
 	active_team = next_team(active_team)
 
 	print("Turn ended. New team %s to play" % active_team.name)

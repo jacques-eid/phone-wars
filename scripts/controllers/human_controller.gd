@@ -5,21 +5,17 @@ extends TeamController
 var move_unit_commands: Array[MoveUnitCommand]
 
 ### GENERAL
-func get_focus_point() -> Vector2:
-	for building: Building in buildings_manager.buildings.values():
-		if building.type() == BuildingType.Values.HQ:
-			return building.position
+func _setup() -> void:
+	pass
+	
 
-	return Vector2.ZERO
-
-
-func play_turn() -> void:
+func _play_turn() -> void:
 	pass
 
 
-func end_turn() -> void:
-	units_manager.reset_units()
-
+func _end_turn() -> void:
+	super._end_turn()
+	
 
 ### SELECTION
 func selection_attempt(cell: Vector2i) -> SelectionResult.Values:

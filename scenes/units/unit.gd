@@ -126,7 +126,7 @@ func move_following_path(p: Array[Vector2]) -> void:
 	if p.is_empty():
 		return
 
-	print("Unit moving along path: %s" % str(p))
+	print("Unit %s moving along path: %s" % [self.name, str(p)])
 
 	moving_state.path = p
 	state_machine.dispatch(MOVE_SIGNAL)

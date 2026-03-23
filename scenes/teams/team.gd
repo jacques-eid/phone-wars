@@ -13,7 +13,7 @@ enum Type {
 @export var face_direction: FaceDirection.Values = FaceDirection.Values.LEFT
 @export var funds: int = 1500
 
-var controller: TeamController
+@export var controller: TeamController
 
 
 func setup(
@@ -21,12 +21,19 @@ func setup(
 	buildings_manager: BuildingsManager,
 	terrain_manager: TerrainManager) -> void:
 	
-	if team_type == Type.PLAYABLE:
-		controller = HumanController.new(self, units_manager, buildings_manager, terrain_manager)
-	
+	match team_type:
+		Type.PLAYABLE:
+			controller = HumanController.new(self, units_manager, buildings_manager, terrain_manager)
+			add_child(controller)
+			controller._setup()	
+		Type.AI:
+			controller = AIController.new(self, units_manager, buildings_manager, terrain_manager)
+			add_child(controller)	
+			controller._setup()
+		
 
 func end_turn() -> void:
-	controller.end_turn()
+	controller._end_turn()
 
 
 func is_playable() -> bool:
@@ -67,7 +74,3 @@ func replace_ui_colors(material: ShaderMaterial) -> void:
 
 func team_name() -> String:
 	return team_profile.team_name
-
-
-func get_focus_point() -> Vector2:
-	return controller.get_focus_point()

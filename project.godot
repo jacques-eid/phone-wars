@@ -58,6 +58,11 @@ pointing/emulate_touch_from_mouse=true
 2d_physics/layer_2="Unit"
 2d_physics/layer_3="Building"
 
+[limbo_ai]
+
+behavior_tree/behavior_tree_default_dir="res://resources/ai"
+behavior_tree/user_task_dirs=PackedStringArray("res://ai/tasks", "res://scripts/ai/tasks")
+
 [rendering]
 
 textures/canvas_textures/default_texture_filter=0

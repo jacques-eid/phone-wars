@@ -16,7 +16,6 @@ signal clear_attackable()
 signal game_paused()
 signal game_resumed()
 
-signal end_turn()
 signal exit_level()
 
 
@@ -89,7 +88,7 @@ func setup(p_level_manager: LevelManager) -> void:
 	grid.cell_long_press_release.connect(_on_long_press_release)
 
 	game_hud.cancel_button_clicked.connect(_on_cancel_clicked)
-	game_hud.end_turn_button_clicked.connect(func(): end_turn.emit())
+	game_hud.end_turn_button_clicked.connect(func(): active_controller._end_turn())
 	game_hud.settings_button_clicked.connect(_on_settings_clicked)
 
 	game_hud.idle_button_clicked.connect(_on_idle_clicked)
@@ -245,7 +244,9 @@ func on_combat(cargo: Variant) -> void:
 func switch_team(new_team: Team) -> void:
 	is_playable = new_team.is_playable()
 	if active_controller != null:
-		active_controller.gameplay_event.disconnect(_on_gameplay_event)
+		if active_controller.gameplay_event.is_connected(_on_gameplay_event):
+			active_controller.gameplay_event.disconnect(_on_gameplay_event)
+			
 	if is_playable:
 		active_controller = new_team.controller
 		active_controller.gameplay_event.connect(_on_gameplay_event)

@@ -44,6 +44,16 @@ func add_unit(entry: ProductionEntry, cell_pos: Vector2i, team: Team) -> void:
 	unit.exhaust()
 
 
+func get_units_for_team(team: Team) -> Array[Unit]:
+	var filtered_units: Array[Unit]
+
+	for unit: Unit in units.values():
+		if unit.team.is_same_team(team):
+			filtered_units.append(unit)
+
+	return filtered_units
+
+
 func get_grid_path(unit: Unit, start_cell: Vector2i, end_cell: Vector2i) -> Pathfinding.Path:
 	return Pathfinding.find_path(grid, unit, start_cell, end_cell)
 

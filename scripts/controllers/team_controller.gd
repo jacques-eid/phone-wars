@@ -5,6 +5,12 @@ extends Node
 signal gameplay_event(event: GameplayEvent.Values, cargo: Variant)
 signal animation_finished()
 
+signal turn_end()
+
+signal focus_on(controller: TeamController, focus_point: Vector2)
+signal focused_on()
+
+
 var team: Team
 var units_manager: UnitsManager
 var buildings_manager: BuildingsManager
@@ -22,12 +28,31 @@ func _init(t: Team, um: UnitsManager, bm: BuildingsManager, tm: TerrainManager) 
     terrain_manager = tm
 
 
-func play_turn() -> void:
-    push_error("play_turn() must be implemented")
+
+func _setup() -> void:
+    push_error("_setup() must be implemented")
 
 
-func end_turn() -> void:
-    push_error("end_turn() must be implemented")
+func _play_turn() -> void:
+    push_error("_play_turn() must be implemented")
+
+
+func _end_turn() -> void:
+    units_manager.reset_units()
+    turn_end.emit()
+
+
+func focus(focus_point: Vector2) -> void:
+    focus_on.emit(self, focus_point)
+    await focused_on
+
+
+func get_default_focus_point() -> Vector2:
+    for building: Building in buildings_manager.buildings.values():
+        if building.type() == BuildingType.Values.HQ:
+            return building.position
+
+    return Vector2.ZERO
 
 
 func move_unit_to_cell(cell: Vector2i) -> MoveUnitCommand:

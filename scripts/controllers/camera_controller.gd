@@ -20,6 +20,8 @@ func setup(ui_controller: UIController, input_manager: InputManager, terrain_man
 	camera.limit_enabled = true
 
 
+	
+
 func _on_camera_pan_enabled(enabled: bool) -> void:
 	pan_enabled = enabled
 

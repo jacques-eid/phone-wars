@@ -41,7 +41,6 @@ metadata/_custom_type_script = "uid://3ayikrqceb2l"
 
 [node name="TestSceneCombat" type="Node2D" unique_id=1604858134]
 script = ExtResource("1_t1o2k")
-disable_animations = true
 
 [node name="Grid" parent="." unique_id=577588847 instance=ExtResource("2_h65yf")]
 
@@ -78,7 +77,7 @@ face_direction = 1
 
 [node name="BlueTeam" parent="Teams" unique_id=704522067 instance=ExtResource("12_n3opb")]
 team_profile = ExtResource("19_k53m2")
-team_type = 0
+team_type = 1
 
 [node name="NeutralTeam" parent="Teams" unique_id=103368924 instance=ExtResource("12_n3opb")]
 team_profile = ExtResource("20_n3opb")

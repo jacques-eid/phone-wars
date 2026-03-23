@@ -1,0 +1,29 @@
+[gd_resource type="BehaviorTree" format=3 uid="uid://c0fxj88jm6pit"]
+
+[ext_resource type="Script" uid="uid://7ig4i2731q5t" path="res://scripts/ai/tasks/select_unit_task.gd" id="1_6srtr"]
+[ext_resource type="Script" uid="uid://dc2pt6ob6iy3c" path="res://scripts/ai/tasks/focus_camera_task.gd" id="2_d7rom"]
+[ext_resource type="Script" uid="uid://dpqlt6i138cnn" path="res://scripts/ai/tasks/move_unit_task.gd" id="2_mbo0r"]
+
+[sub_resource type="BlackboardPlan" id="BlackboardPlan_mvjew"]
+
+[sub_resource type="BTConsolePrint" id="BTConsolePrint_6srtr"]
+text = "Sequence started"
+
+[sub_resource type="BTAction" id="BTAction_d7rom"]
+script = ExtResource("1_6srtr")
+
+[sub_resource type="BTAction" id="BTAction_u2fvf"]
+script = ExtResource("2_d7rom")
+
+[sub_resource type="BTAction" id="BTAction_ycshe"]
+script = ExtResource("2_mbo0r")
+
+[sub_resource type="BTConsolePrint" id="BTConsolePrint_mbo0r"]
+text = "First loop is done"
+
+[sub_resource type="BTSequence" id="BTSequence_u2fvf"]
+children = [SubResource("BTConsolePrint_6srtr"), SubResource("BTAction_d7rom"), SubResource("BTAction_u2fvf"), SubResource("BTAction_ycshe"), SubResource("BTConsolePrint_mbo0r")]
+
+[resource]
+blackboard_plan = SubResource("BlackboardPlan_mvjew")
+root_task = SubResource("BTSequence_u2fvf")
