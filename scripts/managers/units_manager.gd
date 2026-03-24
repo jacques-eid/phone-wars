@@ -4,8 +4,6 @@ extends Node
 var grid: Grid
 var units: Dictionary = {} # Vector2i -> Unit
 
-var move_unit_commands: Array[MoveUnitCommand]
-
 func setup(p_grid: Grid) -> void:
 	grid = p_grid
 	init_units()
@@ -99,8 +97,8 @@ func move_unit(unit: Unit, start_cell: Vector2i, target_cell: Vector2i) -> void:
 	units[target_cell] = unit
 
 
-func reset_units() -> void:
-	for unit in units.values():
+func reset_units(team: Team) -> void:
+	for unit: Unit in get_units_for_team(team):
 		unit.ready_to_move()
 
 

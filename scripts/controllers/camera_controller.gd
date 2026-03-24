@@ -3,6 +3,7 @@ class_name CameraController
 extends Node2D
 
 
+@export var camera_speed: float = 125
 @onready var camera: Camera2D = $Camera2D
 
 
@@ -39,7 +40,9 @@ func move_by(delta: Vector2) -> void:
 
 func focus_on(pos: Vector2) -> void:
 	var tween: Tween = create_tween()
+	var tween_duration: float = pos.distance_to(camera.position) / camera_speed
 	tween.set_ease(Tween.EASE_OUT)
-	tween.tween_property(camera, "position", pos, 1.0)
+	tween.tween_property(camera, "position", pos, tween_duration)
 
 	await tween.finished
+	await get_tree().create_timer(0.5).timeout

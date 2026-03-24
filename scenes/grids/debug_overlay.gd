@@ -3,12 +3,15 @@ extends Node2D
 
 @export var grid: Grid
 @export var show_cells: bool = true
+@export var show_coordinates: bool = false
 @export var highlight_cell: Vector2i = Vector2i(-1, -1)
 
+@onready var font: Font = preload("res://assets/fonts/Pixel Lofi.otf")
 
 func _ready() -> void:
 	grid.cell_short_tap.connect(_on_cell_clicked)
-
+	
+	
 func _draw():
 	for grid_map in grid.terrain_manager.terrain_layers:			
 		# Draw grid
@@ -16,6 +19,8 @@ func _draw():
 			for cell in grid_map.get_used_cells():
 				var local_pos = cell * Const.CELL_SIZE
 				draw_rect(Rect2(local_pos, Const.CELL_SIZE), Color(1, 1, 1, 0.3), false, 1.0)
+				if show_coordinates:
+					draw_string(font, local_pos, "%s-%s"%[cell.x, cell.y-1], HORIZONTAL_ALIGNMENT_LEFT, -1, 12)
 
 		# Highlight a cell (e.g., mouse over)
 		# if highlight_cell.x != -1:

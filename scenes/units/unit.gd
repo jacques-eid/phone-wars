@@ -49,7 +49,7 @@ func _ready() -> void:
 
 func setup() -> void:
 	set_team(team)
-	gain_health(max_health() / 2.5)
+	gain_health(max_health())
 	reset_movement_points()
 	
 	if unit_profile.capture_capacity > 0:
@@ -208,15 +208,6 @@ func take_dmg(dmg: float) -> void:
 
 func die() -> void:
 	stop_capture()
-	animated_sprite.visible = false
-
-	var explosion: Explosion = death_scene.instantiate()
-	explosion.global_position = global_position
-	get_tree().root.add_child(explosion)
-	AudioService.play_sfx(death_sound, global_position)
-
-	await explosion.finished
-
 	unit_killed.emit(self)
 
 
@@ -250,6 +241,15 @@ func play_hit_reaction() -> void:
 	animated_sprite.position = pos
 
 
+func play_death() -> void:
+	visible = false
+
+	var explosion: Explosion = death_scene.instantiate()
+	explosion.global_position = global_position
+	get_tree().root.add_child(explosion)
+	AudioService.play_sfx(death_sound, global_position)
+
+	await explosion.finished
 
 # Unit profile getters
 func max_movement_points() -> int:

@@ -152,7 +152,7 @@ func _on_build_clicked(entry: ProductionEntry) -> void:
 
 
 func _on_settings_clicked() -> void:
-	game_hud.hide()
+	game_hud.game_hud.hide_game_hud()
 	team_display.animate_out()
 	settings_hud.show()
 	game_paused.emit()
@@ -161,7 +161,7 @@ func _on_settings_clicked() -> void:
 func _on_resume_clicked() -> void:
 	settings_hud.hide()
 	team_display.animate_in()
-	game_hud.show()
+	game_hud.show_game_hud()
 	game_resumed.emit()
 
 
@@ -178,7 +178,7 @@ func _on_capture_clicked() -> void:
 
 
 func _on_merge_clicked() -> void:
-	game_hud.hide()
+	game_hud.hide_game_hud()
 	await active_controller.merge_units()
 	state_machine.dispatch(RESET_SIGNAL)
 
@@ -241,6 +241,16 @@ func on_combat(cargo: Variant) -> void:
 	active_controller.animation_finished.emit()
 
 
+func lock() -> void:
+	camera_pan_enabled.emit(false)
+	game_hud.hide_game_hud()
+
+
+func unlock() -> void:
+	game_hud.show_game_hud()
+	camera_pan_enabled.emit(true)
+
+
 func switch_team(new_team: Team) -> void:
 	is_playable = new_team.is_playable()
 	if active_controller != null:
@@ -248,7 +258,7 @@ func switch_team(new_team: Team) -> void:
 			
 	active_controller = new_team.controller
 	active_controller.gameplay_event.connect(_on_gameplay_event)
-	state_machine.dispatch(RESET_SIGNAL)
+	state_machine.change_active_state(idle_state) # enforce reload of the idle state
 
 
 func switch_to_previous_state() -> void:
@@ -256,11 +266,7 @@ func switch_to_previous_state() -> void:
 
 
 func show_start_turn_intro(team: Team, new_funds: int) -> void:
-	camera_pan_enabled.emit(false)
-	game_hud.hide()
 	await start_turn_orchestrator.execute(team, new_funds)
-	game_hud.show()
-	camera_pan_enabled.emit(true)
 	
 
 func show_attack_indicator() -> void:

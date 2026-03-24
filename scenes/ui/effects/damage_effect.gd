@@ -19,5 +19,7 @@ func play(target: Node2D):
 	modulate.a = 1.0
 
 	var tween = create_tween()
-	tween.parallel().tween_property(self, "position:y", position.y - 50, 1.5)
-	tween.parallel().tween_property(self, "modulate:a", 0.0, 1.5)
+	tween.parallel().tween_property(self, "position:y", position.y - 50, 0.5)
+	tween.parallel().tween_property(self, "modulate:a", 0.0, 0.5)
+
+	await tween.finished

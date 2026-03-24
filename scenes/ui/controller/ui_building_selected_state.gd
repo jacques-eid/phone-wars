@@ -14,7 +14,7 @@ func _setup() -> void:
 
 func _enter() -> void:
 	ui_controller.visible = true
-	ui_controller.game_hud.hide()
+	ui_controller.game_hud.hide_game_hud()
 	ui_controller.production_panel.show()
 	ui_controller.team_display.animate_out()
 
@@ -26,7 +26,7 @@ func _enter() -> void:
 
 
 func _exit() -> void:
-	ui_controller.game_hud.show()
+	ui_controller.game_hud.show_game_hud()
 	ui_controller.production_panel.hide()
 	ui_controller.team_display.animate_in()
 	ui_controller.clear_selected.emit()

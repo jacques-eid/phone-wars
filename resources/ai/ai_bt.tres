@@ -30,9 +30,6 @@ var/task/type = 24
 var/task/hint = 0
 var/task/hint_string = ""
 
-[sub_resource type="BTConsolePrint" id="BTConsolePrint_6srtr"]
-text = "Sequence started"
-
 [sub_resource type="BTAction" id="BTAction_u2fvf"]
 script = ExtResource("1_ycshe")
 
@@ -53,11 +50,8 @@ script = ExtResource("2_d7rom")
 [sub_resource type="BTAction" id="BTAction_ycshe"]
 script = ExtResource("4_d7rom")
 
-[sub_resource type="BTConsolePrint" id="BTConsolePrint_mbo0r"]
-text = "First loop is done"
-
 [sub_resource type="BTSequence" id="BTSequence_u2fvf"]
-children = [SubResource("BTConsolePrint_6srtr"), SubResource("BTAction_u2fvf"), SubResource("BTForEach_mbo0r"), SubResource("BTAction_mbo0r"), SubResource("BTAction_d7rom"), SubResource("BTAction_ycshe"), SubResource("BTConsolePrint_mbo0r")]
+children = [SubResource("BTAction_u2fvf"), SubResource("BTForEach_mbo0r"), SubResource("BTAction_mbo0r"), SubResource("BTAction_d7rom"), SubResource("BTAction_ycshe")]
 
 [resource]
 blackboard_plan = SubResource("BlackboardPlan_mvjew")

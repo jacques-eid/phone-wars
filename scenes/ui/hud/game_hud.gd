@@ -23,6 +23,8 @@ signal merge_button_clicked()
 @onready var merge_button: Button = $MarginContainer/HBoxContainer/ActionPanel/MergeButton
 
 
+var lock_visibility: bool
+
 func _ready() -> void:
 	cancel_button.pressed.connect(func(): cancel_button_clicked.emit())
 	end_turn_button.pressed.connect(func(): end_turn_button_clicked.emit())
@@ -44,7 +46,13 @@ func show_attack_preview_state() -> void:
 	end_turn_button.visible = false
 
 
-func show_idle_state() -> void:
+func show_idle_state(is_playable: bool) -> void:
+	if not is_playable:
+		visible = false
+		lock_visibility = true
+		return
+		
+	lock_visibility = false
 	visible = true
 	action_panel.visible = false
 	cancel_button.visible = false
@@ -70,3 +78,15 @@ func show_moved_state(show_capture_button: bool, show_merge_button: bool) -> voi
 		attack_button.visible = false
 		capture_button.visible = false
 		merge_button.visible = true
+
+
+func show_game_hud() -> void:
+	if lock_visibility:
+		return
+	show()
+	
+	
+func hide_game_hud() -> void:
+	if lock_visibility:
+		return
+	hide()

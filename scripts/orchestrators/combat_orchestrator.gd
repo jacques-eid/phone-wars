@@ -11,8 +11,14 @@ func _init(dp: DamageEffect, fxs: FXService) -> void:
 func execute(result: CombatResult) -> void:
 	await play_attack_animation(result)
 	await play_defender_reaction(result)
-	show_damage_popup(result)
+	
+	if not result.defender_killed:
+		await show_damage_popup(result)
+		return
 
+	show_damage_popup(result)	
+	await result.defender.play_death()
+		
 
 func play_attack_animation(result: CombatResult) -> void:
 	await result.attacker.attack(result.defender, fx_service)
@@ -26,4 +32,4 @@ func play_defender_reaction(result: CombatResult) -> void:
 
 func show_damage_popup(result: CombatResult) -> void:
 	damage_popup.update(result.damage)
-	damage_popup.play(result.defender)
+	await damage_popup.play(result.defender)

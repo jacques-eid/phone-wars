@@ -9,8 +9,6 @@ func _tick(_delta: float) -> Status:
 	ai_controller.selected_unit = result.unit
 	ai_controller.selected_unit.select()
 	
-	print("selected unit: ", ai_controller.selected_unit.name)
-
 	return SUCCESS
 
 

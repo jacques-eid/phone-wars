@@ -61,12 +61,16 @@ func start_turn() -> void:
 	ui_controller.switch_team(active_team)
 	var new_income: int = economy_service.calculate_income(buildings_manager, active_team)
 
+	ui_controller.lock()
 	input_manager.lock()
 	await ui_controller.show_start_turn_intro(active_team, active_team.funds+new_income)
+	
+	economy_service.add_money(active_team, new_income)
+	
+	await active_team.controller.focus(active_team.controller.get_default_focus_point())
+	ui_controller.unlock()
 	input_manager.unlock()
 
-	economy_service.add_money(active_team, new_income)
-	await active_team.controller.focus(active_team.controller.get_default_focus_point())
 	active_team.controller._play_turn()
 
 

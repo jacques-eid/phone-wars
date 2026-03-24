@@ -7,10 +7,9 @@ var bt_player: BTPlayer
 var bt_blackboard: Blackboard
 
 var done: bool
+var move_command: MoveUnitCommand
 
 func _setup() -> void:
-	print("init ai controller")
-
 	bt_player = BTPlayer.new()
 	bt_player.active = false
 	add_child(bt_player)
@@ -39,6 +38,14 @@ func _end_turn() -> void:
 	done = false
 
 
+func _confirm_movement() -> void:
+	if move_command == null:
+		return
+
+	units_manager.move_unit(selected_unit, move_command.start_cell, move_command.target_cell)
+	move_command = null
+
+	
 func get_possible_targets(unit: Unit) -> Array[Unit]:
 	return units_manager.get_units_in_attack_range_with_movement(unit)
 

@@ -12,13 +12,11 @@ func _setup() -> void:
 
 
 func _enter() -> void:
-	print('unit moving')
 	unit.animated_sprite.play("move_left")
 	currentPathIndex = 0
 
 	# means that the unit stick on the same cell
 	if path.size() <= 1:
-		print('unit did not move')
 		dispatch(EVENT_FINISHED)
 		unit.unit_moved.emit()
 		return
@@ -34,7 +32,6 @@ func _exit() -> void:
 
 
 func _update(delta: float) -> void:
-	print('unit is moving')
 	if currentPathIndex >= path.size():
 		dispatch(EVENT_FINISHED)
 		unit.unit_moved.emit()

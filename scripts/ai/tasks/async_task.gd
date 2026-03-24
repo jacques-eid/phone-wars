@@ -31,6 +31,4 @@ func _run_async() -> void:
 
 func _run(callable: Callable, ...args) -> void:
 	await callable.callv(args)
-
-	print('run is done')
 	done = true

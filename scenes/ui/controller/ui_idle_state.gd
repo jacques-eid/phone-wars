@@ -14,7 +14,7 @@ func _setup() -> void:
 
 func _enter() -> void:
 	ui_controller.production_panel.hide()
-	ui_controller.game_hud.show_idle_state()
+	ui_controller.game_hud.show_idle_state(ui_controller.is_playable)
 	ui_controller.clear_attackable.emit()
 
 

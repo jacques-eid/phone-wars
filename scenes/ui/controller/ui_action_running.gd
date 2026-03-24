@@ -13,7 +13,7 @@ func _setup() -> void:
 
 
 func _enter() -> void:
-	ui_controller.game_hud.hide()
+	ui_controller.game_hud.hide_game_hud()
 	ui_controller.team_display.animate_out()
 	ui_controller.camera_pan_enabled.emit(false)
 	
@@ -24,7 +24,7 @@ func _enter() -> void:
 
 
 func _exit() -> void:
-	ui_controller.game_hud.show()
+	ui_controller.game_hud.show_game_hud()
 	ui_controller.team_display.animate_in()
 	ui_controller.camera_pan_enabled.emit(true)
 	ui_controller.clear_movement_range.emit()
