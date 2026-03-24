@@ -102,12 +102,11 @@ func capture_building() -> void:
 	gameplay_event.emit(GameplayEvent.Values.CAPTURE, result)
 	await animation_finished
 
-	exhaust_unit()
-	if not result.capture_done:
-		return
+	if result.capture_done:
+		selected_unit.capture_process.capture_done(selected_unit)
+		selected_unit.stop_capture()
 
-	selected_unit.capture_process.capture_done(selected_unit)
-	selected_unit.stop_capture()
+	exhaust_unit()
 
 
 func merge_units() -> void:

@@ -19,8 +19,6 @@ func setup(ui_controller: UIController, input_manager: InputManager, terrain_man
 	camera.limit_right = terrain_manager.terrain_end_pos.x * Const.CELL_SIZE.x
 	camera.limit_bottom = terrain_manager.terrain_end_pos.y * Const.CELL_SIZE.y
 	camera.limit_enabled = true
-
-
 	
 
 func _on_camera_pan_enabled(enabled: bool) -> void:

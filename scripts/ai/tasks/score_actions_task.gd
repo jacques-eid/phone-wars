@@ -4,12 +4,17 @@ extends BTAction
 func _tick(_delta: float) -> Status:
 	var unit: Unit = blackboard.get_var("unit")
 
-	var result: AIActionResult = score_attack(unit)
-	var results: Array[AIActionResult] = blackboard.get_var("results")
-	results.append(result)
-	blackboard.set_var("results", results)
+	var attack_result: AIActionResult = score_attack(unit)
+	var capture_result: AIActionResult = score_capture(unit)
+	var merge_result: AIActionResult = score_merge(unit)
+	var move_result: AIActionResult = score_move(unit)
 
-	## TODO: compute other actions score
+	var results: Array[AIActionResult] = blackboard.get_var("results")
+	results.append(attack_result)
+	results.append(capture_result)
+	results.append(merge_result)
+	results.append(move_result)
+	blackboard.set_var("results", results)
 
 	return SUCCESS
 
@@ -39,17 +44,16 @@ func score_attack(unit: Unit) -> AIActionResult:
 		secondary_targets.append(target)
 
 	if len(best_targets) != 0:
-		result.target_unit = select_best_targets(best_targets)
+		result.target_unit = select_best_unit_to_attack(best_targets)
 		result.score = 100 + unit.type()
 		return result
 
-	result.target_unit = select_best_targets(secondary_targets)
+	result.target_unit = select_best_unit_to_attack(secondary_targets)
 	result.score = 50 + unit.type()
 	return result
 
 
-
-func select_best_targets(targets: Array[Unit]) -> Unit:
+func select_best_unit_to_attack(targets: Array[Unit]) -> Unit:
 	var best_target: Unit
 	var best_score: int = int(-INF)
 	for target: Unit in targets:
@@ -64,3 +68,93 @@ func select_best_targets(targets: Array[Unit]) -> Unit:
 			best_target = target
 
 	return best_target
+
+
+func score_capture(unit: Unit) -> AIActionResult:
+	var ai_controller: AIController = agent as AIController
+	var result: AIActionResult = AIActionResult.new()
+	result.unit = unit
+	result.type = AIActionType.Values.CAPTURE
+
+	if not unit.can_capture():
+		return result
+
+	var buildings: Array[Building] = ai_controller.find_capturable_buildings(unit)
+	if len(buildings) == 0:
+		return result
+
+	result.score = 80
+	result.target_building = select_best_building_to_capture(unit, buildings)
+
+	return result
+
+
+func select_best_building_to_capture(unit: Unit, buildings: Array[Building]) -> Building:
+	var best_building: Building
+	var best_score: int = int(-INF)
+
+	for building: Building in buildings:
+		var score: int = building.type()
+
+		# Prioritize enemy buildings
+		if not building.team.neutral_team():
+			score += 20
+
+		# Keep capturing the same building
+		if unit.capture_process != null and \
+			unit.capture_process.building == building:
+				score += 100
+
+		if score > best_score:
+			best_score = score
+			best_building = building
+
+	return best_building
+
+
+func score_merge(unit: Unit) -> AIActionResult:
+	var ai_controller: AIController = agent as AIController
+	var result: AIActionResult = AIActionResult.new()
+	result.unit = unit
+	result.type = AIActionType.Values.MERGE
+	
+	var units: Array[Unit] = ai_controller.find_mergeable_units(unit)
+	var array: Array = select_best_unit_to_merge(units)
+	result.target_unit = array[0]
+	result.score = array[1]
+
+	return result
+
+
+func select_best_unit_to_merge(units: Array[Unit]) -> Array:
+	var best_target: Unit
+	var best_score: int = int(-INF)
+	for unit: Unit in units:
+		var score: int = 30
+
+		# Prefer units that are capturing a building
+		if unit.capture_process != null:
+			score += 5
+
+		# Save low units first
+		if unit.actual_health <= unit.max_health() / 5.0:
+			score += 20
+
+		if score > best_score:
+			best_score = score
+			best_target = unit
+
+	return [best_target, best_score]
+
+
+func score_move(unit: Unit) -> AIActionResult:
+	var ai_controller: AIController = agent as AIController
+	var result: AIActionResult = AIActionResult.new()
+	result.unit = unit
+	result.type = AIActionType.Values.MOVE
+	result.score = 10
+	# Target a random reachable cell for now
+	var cells: Array[Vector2i] = ai_controller.units_manager.compute_reachable_cells(unit)
+	result.target_cell = cells[randi() % len(cells)]
+
+	return result

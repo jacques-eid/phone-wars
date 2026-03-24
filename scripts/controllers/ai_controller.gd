@@ -54,3 +54,28 @@ func get_units_to_play() -> Array[Unit]:
 	var units: Array[Unit] = units_manager.get_units_for_team(team)
 
 	return units.filter(func(unit: Unit): return not unit.exhausted)
+
+
+func find_capturable_buildings(unit: Unit) -> Array[Building]:
+	var reachable_cells: Array[Vector2i] = units_manager.compute_reachable_cells(unit)
+	reachable_cells.append(unit.cell_pos)
+	var buildings: Array[Building]
+
+	for cell: Vector2i in reachable_cells:
+		var building: Building = buildings_manager.get_building_at(cell)
+		if building != null and not building.team.is_same_team(unit.team):
+			buildings.append(building)
+
+	return buildings
+
+
+func find_mergeable_units(unit: Unit) -> Array[Unit]:
+	var reachable_cells: Array[Vector2i] = units_manager.compute_reachable_cells(unit)
+	var units: Array[Unit]
+
+	for cell: Vector2i in reachable_cells:
+		var target: Unit = units_manager.get_unit_at(cell)
+		if target != null and unit.can_merge_with_unit(target):
+			units.append(target)
+
+	return units

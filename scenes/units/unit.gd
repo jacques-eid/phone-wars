@@ -151,7 +151,7 @@ func can_capture_building(building: Building) -> bool:
 	if team.is_same_team(building.team):
 		return false
 
-	return unit_profile.capture_capacity > 0
+	return can_capture()
 
 
 func capture_capacity() -> int:
@@ -262,6 +262,10 @@ func max_health() -> int:
 
 func cost() -> int:
 	return unit_profile.cost
+
+
+func can_capture() -> bool:
+	return unit_profile.capture_capacity > 0
 
 
 func icon() -> Texture2D:

@@ -1,18 +1,18 @@
 class_name BuildingType
 
 enum Values {
-	BASE,
 	CITY,
+	BASE,
 	HQ,
 }
 
 
 static func get_name_from_type(val: Values) -> String:
 	match val:
-		Values.BASE:
-			return "Base" 
 		Values.CITY:
 			return "City"
+		Values.BASE:
+			return "Base" 
 		Values.HQ:
 			return "HQ"
 	

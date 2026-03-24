@@ -63,7 +63,7 @@ var attack_preview_state: UIAttackPreviewState
 var action_running_state: UIActionRunningState
 
 var active_controller: TeamController
-var is_playable: bool
+var lock_controller: bool
 
 var capture_orchestrator: CaptureOrchestrator
 var combat_orchestrator: CombatOrchestrator
@@ -132,22 +132,37 @@ func init_state_machine() -> void:
 
 
 func _on_cell_tap(cell: Vector2i) -> void:
+	if lock_controller:
+		return
+
 	state_machine.dispatch(CELL_TAP, cell)
 
 
 func _on_long_press(cell: Vector2i) -> void:
+	if lock_controller:
+		return
+
 	state_machine.dispatch(LONG_PRESS, cell)
 
 	
 func _on_long_press_release(_cell: Vector2i) -> void:
+	if lock_controller:
+		return
+
 	state_machine.dispatch(LONG_PRESS_RELEASE)
 
 
 func _on_cancel_clicked() -> void:
+	if lock_controller:
+		return
+
 	state_machine.dispatch(CANCEL_CLICKED)
 
 
 func _on_build_clicked(entry: ProductionEntry) -> void:
+	if lock_controller:
+		return
+
 	state_machine.dispatch(BUILD_CLICKED, entry)
 
 
@@ -166,11 +181,17 @@ func _on_resume_clicked() -> void:
 
 
 func _on_idle_clicked() -> void:
+	if lock_controller:
+		return
+
 	active_controller.exhaust_unit()
 	state_machine.dispatch(RESET_SIGNAL)
 
 
 func _on_capture_clicked() -> void:
+	if lock_controller:
+		return
+
 	action_running_state.clear_selections = true
 	state_machine.dispatch(ACTION_RUNNING_SIGNAL)
 	await active_controller.capture_building()
@@ -178,12 +199,18 @@ func _on_capture_clicked() -> void:
 
 
 func _on_merge_clicked() -> void:
+	if lock_controller:
+		return
+
 	game_hud.hide_game_hud()
 	await active_controller.merge_units()
 	state_machine.dispatch(RESET_SIGNAL)
 
 
 func _on_attack_clicked() -> void:
+	if lock_controller:
+		return
+
 	state_machine.dispatch(ATTACK_CLICKED)
 	
 
@@ -252,7 +279,7 @@ func unlock() -> void:
 
 
 func switch_team(new_team: Team) -> void:
-	is_playable = new_team.is_playable()
+	lock_controller = not new_team.is_playable()
 	if active_controller != null:
 		active_controller.gameplay_event.disconnect(_on_gameplay_event)
 			

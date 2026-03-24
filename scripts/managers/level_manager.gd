@@ -121,4 +121,4 @@ func building_owner_changed() -> void:
 
 
 func _on_exit_level() -> void:
-	get_tree().change_scene_to_packed(main_menu_scene)
+	pass#get_tree().change_scene_to_packed(main_menu_scene)

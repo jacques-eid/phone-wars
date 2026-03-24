@@ -86,7 +86,8 @@ func handle_long_press(cell: Vector2i) -> LongPressResult:
 	var lpr: LongPressResult = LongPressResult.new()
 	lpr.unit = unit
 	lpr.building = building
-	lpr.cells_in_attack_range = units_manager.get_cells_in_attack_range(unit)
+	if unit != null:
+		lpr.cells_in_attack_range = units_manager.get_cells_in_attack_range(unit)
 	return lpr
 
 

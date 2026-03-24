@@ -9,6 +9,6 @@ region = Rect2(0, 0, 32, 32)
 
 [resource]
 script = ExtResource("1_tuknc")
-type = 1
+type = 0
 building_icon = SubResource("AtlasTexture_2l0ca")
 metadata/_custom_type_script = "uid://bvkf6k11gv6m8"

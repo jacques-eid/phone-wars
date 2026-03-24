@@ -28,6 +28,7 @@ func with_unit(unit: Unit) -> void:
 
 
 func with_building(building: Building) -> void:
+	print('building_type: ', building.type())
 	terrain_type_label.text = BuildingType.get_name_from_type(building.type())
 	terrain_icon.texture = building.icon().duplicate()
 	terrain_def_label.text = "+%s" %building.defense()

@@ -46,8 +46,8 @@ func show_attack_preview_state() -> void:
 	end_turn_button.visible = false
 
 
-func show_idle_state(is_playable: bool) -> void:
-	if not is_playable:
+func show_idle_state(lock_controller: bool) -> void:
+	if lock_controller:
 		visible = false
 		lock_visibility = true
 		return
