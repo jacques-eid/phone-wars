@@ -62,7 +62,7 @@ var building_selected_state: UIBuildingSelectedState
 var attack_preview_state: UIAttackPreviewState
 var action_running_state: UIActionRunningState
 
-var active_controller: HumanController
+var active_controller: TeamController
 var is_playable: bool
 
 var capture_orchestrator: CaptureOrchestrator
@@ -244,12 +244,10 @@ func on_combat(cargo: Variant) -> void:
 func switch_team(new_team: Team) -> void:
 	is_playable = new_team.is_playable()
 	if active_controller != null:
-		if active_controller.gameplay_event.is_connected(_on_gameplay_event):
-			active_controller.gameplay_event.disconnect(_on_gameplay_event)
+		active_controller.gameplay_event.disconnect(_on_gameplay_event)
 			
-	if is_playable:
-		active_controller = new_team.controller
-		active_controller.gameplay_event.connect(_on_gameplay_event)
+	active_controller = new_team.controller
+	active_controller.gameplay_event.connect(_on_gameplay_event)
 	state_machine.dispatch(RESET_SIGNAL)
 
 

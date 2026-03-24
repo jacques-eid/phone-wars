@@ -66,6 +66,11 @@ func move_unit_to_cell(cell: Vector2i) -> MoveUnitCommand:
     return move_unit_command
 
 
+func can_attack_without_moving(cell: Vector2i) -> bool:
+    var unit_context: UnitContext = UnitContext.create_unit_context(selected_unit)
+    return units_manager.can_attack_cell_without_moving(unit_context, cell)
+
+
 # Later on, add a movement service to compute such movements
 func choose_best_attack_position(cell: Vector2i) -> Vector2i:
     return units_manager.choose_best_attack_position(selected_unit, cell, buildings_manager)
@@ -125,13 +130,7 @@ func merge_units() -> void:
 func perform_combat() -> void:
     var attacker: Unit = selected_unit
     var defender: Unit = target_unit
-    var terrain_data: TerrainData = terrain_manager.get_terrain_data(defender.cell_pos)
-    var building: Building = buildings_manager.get_building_at(defender.cell_pos)
-    var terrain_defense: float = terrain_data.defense_bonus
-
-    if building != null:
-        terrain_defense = building.defense() 
-    var result = CombatManager.resolve_combat(attacker, defender, terrain_defense)
+    var result = CombatManager.resolve_combat(attacker, defender, get_terrain_defense(defender))
 
     gameplay_event.emit(GameplayEvent.Values.COMBAT, result)
     await animation_finished
@@ -140,6 +139,17 @@ func perform_combat() -> void:
     if result.defender_killed:
         result.defender.die()
     exhaust_unit()
+
+
+func get_terrain_defense(unit: Unit) -> float:
+    var terrain_data: TerrainData = terrain_manager.get_terrain_data(unit.cell_pos)
+    var building: Building = buildings_manager.get_building_at(unit.cell_pos)
+    var terrain_defense: float = terrain_data.defense_bonus
+
+    if building != null:
+        terrain_defense = building.defense()
+
+    return terrain_defense
 
 
 func buy_unit(entry: ProductionEntry) -> void:

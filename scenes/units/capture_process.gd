@@ -51,3 +51,7 @@ func capture_done(unit: Unit) -> void:
 
 func clear_capture() -> void:
 	capturing_component.hide()
+
+
+func can_finish_next_turn(unit: Unit) -> bool:
+	return unit.capture_capacity() > progress

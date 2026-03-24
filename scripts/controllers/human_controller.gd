@@ -157,11 +157,6 @@ func can_attack_cell(cell: Vector2i) -> bool:
 	return cells.has(cell) and enemy_unit != null and not enemy_unit.team.is_same_team(unit.team) 
 
 
-func can_attack_without_moving(cell: Vector2i) -> bool:
-	var unit_context: UnitContext = UnitContext.create_unit_context(selected_unit)
-	return units_manager.can_attack_cell_without_moving(unit_context, cell)
-
-
 func set_target_unit(cell: Vector2i) -> void:
 	target_unit = units_manager.get_unit_at(cell)
 

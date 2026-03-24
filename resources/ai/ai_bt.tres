@@ -1,28 +1,63 @@
 [gd_resource type="BehaviorTree" format=3 uid="uid://c0fxj88jm6pit"]
 
-[ext_resource type="Script" uid="uid://7ig4i2731q5t" path="res://scripts/ai/tasks/select_unit_task.gd" id="1_6srtr"]
+[ext_resource type="Script" uid="uid://bedaafq38mk1l" path="res://scripts/ai/tasks/score_actions_task.gd" id="1_d7rom"]
+[ext_resource type="Script" uid="uid://quedmey6k7m0" path="res://scripts/ai/tasks/filter_units_to_play_task.gd" id="1_ycshe"]
 [ext_resource type="Script" uid="uid://dc2pt6ob6iy3c" path="res://scripts/ai/tasks/focus_camera_task.gd" id="2_d7rom"]
-[ext_resource type="Script" uid="uid://dpqlt6i138cnn" path="res://scripts/ai/tasks/move_unit_task.gd" id="2_mbo0r"]
+[ext_resource type="Script" uid="uid://7ig4i2731q5t" path="res://scripts/ai/tasks/select_top_action_task.gd" id="2_ycshe"]
+[ext_resource type="Script" uid="uid://ha8my00d4l5o" path="res://scripts/ai/tasks/perform_action_task.gd" id="4_d7rom"]
 
 [sub_resource type="BlackboardPlan" id="BlackboardPlan_mvjew"]
+var/units/name = &"units"
+var/units/type = 28
+var/units/value = []
+var/units/hint = 0
+var/units/hint_string = "Array[Unit]"
+var/unit/name = &"unit"
+var/unit/type = 24
+var/unit/hint = 34
+var/unit/hint_string = "Unit"
+var/results/name = &"results"
+var/results/type = 28
+var/results/value = []
+var/results/hint = 0
+var/results/hint_string = "Array[AIActionResult]"
+var/top_result/name = &"top_result"
+var/top_result/type = 24
+var/top_result/hint = 0
+var/top_result/hint_string = "AIActionResult"
+var/task/name = &"task"
+var/task/type = 24
+var/task/hint = 0
+var/task/hint_string = ""
 
 [sub_resource type="BTConsolePrint" id="BTConsolePrint_6srtr"]
 text = "Sequence started"
 
-[sub_resource type="BTAction" id="BTAction_d7rom"]
-script = ExtResource("1_6srtr")
-
 [sub_resource type="BTAction" id="BTAction_u2fvf"]
+script = ExtResource("1_ycshe")
+
+[sub_resource type="BTAction" id="BTAction_dtcg0"]
+script = ExtResource("1_d7rom")
+
+[sub_resource type="BTForEach" id="BTForEach_mbo0r"]
+array_var = &"units"
+save_var = &"unit"
+children = [SubResource("BTAction_dtcg0")]
+
+[sub_resource type="BTAction" id="BTAction_mbo0r"]
+script = ExtResource("2_ycshe")
+
+[sub_resource type="BTAction" id="BTAction_d7rom"]
 script = ExtResource("2_d7rom")
 
 [sub_resource type="BTAction" id="BTAction_ycshe"]
-script = ExtResource("2_mbo0r")
+script = ExtResource("4_d7rom")
 
 [sub_resource type="BTConsolePrint" id="BTConsolePrint_mbo0r"]
 text = "First loop is done"
 
 [sub_resource type="BTSequence" id="BTSequence_u2fvf"]
-children = [SubResource("BTConsolePrint_6srtr"), SubResource("BTAction_d7rom"), SubResource("BTAction_u2fvf"), SubResource("BTAction_ycshe"), SubResource("BTConsolePrint_mbo0r")]
+children = [SubResource("BTConsolePrint_6srtr"), SubResource("BTAction_u2fvf"), SubResource("BTForEach_mbo0r"), SubResource("BTAction_mbo0r"), SubResource("BTAction_d7rom"), SubResource("BTAction_ycshe"), SubResource("BTConsolePrint_mbo0r")]
 
 [resource]
 blackboard_plan = SubResource("BlackboardPlan_mvjew")
