@@ -43,13 +43,19 @@ func score_attack(unit: Unit) -> AIActionResult:
 	var secondary_targets: Array[Unit]
 
 	for target: Unit in targets:
-		var terrain_defense: float = ai_controller.get_terrain_defense(target.cell)
-		var combat_result: CombatResult = CombatManager.resolve_combat(unit, target, terrain_defense)
+		var defender_terrain_defense: float = ai_controller.get_terrain_defense(target.cell)
+		var attacker_terrain_defense: float = ai_controller.get_terrain_defense(unit.cell)
+		var combat_result: CombatResult = CombatManager.resolve_combat(
+			unit,
+			target,
+			defender_terrain_defense,
+			attacker_terrain_defense)
+
 		if combat_result.defender_killed:
 			best_targets.append(target)
 
-		# TODO: when counter attack, check if attacking is worth it
-		secondary_targets.append(target)
+		if combat_result.damage > combat_result.counter_damage:
+			secondary_targets.append(target)
 
 	if len(best_targets) != 0:
 		result.target_unit = select_best_unit_to_attack(best_targets)

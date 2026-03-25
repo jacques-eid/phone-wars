@@ -376,7 +376,7 @@ func show_combat_dialog() -> void:
 	else:
 		combat_popup.with_building(edr.building)
 
-	combat_popup.with_estimated_damage(edr.estimated_damage)
+	combat_popup.with_estimated_damage(edr.estimated_damage, edr.counter_damage)
 	combat_popup.with_unit(edr.defender)
 
 	combat_popup.position_dialog(edr.defender)

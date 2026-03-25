@@ -99,7 +99,7 @@ func estimate_damage(unit: Unit, cell: Vector2i) -> float:
 	for enemy: Unit in units_manager.get_enemy_units(unit.team):
 		if cell in units_manager.get_cells_in_attack_range(enemy):
 			var terrain_defense: float = get_terrain_defense(cell)
-			total_damage += CombatManager.compute_damage(enemy, unit, terrain_defense)
+			total_damage += CombatManager.compute_damage(enemy,enemy.actual_health, unit, terrain_defense)
 
 	return total_damage
 

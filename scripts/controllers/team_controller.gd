@@ -121,11 +121,18 @@ func merge_units() -> void:
 func perform_combat() -> void:
 	var attacker: Unit = selected_unit
 	var defender: Unit = target_unit
-	var result = CombatManager.resolve_combat(attacker, defender, get_terrain_defense(defender.cell))
-
+	var defender_terrain_defense: float = get_terrain_defense(defender.cell)
+	var attacker_terrain_defense: float = get_terrain_defense(attacker.cell)
+	var result = CombatManager.resolve_combat(
+		attacker, 
+		defender, 
+		defender_terrain_defense, 
+		attacker_terrain_defense)
+	
 	gameplay_event.emit(GameplayEvent.Values.COMBAT, result)
 	await animation_finished
 	result.defender.take_dmg(result.damage)
+	result.attacker.take_dmg(result.counter_damage)
 
 	if result.defender_killed:
 		result.defender.die()

@@ -38,6 +38,9 @@ func animate_in():
 
 
 func animate_out():
+	if modulate.a == 0.0:
+		return
+
 	var tween = create_tween()
 	tween.set_parallel(true)
 	# hides the border alone

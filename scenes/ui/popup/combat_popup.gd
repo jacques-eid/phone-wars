@@ -1,15 +1,17 @@
 class_name CombatPopup
 extends BasePopup
 
-@onready var damage_preview_label: Label = $PanelContainer/MarginContainer/VBoxContainer/DamagePreview
+@onready var attacker_damage_preview_label: Label = $PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2/AttackerDamagePreview
+@onready var counter_damage_preview_label: Label = $PanelContainer/MarginContainer/VBoxContainer/HBoxContainer2/CounterDamagePreview
 @onready var defender_icon: TextureRect = $PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/DefenderIcon
 @onready var defender_hp_label: Label = $PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/DefenderHP
 @onready var terrain_icon: TextureRect = $PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/TerrainIcon
 @onready var terrain_def_label: Label = $PanelContainer/MarginContainer/VBoxContainer/HBoxContainer/TerrainDef
 
 
-func with_estimated_damage(estimated_damage: float) -> void:
-	damage_preview_label.text = "-%s %%" % (estimated_damage*10)
+func with_estimated_damage(estimated_damage: float, counter_damage: float) -> void:
+	attacker_damage_preview_label.text = "-%s %%" % (estimated_damage*10)
+	counter_damage_preview_label.text = "-%s %%" % (counter_damage*10)
 
 
 func with_unit(unit: Unit) -> void:

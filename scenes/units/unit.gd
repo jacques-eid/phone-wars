@@ -122,6 +122,20 @@ func idling() -> void:
 	animated_sprite.flip_h = facing == FaceDirection.Values.RIGHT
 
 
+func face_towards(cell_pos: Vector2i) -> void:
+	if cell_pos.x < cell.x:
+		facing = FaceDirection.Values.LEFT
+	elif cell_pos.x > cell.x:
+		facing = FaceDirection.Values.RIGHT
+
+	animated_sprite.flip_h = facing == FaceDirection.Values.RIGHT
+
+
+func face_team_direction() -> void:
+	facing = team.face_direction
+	animated_sprite.flip_h = facing == FaceDirection.Values.RIGHT
+
+
 func move_following_path(p: Array[Vector2]) -> void:
 	if p.is_empty():
 		return
@@ -215,13 +229,7 @@ func die() -> void:
 	unit_killed.emit(self)
 
 
-func attack(defender: Unit, fx_service: FXService) -> void:
-	if defender.global_position.x < global_position.x:
-		facing = FaceDirection.Values.LEFT
-	elif defender.global_position.x < global_position.x:
-		facing = FaceDirection.Values.RIGHT
-
-	animated_sprite.flip_h = facing == FaceDirection.Values.RIGHT
+func play_attack(fx_service: FXService) -> void:
 	animation_player.play("attack")
 	unit_profile.weapon._play_fire(self, weapon_muzzle.global_position, fx_service.play_world_fx)
 
