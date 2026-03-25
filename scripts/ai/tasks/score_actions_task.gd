@@ -1,6 +1,13 @@
 extends BTAction
 
 
+var ai_controller: AIController
+
+
+func _enter() -> void:
+	ai_controller = agent as AIController
+
+
 func _tick(_delta: float) -> Status:
 	var unit: Unit = blackboard.get_var("unit")
 
@@ -18,10 +25,11 @@ func _tick(_delta: float) -> Status:
 
 	return SUCCESS
 
-
-
+# Compute the score to attack an enemy unit:
+# base score : 50
+# enemy unit dies: +50
+# enemy type: +type()
 func score_attack(unit: Unit) -> AIActionResult:
-	var ai_controller: AIController = agent as AIController
 	var result: AIActionResult = AIActionResult.new()
 	result.unit = unit
 	result.type = AIActionType.Values.ATTACK
@@ -35,7 +43,7 @@ func score_attack(unit: Unit) -> AIActionResult:
 	var secondary_targets: Array[Unit]
 
 	for target: Unit in targets:
-		var terrain_defense: float = ai_controller.get_terrain_defense(target)
+		var terrain_defense: float = ai_controller.get_terrain_defense(target.cell)
 		var combat_result: CombatResult = CombatManager.resolve_combat(unit, target, terrain_defense)
 		if combat_result.defender_killed:
 			best_targets.append(target)
@@ -53,6 +61,9 @@ func score_attack(unit: Unit) -> AIActionResult:
 	return result
 
 
+# Select the unit to attack: focus first the unit capturing buildings
+# that can finish next turn.
+# Then target valuable enemies
 func select_best_unit_to_attack(targets: Array[Unit]) -> Unit:
 	var best_target: Unit
 	var best_score: int = int(-INF)
@@ -70,8 +81,9 @@ func select_best_unit_to_attack(targets: Array[Unit]) -> Unit:
 	return best_target
 
 
+# Compute the score to capture a building:
+# base score : 80
 func score_capture(unit: Unit) -> AIActionResult:
-	var ai_controller: AIController = agent as AIController
 	var result: AIActionResult = AIActionResult.new()
 	result.unit = unit
 	result.type = AIActionType.Values.CAPTURE
@@ -89,6 +101,10 @@ func score_capture(unit: Unit) -> AIActionResult:
 	return result
 
 
+# Compute the score to select which building to capture:
+# base score : 0
+# non neutral buildings: +20
+# already capturing a building: +100
 func select_best_building_to_capture(unit: Unit, buildings: Array[Building]) -> Building:
 	var best_building: Building
 	var best_score: int = int(-INF)
@@ -112,8 +128,11 @@ func select_best_building_to_capture(unit: Unit, buildings: Array[Building]) -> 
 	return best_building
 
 
+# Compute the score to merge a unit:
+# base score : 30
+# target is capturing a building: +5
+# target is low health: +20
 func score_merge(unit: Unit) -> AIActionResult:
-	var ai_controller: AIController = agent as AIController
 	var result: AIActionResult = AIActionResult.new()
 	result.unit = unit
 	result.type = AIActionType.Values.MERGE
@@ -137,7 +156,7 @@ func select_best_unit_to_merge(units: Array[Unit]) -> Array:
 			score += 5
 
 		# Save low units first
-		if unit.actual_health <= unit.max_health() / 5.0:
+		if unit.is_low_health():
 			score += 20
 
 		if score > best_score:
@@ -147,14 +166,147 @@ func select_best_unit_to_merge(units: Array[Unit]) -> Array:
 	return [best_target, best_score]
 
 
+# Compute the score to select which building to capture:
+# base score : 0 
 func score_move(unit: Unit) -> AIActionResult:
-	var ai_controller: AIController = agent as AIController
 	var result: AIActionResult = AIActionResult.new()
 	result.unit = unit
 	result.type = AIActionType.Values.MOVE
-	result.score = 10
-	# Target a random reachable cell for now
-	var cells: Array[Vector2i] = ai_controller.units_manager.compute_reachable_cells(unit)
-	result.target_cell = cells[randi() % len(cells)]
+	
+	var building: Building = ai_controller.find_closest_building(unit)
+	if building != null:
+		result.score = score_move_towards_building(unit, building)
+		result.target_cell = select_best_cell_to_capture(unit, building.cell)
+	
+	var score: int = 0
+	var enemy: Unit = ai_controller.find_closest_enemy(unit)
+	if enemy != null:
+		score = score_move_towards_enemy(unit, enemy)
+		if score > result.score:
+			result.score = score
+			result.target_cell = select_best_cell_to_attack(unit, enemy.cell)
+
+	score = score_retreat(unit)
+	if score > result.score:
+		result.score = score
+		result.target_cell = select_best_cell_to_retreat(unit)
+
 
 	return result
+
+
+# Compute the score to decide if the unit should move towards the building:
+# base score : 40
+# distance to target: -value
+# target cell in enemy range: -20
+func score_move_towards_building(unit: Unit, building: Building) -> int:
+	var score: int = 40
+	score -= int(unit.cell.distance_to(building.cell))
+
+	if ai_controller.cell_in_enemy_attack_range(building.cell):
+		score -= 20
+	
+	return score
+
+
+# Compute the score to decide if the unit should move towards the enemy:
+# base score : 25
+# distance to target: -value
+func score_move_towards_enemy(unit: Unit, target: Unit) -> int:
+	var score: int = 25
+	score -= int(unit.cell.distance_to(target.cell))
+
+	return score
+	
+
+# Compute the score to decide if the unit should retreat:
+# base score : 0
+# low health: +40
+# range and in enemy attack range: +30
+func score_retreat(unit: Unit) -> int:
+	var score: int = 0
+
+	if unit.is_low_health():
+		score += 40
+
+	if unit.is_range() and ai_controller.cell_in_enemy_attack_range(unit.cell):
+		score += 30 
+
+	return score
+
+
+func select_best_cell_to_capture(unit: Unit, target_cell: Vector2i) -> Vector2i:
+	var best_cell: Vector2i
+	var best_score: float = -INF
+
+	var reachable_cells: Array[Vector2i] = ai_controller.units_manager.compute_reachable_cells(unit)
+
+	for cell: Vector2i in reachable_cells:
+		var score: float = 0
+
+		score -= cell.distance_to(target_cell) * 10
+		
+		score += ai_controller.get_terrain_defense(cell)
+
+		if ai_controller.cell_in_enemy_attack_range(cell):
+			score -= 40
+
+		if score > best_score:
+			best_score = score
+			best_cell = cell
+
+	return best_cell
+
+
+func select_best_cell_to_attack(unit: Unit, target_cell: Vector2i) -> Vector2i:
+	var best_cell: Vector2i
+	var best_score: float = -INF
+
+	var reachable_cells: Array[Vector2i] = ai_controller.units_manager.compute_reachable_cells(unit)
+
+	for cell: Vector2i in reachable_cells:
+		var score: float = 0
+
+		score -= cell.distance_to(target_cell) * 10
+		
+		score += ai_controller.get_terrain_defense(cell)
+
+		if ai_controller.can_attack_from(unit, cell):
+			score += 30
+
+		if ai_controller.cell_in_enemy_attack_range(cell):
+			score -= 40
+
+		score += ai_controller.get_support_bonus(unit, cell, target_cell)
+
+		if score > best_score:
+			best_score = score
+			best_cell = cell
+
+	return best_cell
+
+
+func select_best_cell_to_retreat(unit: Unit) -> Vector2i:
+	var best_cell: Vector2i
+	var best_score: float = -INF
+
+	var reachable_cells: Array[Vector2i] = ai_controller.units_manager.compute_reachable_cells(unit)
+
+	for cell: Vector2i in reachable_cells:
+		var score: float = 0
+
+		var total_damage: float = ai_controller.estimate_damage(unit, cell)
+		score -= total_damage * 10
+	
+		# TODO: add avoidance to most dangerouse enemies
+
+		if total_damage == 0:
+			score += 100
+
+		score += ai_controller.get_terrain_defense(cell) * 10
+
+		if score > best_score:
+			best_score = score
+			best_cell = cell
+
+	return best_cell

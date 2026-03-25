@@ -28,7 +28,6 @@ func _init(t: Team, um: UnitsManager, bm: BuildingsManager, tm: TerrainManager) 
 	terrain_manager = tm
 
 
-
 func _setup() -> void:
 	push_error("_setup() must be implemented")
 
@@ -80,17 +79,8 @@ func choose_best_attack_position(cell: Vector2i) -> Vector2i:
 	return units_manager.choose_best_attack_position(selected_unit, cell, buildings_manager)
 
 
-func score_cell_for_attack(cell: Vector2i) -> int:
-	var building: Building = buildings_manager.get_building_at(cell)
-	if building != null:
-		return building.defense()
-
-	var terrain_data: TerrainData = terrain_manager.get_terrain_data(cell)
-	return terrain_data.defense_bonus
-
-
 func capture_building() -> void:
-	var unit_pos: Vector2i = selected_unit.cell_pos
+	var unit_pos: Vector2i = selected_unit.cell
 	var building: Building = buildings_manager.get_building_at(unit_pos)
 	if building == null:
 		return
@@ -110,7 +100,7 @@ func capture_building() -> void:
 
 
 func merge_units() -> void:
-	var unit_pos: Vector2i = selected_unit.cell_pos
+	var unit_pos: Vector2i = selected_unit.cell
 	var merged_unit: Unit = units_manager.get_unit_at(unit_pos)
 
 	if merged_unit == null:
@@ -131,7 +121,7 @@ func merge_units() -> void:
 func perform_combat() -> void:
 	var attacker: Unit = selected_unit
 	var defender: Unit = target_unit
-	var result = CombatManager.resolve_combat(attacker, defender, get_terrain_defense(defender))
+	var result = CombatManager.resolve_combat(attacker, defender, get_terrain_defense(defender.cell))
 
 	gameplay_event.emit(GameplayEvent.Values.COMBAT, result)
 	await animation_finished
@@ -143,9 +133,9 @@ func perform_combat() -> void:
 	exhaust_unit()
 
 
-func get_terrain_defense(unit: Unit) -> float:
-	var terrain_data: TerrainData = terrain_manager.get_terrain_data(unit.cell_pos)
-	var building: Building = buildings_manager.get_building_at(unit.cell_pos)
+func get_terrain_defense(cell: Vector2i) -> float:
+	var terrain_data: TerrainData = terrain_manager.get_terrain_data(cell)
+	var building: Building = buildings_manager.get_building_at(cell)
 	var terrain_defense: float = terrain_data.defense_bonus
 
 	if building != null:
@@ -158,7 +148,7 @@ func buy_unit(entry: ProductionEntry) -> void:
 	if team.funds < entry.cost():
 		return
 		
-	var cell: Vector2i = selected_building.cell_pos
+	var cell: Vector2i = selected_building.cell
 	team.funds -= entry.cost()
 	units_manager.add_unit(entry, cell, team)
 

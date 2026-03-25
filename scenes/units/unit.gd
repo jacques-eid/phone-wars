@@ -17,7 +17,7 @@ signal unit_killed(unit: Unit)
 @onready var death_scene: PackedScene = preload("res://scenes/vfx/explosion.tscn")
 @onready var death_sound: AudioStream = preload("res://assets/sounds/units/sfx_die3.wav")
 
-var cell_pos: Vector2i = Vector2i.ZERO
+var cell: Vector2i = Vector2i.ZERO
 var reachable_cells: Array[Vector2i]
 var exhausted: bool = false
 var capture_process: CaptureProcess
@@ -144,8 +144,12 @@ func is_max_health() -> bool:
 	return actual_health >= max_health()
 
 
+func is_low_health() -> bool:
+	return actual_health <= max_health() / 5.0
+
+
 func can_capture_building(building: Building) -> bool:
-	if building.cell_pos != cell_pos:
+	if building.cell != cell:
 		return false
 
 	if team.is_same_team(building.team):
@@ -297,7 +301,11 @@ func max_attack_range() -> int:
 
 
 func can_attack_after_movement() -> bool:
-	return unit_profile.attack_profile.can_attack_after_movement
+	return not unit_profile.attack_profile.is_range
+
+
+func is_range() -> bool:
+	return unit_profile.attack_profile.is_range
 
 
 func weapon() -> Weapon:

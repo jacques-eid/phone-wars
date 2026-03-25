@@ -18,7 +18,7 @@ func init_units() -> void:
 
 func init_unit(unit: Unit, cell_pos: Vector2i) -> void:
 	units[cell_pos] = unit
-	unit.cell_pos = cell_pos
+	unit.cell = cell_pos
 	unit.position = Vector2(cell_pos) * Vector2(Const.CELL_SIZE) + Const.CELL_SIZE*0.5
 	unit.unit_killed.connect(_on_unit_killed)
 	unit.setup()
@@ -29,8 +29,8 @@ func _on_unit_killed(unit: Unit) -> void:
 	
 
 func remove_unit(unit: Unit) -> void:
-	print("removing unit %s at %s" % [unit.name, unit.cell_pos])
-	units.erase(unit.cell_pos)
+	print("removing unit %s at %s" % [unit.name, unit.cell])
+	units.erase(unit.cell)
 	unit.queue_free()
 
 
@@ -42,14 +42,19 @@ func add_unit(entry: ProductionEntry, cell_pos: Vector2i, team: Team) -> void:
 	unit.exhaust()
 
 
-func get_units_for_team(team: Team) -> Array[Unit]:
-	var filtered_units: Array[Unit]
+func get_units_with_filter(callable: Callable) -> Array[Unit]:
+	var res: Array[Unit]
+	var arr = units.values().filter(func(unit: Unit): return callable.call(unit))
+	res.assign(arr)
+	return res
 
-	for unit: Unit in units.values():
-		if unit.team.is_same_team(team):
-			filtered_units.append(unit)
 
-	return filtered_units
+func get_friendly_units(team: Team) -> Array[Unit]:
+	return get_units_with_filter(func(unit: Unit): return unit.team.is_same_team(team))
+
+
+func get_enemy_units(team: Team) -> Array[Unit]:
+	return get_units_with_filter(func(unit: Unit): return not unit.team.is_same_team(team))
 
 
 func get_grid_path(unit: Unit, start_cell: Vector2i, end_cell: Vector2i) -> Pathfinding.Path:
@@ -78,13 +83,13 @@ func get_units_positions(p_units: Array[Unit]) -> Array[Vector2i]:
 	var cells: Array[Vector2i] = []
 
 	for unit in p_units:
-		cells.append(unit.cell_pos)
+		cells.append(unit.cell)
 
 	return cells
 
 
 func has_unit(unit: Unit) -> bool:
-	return units.get(unit.cell_pos, null) != null
+	return units.get(unit.cell, null) != null
 
 
 func compute_unit_path(unit: Unit, target_cell: Vector2i) -> Pathfinding.Path:
@@ -98,7 +103,7 @@ func move_unit(unit: Unit, start_cell: Vector2i, target_cell: Vector2i) -> void:
 
 
 func reset_units(team: Team) -> void:
-	for unit: Unit in get_units_for_team(team):
+	for unit: Unit in get_friendly_units(team):
 		unit.ready_to_move()
 
 
@@ -134,8 +139,8 @@ func filter_attackable_units(unit_context: UnitContext, cells: Array[Vector2i]) 
 	var filtered_units: Array[Unit] = []
 	
 	for unit: Unit in units.values():
-		if (unit.cell_pos in cells and 
-			unit.cell_pos != unit_context.grid_pos and
+		if (unit.cell in cells and 
+			unit.cell != unit_context.grid_pos and
 			not unit_context.team.is_same_team(unit.team)):
 				filtered_units.append(unit)
 
@@ -147,7 +152,7 @@ func can_attack_cell_without_moving(unit_context: UnitContext, cell: Vector2i) -
 	var targets: Array[Unit] = get_units_in_direct_attack_range(unit_context)
 
 	for unit in targets:
-		if unit.cell_pos == cell:
+		if unit.cell == cell:
 			return true
 
 	return false
@@ -177,6 +182,7 @@ func get_cells_in_attack_range(unit: Unit) -> Array[Vector2i]:
 
 	return cells
 
+
 # Retursn all the units in attack range: movement included
 func get_units_in_attack_range_with_movement(unit: Unit) -> Array[Unit]:
 	var target_cells: Array[Vector2i] = get_cells_in_attack_range(unit)
@@ -199,7 +205,7 @@ func choose_best_attack_position(unit: Unit, target_cell: Vector2i, buildings_ma
 	var best_score: int = int(-INF)
 
 	for cell in candidates:
-		var score: int = score_cell_for_attack(cell, buildings_manager)
+		var score: int = score_cell_for_attack(unit, cell, buildings_manager)
 
 		if score > best_score:
 			best_score = score
@@ -224,10 +230,15 @@ func get_attack_positions_after_movement(unit: Unit, target_cell: Vector2i) -> A
 	return valid_positions
 
 
-func score_cell_for_attack(cell: Vector2i, buildings_manager: BuildingsManager) -> int:
+# For now, prevent unit to move on enemy/neutral buildings so that
+# other units can capture them
+# TODO: check if a unit is in range of capture before taking this decision
+func score_cell_for_attack(unit: Unit, cell: Vector2i, buildings_manager: BuildingsManager) -> int:
 	var building: Building = buildings_manager.get_building_at(cell)
 	if building != null:
-		return building.defense()
+		if building.team.is_same_team(unit.team):
+			return building.defense()
+		return 0
 
 	var terrain_data: TerrainData = grid.terrain_manager.get_terrain_data(cell)
 	return terrain_data.defense_bonus

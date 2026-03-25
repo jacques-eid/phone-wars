@@ -13,10 +13,16 @@ func init_buildings() -> void:
 		if building is Building:
 			var cell_pos: Vector2i = Vector2i(building.position / Vector2(Const.CELL_SIZE))
 			buildings[cell_pos] = building
-			building.cell_pos = cell_pos
+			building.cell = cell_pos
 			building.setup()
-			print("adding building %s at %s" % [building.name, building.cell_pos])
+			print("adding building %s at %s" % [building.name, building.cell])
 			
+
+func get_buildings() -> Array[Building]:
+	var results: Array[Building]
+	results.assign(buildings.values())
+	return results
+
 
 func get_building_at(cell_pos: Vector2i) -> Building:
 	return buildings.get(cell_pos, null) as Building

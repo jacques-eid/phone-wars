@@ -13,21 +13,21 @@ func _init(p_unit: Unit, p_target_cell: Vector2i, p_path: Pathfinding.Path):
 	unit = p_unit
 	capture_process = unit.capture_process
 	start_pos = p_unit.global_position
-	start_cell = p_unit.cell_pos
+	start_cell = p_unit.cell
 	target_cell = p_target_cell
 	path = p_path
 	facing = unit.facing
 
 
 func execute():
-	unit.cell_pos = target_cell
+	unit.cell = target_cell
 	unit.movement_points -= path.cost
 	unit.move_following_path(path.world_points)
 
 
 func undo():
 	unit.facing = facing
-	unit.cell_pos = start_cell
+	unit.cell = start_cell
 	unit.movement_points += path.cost
 	unit.global_position = start_pos
 	unit.select()

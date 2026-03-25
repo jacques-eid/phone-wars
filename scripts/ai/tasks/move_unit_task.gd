@@ -4,7 +4,7 @@ extends AsyncTask
 func _run_async() -> void:
 	var ai_controller: AIController = agent as AIController
 	var target_cell: Vector2i = get_random_target_cell(ai_controller)
-	print('selected_unit.pos: ', ai_controller.selected_unit.cell_pos)
+	print('selected_unit.pos: ', ai_controller.selected_unit.cell)
 	_run(ai_controller.move_unit_to_cell, target_cell)
 
 

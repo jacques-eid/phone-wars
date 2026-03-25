@@ -42,10 +42,10 @@ func selection_attempt(cell: Vector2i) -> SelectionResult.Values:
 
 func selected_cell_pos() -> Vector2i:
 	if selected_unit != null:
-		return selected_unit.cell_pos
+		return selected_unit.cell
 
 	if selected_building != null:
-		return selected_building.cell_pos
+		return selected_building.cell
 
 	return Vector2i.ZERO
 
@@ -129,7 +129,7 @@ func capture_available() -> bool:
 	if selected_unit == null:
 		return false
 
-	var unit_pos: Vector2i = selected_unit.cell_pos
+	var unit_pos: Vector2i = selected_unit.cell
 	var building: Building = buildings_manager.get_building_at(unit_pos)
 	if building == null:
 		return false
@@ -142,7 +142,7 @@ func merge_available() -> bool:
 	if selected_unit == null:
 		return false
 	
-	var unit_pos: Vector2i = selected_unit.cell_pos
+	var unit_pos: Vector2i = selected_unit.cell
 	var unit: Unit = units_manager.get_unit_at(unit_pos)
 	if unit == null or unit == selected_unit:
 		return false
@@ -167,10 +167,10 @@ func estimate_damage() -> EstimatedDamageResult:
 	edr.attacker = selected_unit
 	edr.defender = target_unit
 
-	var building: Building = buildings_manager.get_building_at(target_unit.cell_pos)
+	var building: Building = buildings_manager.get_building_at(target_unit.cell)
 
 	if building == null:
-		var terrain_data: TerrainData = terrain_manager.get_terrain_data(target_unit.cell_pos)
+		var terrain_data: TerrainData = terrain_manager.get_terrain_data(target_unit.cell)
 		edr.terrain_data = terrain_data
 		edr.estimated_damage = CombatManager.compute_damage(edr.attacker, edr.defender, terrain_data.defense_bonus)
 		return edr
@@ -196,7 +196,7 @@ func _confirm_movement() -> void:
 		return
 
 	var first_move_unit_command: MoveUnitCommand = move_unit_commands.pop_front()
-	units_manager.move_unit(selected_unit, first_move_unit_command.start_cell, selected_unit.cell_pos)
+	units_manager.move_unit(selected_unit, first_move_unit_command.start_cell, selected_unit.cell)
 
 	move_unit_commands.clear()
 

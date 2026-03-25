@@ -43,7 +43,7 @@ func get_world_position_from_cell(cell_position: Vector2i) -> Vector2:
 # Return a dictionary of all the reachable cells
 # Exclude the current unit cell
 func get_reachable_cells(unit: Unit) -> Array[Vector2i]:
-	var start: Vector2i = unit.cell_pos
+	var start: Vector2i = unit.cell
 	var frontier := [{ "cell": start, "cost": 0.0 }]
 	var visited := { start: 0.0 }
 
@@ -84,7 +84,7 @@ func get_reachable_cells(unit: Unit) -> Array[Vector2i]:
 	var results: Array[Vector2i]
 	results.assign(visited.keys())
 	# erase the current unit
-	results.erase(unit.cell_pos)
+	results.erase(unit.cell)
 
 	return results
 

@@ -9,7 +9,7 @@ signal owner_changed()
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 
-var cell_pos: Vector2i = Vector2i.ZERO
+var cell: Vector2i = Vector2i.ZERO
 
 
 func _ready() -> void:
