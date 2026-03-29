@@ -17,7 +17,7 @@ func _ready() -> void:
 
 
 
-func load_production_list(prod_list: ProductionList, team: Team) -> void:
+func load_production_list(prod_list: ProductionList, controller: TeamController) -> void:
 	# Clear previous
 	for child in production_list.get_children():
 		child.queue_free()
@@ -26,7 +26,7 @@ func load_production_list(prod_list: ProductionList, team: Team) -> void:
 	for entry in prod_list.entries:
 		var ui_entry: ProductionEntryPanel = entry_scene.instantiate()
 		production_list.add_child(ui_entry)
-		ui_entry.load_from_entry(entry, team)
+		ui_entry.load_from_entry(entry, controller)
 		ui_entry.build_button_clicked.connect(func(e: ProductionEntry): build_clicked.emit(e))
 	
 	

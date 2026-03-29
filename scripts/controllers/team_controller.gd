@@ -51,7 +51,7 @@ func focus(focus_point: Vector2) -> void:
 
 
 func get_default_focus_point() -> Vector2:
-	for building: Building in buildings_manager.buildings.values():
+	for building: Building in buildings_manager.get_friendly_buildings(team):
 		if building.type() == BuildingType.Values.HQ:
 			return building.position
 
@@ -149,6 +149,10 @@ func get_terrain_defense(cell: Vector2i) -> float:
 		terrain_defense = building.defense()
 
 	return terrain_defense
+
+
+func can_buy(entry: ProductionEntry) -> bool:
+	return entry.cost() <= team.funds
 
 
 func buy_unit(entry: ProductionEntry) -> void:

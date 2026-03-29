@@ -21,7 +21,7 @@ func _enter() -> void:
 	var selected_building: Building = ui_controller.active_controller.selected_building
 	ui_controller.production_panel.load_production_list(
 		selected_building.production_list, 
-		selected_building.team)
+		ui_controller.active_controller)
 	ui_controller.show_selection_indicator()
 
 

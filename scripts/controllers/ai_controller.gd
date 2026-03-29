@@ -77,7 +77,17 @@ func get_buildings_to_buy() -> Array[Building]:
 
 # Returns an array of all the buildings left to capture on the map
 func get_buildings_to_capture() -> Array[Building]:
-	return units_manager.get_enemy_buildings(team)
+	return buildings_manager.get_enemy_buildings(team)
+
+
+func get_buildings_to_capture_in_range(cell: Vector2i) -> Array[Building]:
+	var buildings: Array[Building]
+
+	for building: Building in get_buildings_to_capture():
+		if building.cell.distance_to(cell) <= 5:
+			buildings.append(building)
+
+	return buildings
 
 
 func cell_in_enemy_attack_range(cell: Vector2i) -> bool:

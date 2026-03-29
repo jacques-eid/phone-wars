@@ -66,9 +66,6 @@ script = ExtResource("5_5g5s3")
 custom_name = "UnitsSequence"
 children = [SubResource("BTAction_u2fvf"), SubResource("BTForEach_mbo0r"), SubResource("BTAction_5g5s3"), SubResource("BTAction_d7rom"), SubResource("BTAction_ycshe")]
 
-[sub_resource type="BTConsolePrint" id="BTConsolePrint_ycshe"]
-text = "Time to buy something"
-
 [sub_resource type="BTAction" id="BTAction_204a5"]
 script = ExtResource("6_dtcg0")
 
@@ -91,7 +88,7 @@ script = ExtResource("8_5g5s3")
 
 [sub_resource type="BTSequence" id="BTSequence_ycshe"]
 custom_name = "BuySequence"
-children = [SubResource("BTConsolePrint_ycshe"), SubResource("BTAction_204a5"), SubResource("BTForEach_5643g"), SubResource("BTAction_5643g"), SubResource("BTAction_8t25q"), SubResource("BTAction_45hym")]
+children = [SubResource("BTAction_204a5"), SubResource("BTForEach_5643g"), SubResource("BTAction_5643g"), SubResource("BTAction_8t25q"), SubResource("BTAction_45hym")]
 
 [sub_resource type="BBVariant" id="BBVariant_dtcg0"]
 type = 1

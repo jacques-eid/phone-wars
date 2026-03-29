@@ -13,7 +13,7 @@ enum Type {
 @export var face_direction: FaceDirection.Values = FaceDirection.Values.LEFT
 @export var funds: int = 1500
 
-@export var controller: TeamController
+var controller: TeamController
 
 
 func setup(
@@ -46,12 +46,7 @@ func neutral_team() -> bool:
 
 func is_same_team(team: Team) -> bool:
 	return self == team
-
-
-func can_buy(entry: ProductionEntry) -> bool:
-	return entry.cost() <= funds
 	
-
 
 # Team profile getters
 func replace_unit_colors(material: ShaderMaterial) -> void:

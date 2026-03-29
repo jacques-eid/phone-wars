@@ -205,8 +205,8 @@ func can_merge_with_unit(unit: Unit) -> bool:
 	if unit.type() != type():
 		return false
 
-	# one of them is full hp
-	if unit.is_max_health() or is_max_health():
+	# both of them are max health
+	if unit.is_max_health() and is_max_health():
 		return false
 
 	return true

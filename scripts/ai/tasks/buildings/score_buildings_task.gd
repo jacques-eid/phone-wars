@@ -14,7 +14,12 @@ func _tick(_delta: float) -> Status:
 
 	var production_list: ProductionList = building.production_list
 	for pe: ProductionEntry in production_list.entries:
+		if not ai_controller.can_buy(pe):
+			continue
 		results.append(score_building_with_unit_profile(building, pe))
+
+	if results.size() == 0:
+		return FAILURE
 
 	blackboard.set_var("results", results)
 	return SUCCESS
@@ -26,6 +31,7 @@ func score_building_with_unit_profile(building: Building, production_entry: Prod
 	result.production_entry = production_entry
 	result.focus_point = building.global_position
 	result.score += unit_values(production_entry.unit_profile.type)
+	result.score += context_bonus(building, production_entry.unit_profile.type)
 	result.score += position_value(building)
 	result.score -= danger_penalty(building)
 	result.score -= cost_penalty(production_entry.unit_profile)
@@ -50,11 +56,9 @@ func unit_values(unit_type: UnitType.Values) -> float:
 
 func context_bonus(building: Building, unit_type: UnitType.Values) -> float:
 	var score: float = 0.0
-	var infantry_count: int = ai_controller.get_infantry_count()
-	var buildings_to_capture: int = ai_controller.get_buildings_to_capture().size()
 
 	if unit_type == UnitType.Values.INFANTRY:
-		score += max(0, (buildings_to_capture - infantry_count) * 20)
+		score = score_buildings_to_capture(building)
 
 
 	if ai_controller.enemy_nearby(building.cell):
@@ -63,8 +67,18 @@ func context_bonus(building: Building, unit_type: UnitType.Values) -> float:
 		if unit_type == UnitType.Values.ARTILLERY:
 			score += 20
 
-	if ai_controller.team.funds > 8000 and unit_type == UnitType.Values.LIGHT_TANK:
+	if ai_controller.team.funds > 1000 and unit_type == UnitType.Values.LIGHT_TANK:
 		score += 20
+
+	return score
+
+
+func score_buildings_to_capture(building: Building) -> float:
+	var score: float = 0.0
+	var infantry_count: int = ai_controller.get_infantry_count()
+	var buildings_to_capture: Array[Building] = ai_controller.get_buildings_to_capture_in_range(building.cell)
+
+	score += max(0, (buildings_to_capture.size() - infantry_count) * 10)
 
 	return score
 

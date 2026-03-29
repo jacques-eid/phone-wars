@@ -63,6 +63,9 @@ func score_attack(unit: Unit) -> AIActionResult:
 		result.score = 100 + unit.type()
 		return result
 
+	if len(secondary_targets) == 0:
+		return result
+		
 	result.target_unit = select_best_unit_to_attack(secondary_targets)
 	result.score = 50 + unit.type()
 	return result
