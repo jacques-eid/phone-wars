@@ -16,7 +16,7 @@ func _tick(_delta: float) -> Status:
 	var merge_result: AIActionResult = score_merge(unit)
 	var move_result: AIActionResult = score_move(unit)
 
-	var results: Array[AIActionResult] = blackboard.get_var("results")
+	var results: Array[AIScoreResult] = blackboard.get_var("results")
 	results.append(attack_result)
 	results.append(capture_result)
 	results.append(merge_result)
@@ -32,6 +32,7 @@ func _tick(_delta: float) -> Status:
 func score_attack(unit: Unit) -> AIActionResult:
 	var result: AIActionResult = AIActionResult.new()
 	result.unit = unit
+	result.focus_point = unit.global_position
 	result.type = AIActionType.Values.ATTACK
 
 	var targets: Array[Unit] = ai_controller.get_possible_targets(unit)
@@ -92,6 +93,7 @@ func select_best_unit_to_attack(targets: Array[Unit]) -> Unit:
 func score_capture(unit: Unit) -> AIActionResult:
 	var result: AIActionResult = AIActionResult.new()
 	result.unit = unit
+	result.focus_point = unit.global_position
 	result.type = AIActionType.Values.CAPTURE
 
 	if not unit.can_capture():
@@ -141,6 +143,7 @@ func select_best_building_to_capture(unit: Unit, buildings: Array[Building]) -> 
 func score_merge(unit: Unit) -> AIActionResult:
 	var result: AIActionResult = AIActionResult.new()
 	result.unit = unit
+	result.focus_point = unit.global_position
 	result.type = AIActionType.Values.MERGE
 	
 	var units: Array[Unit] = ai_controller.find_mergeable_units(unit)
@@ -177,6 +180,7 @@ func select_best_unit_to_merge(units: Array[Unit]) -> Array:
 func score_move(unit: Unit) -> AIActionResult:
 	var result: AIActionResult = AIActionResult.new()
 	result.unit = unit
+	result.focus_point = unit.global_position
 	result.type = AIActionType.Values.MOVE
 	
 	var building: Building = ai_controller.find_closest_building(unit)
@@ -185,7 +189,7 @@ func score_move(unit: Unit) -> AIActionResult:
 		result.target_cell = select_best_cell_to_capture(unit, building.cell)
 	
 	var score: int = 0
-	var enemy: Unit = ai_controller.find_closest_enemy(unit)
+	var enemy: Unit = ai_controller.find_closest_enemy(unit.cell)
 	if enemy != null:
 		score = score_move_towards_enemy(unit, enemy)
 		if score > result.score:

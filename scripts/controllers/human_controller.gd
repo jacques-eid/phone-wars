@@ -206,8 +206,3 @@ func _confirm_movement() -> void:
 	units_manager.move_unit(selected_unit, first_move_unit_command.start_cell, selected_unit.cell)
 
 	move_unit_commands.clear()
-
-
-func on_buy_unit(entry: ProductionEntry) -> void:
-	buy_unit(entry)
-	deselect_building()

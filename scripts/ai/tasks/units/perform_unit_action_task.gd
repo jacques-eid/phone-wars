@@ -1,9 +1,19 @@
 extends AsyncTask
 
 
+var ai_controller: AIController
+
+
+func _enter() -> void:
+	ai_controller = agent as AIController
+
+
 func _run_async() -> void:
 	var top_result: AIActionResult = blackboard.get_var("top_result")
 
+	ai_controller.selected_unit = top_result.unit
+	ai_controller.selected_unit.select()
+	
 	match top_result.type:
 		AIActionType.Values.ATTACK:
 			_run(handle_attack, top_result)
@@ -16,7 +26,6 @@ func _run_async() -> void:
 
 
 func handle_attack(top_result: AIActionResult) -> void:
-	var ai_controller: AIController = agent as AIController
 	ai_controller.target_unit = top_result.target_unit
 
 	if ai_controller.can_attack_without_moving(top_result.target_unit.cell):
@@ -29,7 +38,6 @@ func handle_attack(top_result: AIActionResult) -> void:
 
 
 func handle_capture(top_result: AIActionResult) -> void:
-	var ai_controller: AIController = agent as AIController
 	var target_cell: Vector2i = top_result.target_building.cell
 
 	if top_result.unit.cell == target_cell:
@@ -41,7 +49,6 @@ func handle_capture(top_result: AIActionResult) -> void:
 
 
 func handle_merge(top_result: AIActionResult) -> void:
-	var ai_controller: AIController = agent as AIController
 	var target_cell: Vector2i = top_result.target_unit.cell
 
 	if top_result.unit.cell == target_cell:
@@ -53,7 +60,6 @@ func handle_merge(top_result: AIActionResult) -> void:
 
 
 func handle_move(top_result: AIActionResult) -> void:
-	var ai_controller: AIController = agent as AIController
 	ai_controller.move_command = await ai_controller.move_unit_to_cell(top_result.target_cell)
 	await ai_controller.get_tree().process_frame
 	ai_controller.exhaust_unit()

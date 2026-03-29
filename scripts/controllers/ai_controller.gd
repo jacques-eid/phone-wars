@@ -56,6 +56,30 @@ func get_units_to_play() -> Array[Unit]:
 	return units.filter(func(unit: Unit): return not unit.exhausted)
 
 
+func get_infantry_count() -> int:
+	var units: Array[Unit] = units_manager.get_friendly_units(team)
+
+	return units.filter(func(unit: Unit): return unit.type() == UnitType.Values.INFANTRY).size()
+
+
+# Returns an array of owned buildings that can buy units
+func get_buildings_to_buy() -> Array[Building]:
+	var buildings: Array[Building] = buildings_manager.get_friendly_buildings(team)
+	var results: Array[Building]
+
+	for building: Building in buildings:
+		if units_manager.get_unit_at(building.cell) == null and \
+			building.can_buy():
+			results.append(building)
+
+	return results
+
+
+# Returns an array of all the buildings left to capture on the map
+func get_buildings_to_capture() -> Array[Building]:
+	return units_manager.get_enemy_buildings(team)
+
+
 func cell_in_enemy_attack_range(cell: Vector2i) -> bool:
 	var enemy_units: Array[Unit] = units_manager.get_enemy_units(team)
 
@@ -64,6 +88,17 @@ func cell_in_enemy_attack_range(cell: Vector2i) -> bool:
 		if cell in cells_in_attack_range:
 			return true
 
+	return false
+
+
+# Returns true if an enemy unit is at less than 5 cells of the cell
+func enemy_nearby(cell: Vector2i) -> bool:
+	var enemy_units: Array[Unit] = units_manager.get_enemy_units(team)
+
+	for unit: Unit in enemy_units:
+		if unit.cell.distance_to(cell) <= 5:
+			return true
+		
 	return false
 
 
@@ -99,7 +134,7 @@ func estimate_damage(unit: Unit, cell: Vector2i) -> float:
 	for enemy: Unit in units_manager.get_enemy_units(unit.team):
 		if cell in units_manager.get_cells_in_attack_range(enemy):
 			var terrain_defense: float = get_terrain_defense(cell)
-			total_damage += CombatManager.compute_damage(enemy,enemy.actual_health, unit, terrain_defense)
+			total_damage += CombatManager.compute_damage(enemy, enemy.actual_health, unit, terrain_defense)
 
 	return total_damage
 
@@ -134,12 +169,12 @@ func find_mergeable_units(unit: Unit) -> Array[Unit]:
 
 
 # Returns the closest enemy unit not in range during this turn
-func find_closest_enemy(unit: Unit) -> Unit:
+func find_closest_enemy(cell: Vector2i) -> Unit:
 	var best_enemy: Unit
 	var best_dist: float = INF
 
-	for enemy: Unit in units_manager.get_enemy_units(unit.team):
-		var dist: float = unit.cell.distance_to(enemy.cell)
+	for enemy: Unit in units_manager.get_enemy_units(team):
+		var dist: float = cell.distance_to(enemy.cell)
 
 		if dist < best_dist:
 			best_dist = dist

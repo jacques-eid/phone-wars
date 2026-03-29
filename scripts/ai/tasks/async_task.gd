@@ -11,6 +11,11 @@ func _enter() -> void:
 	done = false
 
 
+func _exit() -> void:
+	running = false
+	done = false
+
+
 func _tick(_delta: float) -> Status:
 	if not running:
 		running = true

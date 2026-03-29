@@ -24,6 +24,21 @@ func get_buildings() -> Array[Building]:
 	return results
 
 
+func get_buildings_with_filter(callable: Callable) -> Array[Building]:
+	var res: Array[Building]
+	var arr = buildings.values().filter(func(building: Building): return callable.call(building))
+	res.assign(arr)
+	return res
+
+
+func get_friendly_buildings(team: Team) -> Array[Building]:
+	return get_buildings_with_filter(func(building: Building): return building.team.is_same_team(team))
+
+func get_enemy_buildings(team: Team) -> Array[Building]:
+	return get_buildings_with_filter(func(building: Building): return not building.team.is_same_team(team))
+
+
+
 func get_building_at(cell_pos: Vector2i) -> Building:
 	return buildings.get(cell_pos, null) as Building
 

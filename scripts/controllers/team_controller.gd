@@ -162,6 +162,8 @@ func buy_unit(entry: ProductionEntry) -> void:
 	gameplay_event.emit(GameplayEvent.Values.FUNDS_SPENT, team)
 	await animation_finished
 
+	selected_building = null
+
 
 func exhaust_unit() -> void:
 	_confirm_movement()

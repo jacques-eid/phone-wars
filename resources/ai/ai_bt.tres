@@ -1,10 +1,13 @@
 [gd_resource type="BehaviorTree" format=3 uid="uid://c0fxj88jm6pit"]
 
-[ext_resource type="Script" uid="uid://bedaafq38mk1l" path="res://scripts/ai/tasks/score_actions_task.gd" id="1_d7rom"]
-[ext_resource type="Script" uid="uid://quedmey6k7m0" path="res://scripts/ai/tasks/filter_units_to_play_task.gd" id="1_ycshe"]
+[ext_resource type="Script" uid="uid://quedmey6k7m0" path="res://scripts/ai/tasks/units/filter_units_to_play_task.gd" id="1_ycshe"]
 [ext_resource type="Script" uid="uid://dc2pt6ob6iy3c" path="res://scripts/ai/tasks/focus_camera_task.gd" id="2_d7rom"]
-[ext_resource type="Script" uid="uid://7ig4i2731q5t" path="res://scripts/ai/tasks/select_top_action_task.gd" id="2_ycshe"]
-[ext_resource type="Script" uid="uid://ha8my00d4l5o" path="res://scripts/ai/tasks/perform_action_task.gd" id="4_d7rom"]
+[ext_resource type="Script" uid="uid://bedaafq38mk1l" path="res://scripts/ai/tasks/units/score_units_actions_task.gd" id="2_u2fvf"]
+[ext_resource type="Script" uid="uid://7ig4i2731q5t" path="res://scripts/ai/tasks/select_top_result_task.gd" id="3_dtcg0"]
+[ext_resource type="Script" uid="uid://ha8my00d4l5o" path="res://scripts/ai/tasks/units/perform_unit_action_task.gd" id="5_5g5s3"]
+[ext_resource type="Script" uid="uid://ciaabbai0xtqk" path="res://scripts/ai/tasks/buildings/filter_buildings_to_buy_task.gd" id="6_dtcg0"]
+[ext_resource type="Script" uid="uid://ceyxpau24onbm" path="res://scripts/ai/tasks/buildings/score_buildings_task.gd" id="7_5g5s3"]
+[ext_resource type="Script" uid="uid://negkvg3nvv2v" path="res://scripts/ai/tasks/buildings/buy_unit_action.gd" id="8_5g5s3"]
 
 [sub_resource type="BlackboardPlan" id="BlackboardPlan_mvjew"]
 var/units/name = &"units"
@@ -20,39 +23,88 @@ var/results/name = &"results"
 var/results/type = 28
 var/results/value = []
 var/results/hint = 0
-var/results/hint_string = "Array[AIActionResult]"
+var/results/hint_string = "Array[AIScoreResult]"
 var/top_result/name = &"top_result"
 var/top_result/type = 24
 var/top_result/hint = 0
-var/top_result/hint_string = "AIActionResult"
+var/top_result/hint_string = "AIScoreResult"
 var/task/name = &"task"
 var/task/type = 24
 var/task/hint = 0
 var/task/hint_string = ""
+var/building/name = &"building"
+var/building/type = 24
+var/building/hint = 34
+var/building/hint_string = "Building"
+var/buildings/name = &"buildings"
+var/buildings/type = 28
+var/buildings/value = []
+var/buildings/hint = 0
+var/buildings/hint_string = "Array[Building]"
 
 [sub_resource type="BTAction" id="BTAction_u2fvf"]
 script = ExtResource("1_ycshe")
 
 [sub_resource type="BTAction" id="BTAction_dtcg0"]
-script = ExtResource("1_d7rom")
+script = ExtResource("2_u2fvf")
 
 [sub_resource type="BTForEach" id="BTForEach_mbo0r"]
 array_var = &"units"
 save_var = &"unit"
 children = [SubResource("BTAction_dtcg0")]
 
-[sub_resource type="BTAction" id="BTAction_mbo0r"]
-script = ExtResource("2_ycshe")
+[sub_resource type="BTAction" id="BTAction_5g5s3"]
+script = ExtResource("3_dtcg0")
 
 [sub_resource type="BTAction" id="BTAction_d7rom"]
 script = ExtResource("2_d7rom")
 
 [sub_resource type="BTAction" id="BTAction_ycshe"]
-script = ExtResource("4_d7rom")
+script = ExtResource("5_5g5s3")
 
 [sub_resource type="BTSequence" id="BTSequence_u2fvf"]
-children = [SubResource("BTAction_u2fvf"), SubResource("BTForEach_mbo0r"), SubResource("BTAction_mbo0r"), SubResource("BTAction_d7rom"), SubResource("BTAction_ycshe")]
+custom_name = "UnitsSequence"
+children = [SubResource("BTAction_u2fvf"), SubResource("BTForEach_mbo0r"), SubResource("BTAction_5g5s3"), SubResource("BTAction_d7rom"), SubResource("BTAction_ycshe")]
+
+[sub_resource type="BTConsolePrint" id="BTConsolePrint_ycshe"]
+text = "Time to buy something"
+
+[sub_resource type="BTAction" id="BTAction_204a5"]
+script = ExtResource("6_dtcg0")
+
+[sub_resource type="BTAction" id="BTAction_gplsa"]
+script = ExtResource("7_5g5s3")
+
+[sub_resource type="BTForEach" id="BTForEach_5643g"]
+array_var = &"buildings"
+save_var = &"building"
+children = [SubResource("BTAction_gplsa")]
+
+[sub_resource type="BTAction" id="BTAction_5643g"]
+script = ExtResource("3_dtcg0")
+
+[sub_resource type="BTAction" id="BTAction_8t25q"]
+script = ExtResource("2_d7rom")
+
+[sub_resource type="BTAction" id="BTAction_45hym"]
+script = ExtResource("8_5g5s3")
+
+[sub_resource type="BTSequence" id="BTSequence_ycshe"]
+custom_name = "BuySequence"
+children = [SubResource("BTConsolePrint_ycshe"), SubResource("BTAction_204a5"), SubResource("BTForEach_5643g"), SubResource("BTAction_5643g"), SubResource("BTAction_8t25q"), SubResource("BTAction_45hym")]
+
+[sub_resource type="BBVariant" id="BBVariant_dtcg0"]
+type = 1
+saved_value = true
+resource_name = "true"
+
+[sub_resource type="BTSetAgentProperty" id="BTSetAgentProperty_5g5s3"]
+property = &"done"
+value = SubResource("BBVariant_dtcg0")
+
+[sub_resource type="BTSelector" id="BTSelector_ycshe"]
+children = [SubResource("BTSequence_u2fvf"), SubResource("BTSequence_ycshe"), SubResource("BTSetAgentProperty_5g5s3")]
 
 [resource]
 blackboard_plan = SubResource("BlackboardPlan_mvjew")
-root_task = SubResource("BTSequence_u2fvf")
+root_task = SubResource("BTSelector_ycshe")

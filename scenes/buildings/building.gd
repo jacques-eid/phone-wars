@@ -56,3 +56,7 @@ func max_capture_points() -> int:
 
 func income() -> int:
 	return building_profile.building_income
+
+
+func can_buy() -> bool:
+	return production_list != null
