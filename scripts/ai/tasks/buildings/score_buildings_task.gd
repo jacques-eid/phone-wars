@@ -35,6 +35,7 @@ func score_building_with_unit_profile(building: Building, production_entry: Prod
 	result.score += position_value(building)
 	result.score -= danger_penalty(building)
 	result.score -= cost_penalty(production_entry.unit_profile)
+	result.score -= repetition_penalty(production_entry.unit_profile.type)
 
 	return result
 
@@ -75,10 +76,10 @@ func context_bonus(building: Building, unit_type: UnitType.Values) -> float:
 
 func score_buildings_to_capture(building: Building) -> float:
 	var score: float = 0.0
-	var infantry_count: int = ai_controller.get_infantry_count()
+	var infantry_count: int = ai_controller.get_unit_type_count(UnitType.Values.INFANTRY)
 	var buildings_to_capture: Array[Building] = ai_controller.get_buildings_to_capture_in_range(building.cell)
 
-	score += max(0, (buildings_to_capture.size() - infantry_count) * 10)
+	score += max(0, (buildings_to_capture.size() - infantry_count) * 20)
 
 	return score
 
@@ -104,3 +105,8 @@ func danger_penalty(_building: Building) -> float:
 # Add a small penaly for expensive units
 func cost_penalty(unit_profile: UnitProfile) -> float:
 	return unit_profile.cost / 100.0
+
+
+func repetition_penalty(unit_type: UnitType.Values) -> float:
+	var count: int = ai_controller.get_unit_type_count(unit_type)
+	return count * 15 

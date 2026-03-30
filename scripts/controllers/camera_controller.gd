@@ -16,8 +16,8 @@ func setup(ui_controller: UIController, input_manager: InputManager, terrain_man
 
 	camera.limit_left = terrain_manager.terrain_start_pos.x * Const.CELL_SIZE.x
 	camera.limit_top = terrain_manager.terrain_start_pos.y * Const.CELL_SIZE.y
-	camera.limit_right = terrain_manager.terrain_end_pos.x * Const.CELL_SIZE.x
-	camera.limit_bottom = terrain_manager.terrain_end_pos.y * Const.CELL_SIZE.y
+	camera.limit_right = (terrain_manager.terrain_end_pos.x + 1) * Const.CELL_SIZE.x
+	camera.limit_bottom = (terrain_manager.terrain_end_pos.y + 1)  * Const.CELL_SIZE.y
 	camera.limit_enabled = true
 	
 

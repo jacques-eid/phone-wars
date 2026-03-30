@@ -13,14 +13,15 @@ func _ready() -> void:
 	
 	
 func _draw():
-	for grid_map in grid.terrain_manager.terrain_layers:			
-		# Draw grid
-		if show_cells:
-			for cell in grid_map.get_used_cells():
-				var local_pos = cell * Const.CELL_SIZE
-				draw_rect(Rect2(local_pos, Const.CELL_SIZE), Color(1, 1, 1, 0.3), false, 1.0)
-				if show_coordinates:
-					draw_string(font, local_pos, "%s-%s"%[cell.x, cell.y-1], HORIZONTAL_ALIGNMENT_LEFT, -1, 12)
+	if not show_cells:
+		return
+
+	for cell in grid.terrain_manager.terrain_cells.keys():
+		var local_pos = cell * Const.CELL_SIZE
+		draw_rect(Rect2(local_pos, Const.CELL_SIZE), Color(1, 1, 1, 0.3), false, 1.0)
+		if show_coordinates:
+			local_pos.y += Const.CELL_SIZE.y # Add an offset to write it on the bottom
+			draw_string(font, local_pos, "%s:%s"%[cell.x, cell.y], HORIZONTAL_ALIGNMENT_LEFT, -1, 12)
 
 		# Highlight a cell (e.g., mouse over)
 		# if highlight_cell.x != -1:

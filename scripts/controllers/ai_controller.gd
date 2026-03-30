@@ -56,10 +56,10 @@ func get_units_to_play() -> Array[Unit]:
 	return units.filter(func(unit: Unit): return not unit.exhausted)
 
 
-func get_infantry_count() -> int:
+func get_unit_type_count(unit_type: UnitType.Values) -> int:
 	var units: Array[Unit] = units_manager.get_friendly_units(team)
 
-	return units.filter(func(unit: Unit): return unit.type() == UnitType.Values.INFANTRY).size()
+	return units.filter(func(unit: Unit): return unit.type() == unit_type).size()
 
 
 # Returns an array of owned buildings that can buy units
@@ -176,6 +176,11 @@ func find_mergeable_units(unit: Unit) -> Array[Unit]:
 			units.append(target)
 
 	return units
+
+
+# Returns all the enemies
+func find_enemies() -> Array[Unit]:
+	return units_manager.get_enemy_units(team)
 
 
 # Returns the closest enemy unit not in range during this turn

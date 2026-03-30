@@ -11,11 +11,12 @@ func setup() -> void:
 func init_buildings() -> void:
 	for building in get_children():
 		if building is Building:
-			var cell_pos: Vector2i = Vector2i(building.position / Vector2(Const.CELL_SIZE))
+			print('building.position: ', floor(building.position / Vector2(Const.CELL_SIZE)))
+			var cell_pos: Vector2i = Vector2i(floor(building.position / Vector2(Const.CELL_SIZE)))
 			buildings[cell_pos] = building
 			building.cell = cell_pos
 			building.setup()
-			print("adding building %s at %s" % [building.name, building.cell])
+			print("adding building %s [%s] at %s" % [building.name, building.team, building.cell])
 			
 
 func get_buildings() -> Array[Building]:
@@ -34,9 +35,9 @@ func get_buildings_with_filter(callable: Callable) -> Array[Building]:
 func get_friendly_buildings(team: Team) -> Array[Building]:
 	return get_buildings_with_filter(func(building: Building): return building.team.is_same_team(team))
 
+
 func get_enemy_buildings(team: Team) -> Array[Building]:
 	return get_buildings_with_filter(func(building: Building): return not building.team.is_same_team(team))
-
 
 
 func get_building_at(cell_pos: Vector2i) -> Building:
