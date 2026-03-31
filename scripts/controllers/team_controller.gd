@@ -33,7 +33,7 @@ func _setup() -> void:
 
 
 func _play_turn() -> void:
-	push_error("_play_turn() must be implemented")
+	await heal_units_on_friendly_buildings()
 
 
 func _end_turn() -> void:
@@ -174,3 +174,21 @@ func exhaust_unit() -> void:
 
 	selected_unit.exhaust()
 	selected_unit = null
+
+
+func heal_units_on_friendly_buildings() -> void:
+	for unit: Unit in units_manager.get_friendly_units(team):
+		var building: Building = buildings_manager.get_building_at(unit.cell)
+		if building == null or building.team != team:
+			continue
+		
+		var heal_result: HealResult = units_manager.heal_unit(unit, team, 3)
+		# can't heal this unit
+		if heal_result.healed_hp <= 0:
+			continue
+
+		team.funds -= heal_result.cost
+
+		gameplay_event.emit(GameplayEvent.Values.HEAL, heal_result)
+		await animation_finished
+		unit.gain_health(heal_result.healed_hp)

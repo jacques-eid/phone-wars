@@ -43,4 +43,4 @@ func focus_on(pos: Vector2) -> void:
 	tween.tween_property(camera, "position", pos, tween_duration)
 
 	await tween.finished
-	await get_tree().create_timer(0.5).timeout
+	await get_tree().create_timer(0.1).timeout

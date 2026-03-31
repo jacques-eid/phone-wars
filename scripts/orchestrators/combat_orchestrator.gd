@@ -44,7 +44,7 @@ func play_defender_reaction(attacker: Unit, defender: Unit) -> void:
 
 
 func show_damage_popup(defender: Unit, damage: float) -> void:
-	damage_popup.update(damage)
+	damage_popup.update(-damage)
 	await damage_popup.play(defender)
 
 

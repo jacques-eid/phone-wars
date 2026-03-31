@@ -49,7 +49,7 @@ func _ready() -> void:
 
 func setup() -> void:
 	set_team(team)
-	gain_health(max_health())
+	gain_health(max_health() / 2.0)
 	reset_movement_points()
 	
 	if unit_profile.capture_capacity > 0:

@@ -118,7 +118,27 @@ func merge_units(main_unit: Unit, merged_unit: Unit) -> int:
 	remove_unit(merged_unit)
 
 	return money_gain
-	
+
+
+func heal_unit(unit: Unit, team: Team, healing_value: int) -> HealResult:
+	var heal_result: HealResult = HealResult.new()
+	heal_result.unit = unit
+	heal_result.team = team
+
+	var missing_hp: int = int(unit.max_health() - unit.actual_health)
+	var healed_hp: int = min(healing_value, missing_hp)
+	var cost_per_hp: float = unit.cost() * 0.1
+
+	var affordable_hp: int = int(team.funds / cost_per_hp)
+	heal_result.healed_hp = min(healed_hp, affordable_hp)
+
+	if heal_result.healed_hp <= 0:
+		return heal_result
+
+	heal_result.cost = int(heal_result.healed_hp * cost_per_hp)
+
+	return heal_result
+
 
 # Returns all the cells that are directly attackable by the unit
 # without moving

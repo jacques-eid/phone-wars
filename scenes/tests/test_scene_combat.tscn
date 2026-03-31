@@ -77,7 +77,7 @@ face_direction = 1
 
 [node name="BlueTeam" parent="Teams" unique_id=704522067 instance=ExtResource("12_n3opb")]
 team_profile = ExtResource("19_k53m2")
-team_type = 1
+team_type = 0
 
 [node name="NeutralTeam" parent="Teams" unique_id=103368924 instance=ExtResource("12_n3opb")]
 team_profile = ExtResource("20_n3opb")
@@ -99,7 +99,7 @@ position = Vector2(216, 224)
 team = NodePath("../../../Teams/RedTeam")
 
 [node name="Soldier2" parent="Managers/UnitsManager" unique_id=666268999 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
-position = Vector2(336, 80)
+position = Vector2(176, 48)
 team = NodePath("../../../Teams/RedTeam")
 
 [node name="Soldier3" parent="Managers/UnitsManager" unique_id=249402440 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
@@ -115,7 +115,7 @@ position = Vector2(432, 48)
 team = NodePath("../../../Teams/RedTeam")
 
 [node name="Recon" parent="Managers/UnitsManager" unique_id=138617836 node_paths=PackedStringArray("team") instance=ExtResource("14_h65yf")]
-position = Vector2(336, 136)
+position = Vector2(272, 112)
 team = NodePath("../../../Teams/RedTeam")
 
 [node name="LightTank" parent="Managers/UnitsManager" unique_id=1263502315 node_paths=PackedStringArray("team") instance=ExtResource("15_8kiat")]

@@ -10,7 +10,7 @@ func _ready() -> void:
 
 
 func update(damage: float) -> void:
-	damage_label.text = "-%s" %int(round(damage))
+	damage_label.text = "%s" %int(round(damage))
 
 
 func play(target: Node2D):

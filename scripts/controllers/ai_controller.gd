@@ -22,6 +22,8 @@ func _setup() -> void:
 
 
 func _play_turn() -> void:
+	await super._play_turn()
+
 	bt_player.active = true
 
 	while not done:

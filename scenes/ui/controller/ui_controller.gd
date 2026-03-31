@@ -224,6 +224,8 @@ func _on_gameplay_event(event: GameplayEvent.Values, cargo: Variant) -> void:
 			await on_capture(cargo)
 		GameplayEvent.Values.COMBAT:
 			await on_combat(cargo)
+		GameplayEvent.Values.HEAL:
+			await on_heal(cargo)
 		
 
 func on_funds_earned(cargo: Variant) -> void:
@@ -265,6 +267,22 @@ func on_combat(cargo: Variant) -> void:
 
 	var result: CombatResult = cargo as CombatResult
 	await combat_orchestrator.execute(result)
+	active_controller.animation_finished.emit()
+
+
+func on_heal(cargo: Variant) -> void:
+	if not cargo is HealResult:
+		return
+	
+	var heal_result: HealResult = cargo as HealResult
+
+	await active_controller.focus(heal_result.unit.global_position)
+	damage_effect.update(heal_result.healed_hp)
+	damage_effect.play(heal_result.unit)
+	var id: int = AudioService.play_loop(spent_coin_audio, team_display.global_position)
+	await team_display.update_funds(heal_result.team.funds)
+	AudioService.stop(id)
+	
 	active_controller.animation_finished.emit()
 
 

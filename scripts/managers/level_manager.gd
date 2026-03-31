@@ -67,11 +67,12 @@ func start_turn() -> void:
 	
 	economy_service.add_money(active_team, new_income)
 	
+	await active_team.controller._play_turn()
+
 	await active_team.controller.focus(active_team.controller.get_default_focus_point())
+	
 	ui_controller.unlock()
 	input_manager.unlock()
-
-	active_team.controller._play_turn()
 
 
 func _on_focus_on(controller: TeamController, focus_point: Vector2) -> void:

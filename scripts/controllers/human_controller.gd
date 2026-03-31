@@ -10,7 +10,7 @@ func _setup() -> void:
 	
 
 func _play_turn() -> void:
-	pass
+	await super._play_turn()
 
 
 func _end_turn() -> void:

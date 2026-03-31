@@ -8,7 +8,7 @@
 [ext_resource type="Script" uid="uid://ciaabbai0xtqk" path="res://scripts/ai/tasks/buildings/filter_buildings_to_buy_task.gd" id="6_dtcg0"]
 [ext_resource type="Script" uid="uid://ceyxpau24onbm" path="res://scripts/ai/tasks/buildings/score_buildings_task.gd" id="7_5g5s3"]
 [ext_resource type="Script" uid="uid://cyj8ykeejto5j" path="res://scripts/ai/tasks/buildings/save_money_task.gd" id="8_204a5"]
-[ext_resource type="Script" path="res://scripts/ai/tasks/buildings/buy_unit_task.gd" id="9_gplsa"]
+[ext_resource type="Script" uid="uid://negkvg3nvv2v" path="res://scripts/ai/tasks/buildings/buy_unit_task.gd" id="9_gplsa"]
 
 [sub_resource type="BlackboardPlan" id="BlackboardPlan_mvjew"]
 var/units/name = &"units"
