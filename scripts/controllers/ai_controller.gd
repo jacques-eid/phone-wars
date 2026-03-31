@@ -200,10 +200,10 @@ func find_closest_enemy(cell: Vector2i) -> Unit:
 	return best_enemy
 
 
-# Returns the closest building not in range during this turn
-func find_closest_building(unit: Unit) -> Building:
+# Returns the closest capturable building not in range during this turn
+func find_closest_capturable_building(unit: Unit) -> Building:
 	var best_building: Building
-	var best_dist: float = int(INF)
+	var best_dist: float = INF
 
 	if not unit.can_capture():
 		return null
@@ -212,6 +212,22 @@ func find_closest_building(unit: Unit) -> Building:
 		if not unit.can_capture_building(building):
 			continue
 
+		var dist: float = unit.cell.distance_to(building.cell)
+
+		if dist < best_dist:
+			best_dist = dist
+			best_building = building
+
+	return best_building
+
+
+# Returns the closest friendly building
+func find_closest_friendly_building(unit: Unit) -> Building:
+	var best_building: Building
+	var best_dist: float = INF
+
+	for building: Building in buildings_manager.get_friendly_buildings(team):
+		print('building: ', building)
 		var dist: float = unit.cell.distance_to(building.cell)
 
 		if dist < best_dist:

@@ -64,6 +64,7 @@ var action_running_state: UIActionRunningState
 
 var active_controller: TeamController
 var lock_controller: bool
+var interactable_controller: bool
 
 var capture_orchestrator: CaptureOrchestrator
 var combat_orchestrator: CombatOrchestrator
@@ -131,36 +132,40 @@ func init_state_machine() -> void:
 	state_machine.set_active(true)
 
 
+func can_interact() -> bool:
+	return not lock_controller and interactable_controller
+
+
 func _on_cell_tap(cell: Vector2i) -> void:
-	if lock_controller:
+	if not can_interact():
 		return
 
 	state_machine.dispatch(CELL_TAP, cell)
 
 
 func _on_long_press(cell: Vector2i) -> void:
-	if lock_controller:
+	if not can_interact():
 		return
 
 	state_machine.dispatch(LONG_PRESS, cell)
 
 	
 func _on_long_press_release(_cell: Vector2i) -> void:
-	if lock_controller:
+	if not can_interact():
 		return
 
 	state_machine.dispatch(LONG_PRESS_RELEASE)
 
 
 func _on_cancel_clicked() -> void:
-	if lock_controller:
+	if not can_interact():
 		return
 
 	state_machine.dispatch(CANCEL_CLICKED)
 
 
 func _on_build_clicked(entry: ProductionEntry) -> void:
-	if lock_controller:
+	if not can_interact():
 		return
 
 	state_machine.dispatch(BUILD_CLICKED, entry)
@@ -181,7 +186,7 @@ func _on_resume_clicked() -> void:
 
 
 func _on_idle_clicked() -> void:
-	if lock_controller:
+	if not can_interact():
 		return
 
 	active_controller.exhaust_unit()
@@ -189,7 +194,7 @@ func _on_idle_clicked() -> void:
 
 
 func _on_capture_clicked() -> void:
-	if lock_controller:
+	if not can_interact():
 		return
 
 	action_running_state.clear_selections = true
@@ -199,16 +204,17 @@ func _on_capture_clicked() -> void:
 
 
 func _on_merge_clicked() -> void:
-	if lock_controller:
+	if not can_interact():
 		return
 
-	game_hud.hide_game_hud()
+	lock()
 	await active_controller.merge_units()
+	unlock()
 	state_machine.dispatch(RESET_SIGNAL)
 
 
 func _on_attack_clicked() -> void:
-	if lock_controller:
+	if not can_interact():
 		return
 
 	state_machine.dispatch(ATTACK_CLICKED)
@@ -287,17 +293,19 @@ func on_heal(cargo: Variant) -> void:
 
 
 func lock() -> void:
+	lock_controller = true
 	camera_pan_enabled.emit(false)
 	game_hud.hide_game_hud()
 
 
 func unlock() -> void:
+	lock_controller = false
 	game_hud.show_game_hud()
 	camera_pan_enabled.emit(true)
 
 
 func switch_team(new_team: Team) -> void:
-	lock_controller = not new_team.is_playable()
+	interactable_controller = new_team.is_playable()
 	if active_controller != null:
 		active_controller.gameplay_event.disconnect(_on_gameplay_event)
 			

@@ -186,7 +186,7 @@ func score_move(unit: Unit) -> AIActionResult:
 	result.focus_point = unit.global_position
 	result.type = AIActionType.Values.MOVE
 	
-	var building: Building = ai_controller.find_closest_building(unit)
+	var building: Building = ai_controller.find_closest_capturable_building(unit)
 	if building != null:
 		result.score = score_move_towards_building(unit, building)
 		result.target_cell = select_best_cell_to_capture(unit, building.cell)
@@ -239,11 +239,15 @@ func score_move_towards_enemy(unit: Unit, target: Unit) -> int:
 func score_retreat(unit: Unit) -> int:
 	var score: int = 0
 
-	if unit.is_low_health():
-		score += 40
+	score += int(unit.max_health() - unit.actual_health) * 5
+
+	var building: Building = ai_controller.find_closest_friendly_building(unit)
+	var reachable_cells: Array[Vector2i] = ai_controller.units_manager.compute_reachable_cells(unit)
+	if building.cell in reachable_cells:
+		score += 10
 
 	if unit.is_range() and ai_controller.cell_in_enemy_attack_range(unit.cell):
-		score += 30 
+		score += 20 
 
 	return score
 
@@ -303,6 +307,7 @@ func select_best_cell_to_retreat(unit: Unit) -> Vector2i:
 	var best_cell: Vector2i
 	var best_score: float = -INF
 
+	var closest_friendly_building: Building = ai_controller.find_closest_friendly_building(unit)
 	var reachable_cells: Array[Vector2i] = ai_controller.units_manager.compute_reachable_cells(unit)
 
 	for cell: Vector2i in reachable_cells:
@@ -313,8 +318,10 @@ func select_best_cell_to_retreat(unit: Unit) -> Vector2i:
 	
 		# TODO: add avoidance to most dangerouse enemies
 
-		if total_damage == 0:
-			score += 100
+		if total_damage < unit.actual_health:
+			score += 30
+
+		score += 50 / (closest_friendly_building.cell.distance_to(cell) + 1)
 
 		score += ai_controller.get_terrain_defense(cell) * 10
 

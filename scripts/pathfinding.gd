@@ -3,7 +3,7 @@ class_name Pathfinding
 
 class Path:
 	var points: Array[Vector2i]
-	var cost: int
+	var cost: float
 	var world_points: Array[Vector2]
 
 

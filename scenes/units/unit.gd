@@ -22,7 +22,7 @@ var reachable_cells: Array[Vector2i]
 var exhausted: bool = false
 var capture_process: CaptureProcess
 var actual_health: float = 0.0
-var movement_points: int
+var movement_points: float
 
 var capturing_component: CapturingComponent
 
@@ -49,7 +49,7 @@ func _ready() -> void:
 
 func setup() -> void:
 	set_team(team)
-	gain_health(max_health() / 2.0)
+	gain_health(max_health() / 1.5)
 	reset_movement_points()
 	
 	if unit_profile.capture_capacity > 0:
