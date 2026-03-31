@@ -99,7 +99,7 @@ position = Vector2(216, 224)
 team = NodePath("../../../Teams/RedTeam")
 
 [node name="Soldier2" parent="Managers/UnitsManager" unique_id=666268999 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
-position = Vector2(176, 48)
+position = Vector2(464, 80)
 team = NodePath("../../../Teams/RedTeam")
 
 [node name="Soldier3" parent="Managers/UnitsManager" unique_id=249402440 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
@@ -107,15 +107,15 @@ position = Vector2(400, 80)
 team = NodePath("../../../Teams/RedTeam")
 
 [node name="Soldier5" parent="Managers/UnitsManager" unique_id=1261344568 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
-position = Vector2(208, 112)
+position = Vector2(400, 80)
 team = NodePath("../../../Teams/RedTeam")
 
 [node name="Soldier4" parent="Managers/UnitsManager" unique_id=1003911693 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
-position = Vector2(432, 48)
+position = Vector2(464, 48)
 team = NodePath("../../../Teams/RedTeam")
 
 [node name="Recon" parent="Managers/UnitsManager" unique_id=138617836 node_paths=PackedStringArray("team") instance=ExtResource("14_h65yf")]
-position = Vector2(272, 112)
+position = Vector2(432, 168)
 team = NodePath("../../../Teams/RedTeam")
 
 [node name="LightTank" parent="Managers/UnitsManager" unique_id=1263502315 node_paths=PackedStringArray("team") instance=ExtResource("15_8kiat")]
@@ -127,7 +127,7 @@ position = Vector2(80, 144)
 team = NodePath("../../../Teams/RedTeam")
 
 [node name="Soldier6" parent="Managers/UnitsManager" unique_id=819430262 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
-position = Vector2(432, 80)
+position = Vector2(432, 48)
 team = NodePath("../../../Teams/BlueTeam")
 
 [node name="Recon2" parent="Managers/UnitsManager" unique_id=1838461170 node_paths=PackedStringArray("team") instance=ExtResource("14_h65yf")]

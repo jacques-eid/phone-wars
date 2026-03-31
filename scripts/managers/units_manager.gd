@@ -227,7 +227,7 @@ func choose_best_attack_position(unit: Unit, target_cell: Vector2i, buildings_ma
 	var best_cell: Vector2i
 	var best_score: int = int(-INF)
 
-	for cell in candidates:
+	for cell: Vector2i in candidates:
 		var score: int = score_cell_for_attack(unit, cell, buildings_manager)
 
 		if score > best_score:
@@ -245,7 +245,11 @@ func get_attack_positions_after_movement(unit: Unit, target_cell: Vector2i) -> A
 	var reachable_cells: Array[Vector2i] = grid.get_reachable_cells(unit)
 	var valid_positions: Array[Vector2i] = []
 
-	for cell in reachable_cells:
+	for cell: Vector2i in reachable_cells:
+		# Filter out cells that could be reachable due to merging conditions
+		if cell in units.keys() and cell != unit.cell:
+			continue
+
 		unit_context.grid_pos = cell
 		if can_attack_cell_without_moving(unit_context, target_cell):
 			valid_positions.append(cell)
