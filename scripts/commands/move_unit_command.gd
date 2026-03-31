@@ -32,5 +32,5 @@ func undo():
 	unit.global_position = start_pos
 	unit.select()
 	if capture_process != null:
-		unit.capture_process = CaptureProcess.load_from_capture_process(capture_process)
+		unit.capture_process = CaptureProcess.load_from_capture_process(capture_process, unit)
 		capture_process = null

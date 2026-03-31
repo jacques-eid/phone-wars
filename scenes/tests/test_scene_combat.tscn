@@ -103,11 +103,11 @@ position = Vector2(176, 48)
 team = NodePath("../../../Teams/RedTeam")
 
 [node name="Soldier3" parent="Managers/UnitsManager" unique_id=249402440 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
-position = Vector2(304, 112)
+position = Vector2(400, 80)
 team = NodePath("../../../Teams/RedTeam")
 
 [node name="Soldier5" parent="Managers/UnitsManager" unique_id=1261344568 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
-position = Vector2(336, 112)
+position = Vector2(208, 112)
 team = NodePath("../../../Teams/RedTeam")
 
 [node name="Soldier4" parent="Managers/UnitsManager" unique_id=1003911693 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]

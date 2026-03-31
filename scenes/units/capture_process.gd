@@ -13,8 +13,8 @@ func _init(build: Building, unit: Unit) -> void:
 	capturing_component.show()
 	
 
-static func load_from_capture_process(cp: CaptureProcess) -> CaptureProcess:
-	var new_cp: CaptureProcess = CaptureProcess.new(cp.building, cp.unit)
+static func load_from_capture_process(cp: CaptureProcess, unit: Unit) -> CaptureProcess:
+	var new_cp: CaptureProcess = CaptureProcess.new(cp.building, unit)
 	new_cp.progress = cp.progress
 
 	return new_cp

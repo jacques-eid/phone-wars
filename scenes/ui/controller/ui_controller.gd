@@ -393,7 +393,6 @@ func handle_build_async(entry: ProductionEntry) -> void:
 	state_machine.dispatch(RESET_SIGNAL)
 
 
-
 func show_combat_dialog() -> void:
 	var edr: EstimatedDamageResult = active_controller.estimate_damage()
 	

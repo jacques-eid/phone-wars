@@ -227,7 +227,6 @@ func find_closest_friendly_building(unit: Unit) -> Building:
 	var best_dist: float = INF
 
 	for building: Building in buildings_manager.get_friendly_buildings(team):
-		print('building: ', building)
 		var dist: float = unit.cell.distance_to(building.cell)
 
 		if dist < best_dist:

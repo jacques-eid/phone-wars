@@ -70,12 +70,12 @@ tile_set = ExtResource("11_oub7f")
 team_profile = ExtResource("13_idf83")
 team_type = 0
 face_direction = 1
-funds = 300
+funds = 0
 
 [node name="BlueTeam" parent="Teams" unique_id=704522067 instance=ExtResource("12_p5q6g")]
 team_profile = ExtResource("20_3e3xw")
 team_type = 1
-funds = 300
+funds = 0
 
 [node name="NeutralTeam" parent="Teams" unique_id=103368924 instance=ExtResource("12_p5q6g")]
 team_profile = ExtResource("22_5ol6i")

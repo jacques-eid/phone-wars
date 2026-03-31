@@ -65,6 +65,7 @@ func move_unit_to_cell(cell: Vector2i) -> MoveUnitCommand:
 	move_unit_command.execute()
 
 	await selected_unit.unit_moved
+	await get_tree().process_frame
 
 	return move_unit_command
 

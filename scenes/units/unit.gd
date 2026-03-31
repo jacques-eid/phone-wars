@@ -27,6 +27,7 @@ var movement_points: float
 var capturing_component: CapturingComponent
 
 var facing: FaceDirection.Values
+var debug_name: String
 
 var state_machine: LimboHSM
 var idle_state: UnitIdleState
@@ -49,13 +50,15 @@ func _ready() -> void:
 
 func setup() -> void:
 	set_team(team)
-	gain_health(max_health() / 1.5)
+	gain_health(max_health())
 	reset_movement_points()
 	
 	if unit_profile.capture_capacity > 0:
 		set_capture_component()
 	
 	init_state_machine()
+	
+	debug_name = DebugHelper.generate_unit_name(type(), team.team_id)
 
 
 func init_state_machine() -> void:

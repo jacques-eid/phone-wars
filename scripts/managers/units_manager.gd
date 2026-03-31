@@ -29,7 +29,7 @@ func _on_unit_killed(unit: Unit) -> void:
 	
 
 func remove_unit(unit: Unit) -> void:
-	print("removing unit %s at %s" % [unit.name, unit.cell])
+	print("removing unit %s at %s" % [unit.debug_name, unit.cell])
 	units.erase(unit.cell)
 	unit.queue_free()
 
@@ -115,6 +115,9 @@ func merge_units(main_unit: Unit, merged_unit: Unit) -> int:
 	main_unit.gain_health(merged_unit.actual_health)
 
 	var money_gain: int = int((float(excess) / max_hp) * main_unit.cost())
+	if merged_unit.capture_process != null:
+		main_unit.capture_process = CaptureProcess.load_from_capture_process(merged_unit.capture_process, main_unit)
+	
 	remove_unit(merged_unit)
 
 	return money_gain
