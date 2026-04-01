@@ -11,7 +11,6 @@ func setup() -> void:
 func init_buildings() -> void:
 	for building in get_children():
 		if building is Building:
-			print('building.position: ', floor(building.position / Vector2(Const.CELL_SIZE)))
 			var cell_pos: Vector2i = Vector2i(floor(building.position / Vector2(Const.CELL_SIZE)))
 			buildings[cell_pos] = building
 			building.cell = cell_pos

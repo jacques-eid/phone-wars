@@ -10,4 +10,5 @@ script = ExtResource("1_td1a3")
 top_level = true
 script = ExtResource("2_4of1p")
 grid = NodePath("..")
+show_coordinates = true
 highlight_cell = Vector2i(1, 1)

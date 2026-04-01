@@ -21,8 +21,10 @@
 [ext_resource type="PackedScene" uid="uid://qhm0o8ol2yhy" path="res://scenes/buildings/hq.tscn" id="21_u1mhv"]
 [ext_resource type="Resource" uid="uid://c6scialk58fws" path="res://resources/teams/grey_team.tres" id="22_5ol6i"]
 [ext_resource type="Script" uid="uid://cky8p0fqqxnii" path="res://scripts/managers/input_manager.gd" id="23_nimoc"]
+[ext_resource type="PackedScene" uid="uid://mu0vq50rfsva" path="res://scenes/units/soldier.tscn" id="24_07dy8"]
 [ext_resource type="Script" uid="uid://datlrsmxx1ofs" path="res://scripts/managers/music_manager.gd" id="24_c52q8"]
 [ext_resource type="Resource" uid="uid://f6a5g6jtp5bi" path="res://resources/musics/battle_playlist.tres" id="25_2e78u"]
+[ext_resource type="PackedScene" uid="uid://dsbo56tbuh626" path="res://scenes/units/light_tank.tscn" id="25_3gp1u"]
 [ext_resource type="PackedScene" uid="uid://baity5p4rgu1j" path="res://scenes/ui/controller/ui_controller.tscn" id="26_mcic2"]
 [ext_resource type="Script" uid="uid://dnrk6k26be4ly" path="res://scripts/services/fx_service.gd" id="27_0p1sx"]
 [ext_resource type="PackedScene" uid="uid://bqqubrlum3m1c" path="res://scenes/services/music_service.tscn" id="29_01mkw"]
@@ -90,9 +92,6 @@ script = ExtResource("23_nimoc")
 script = ExtResource("24_c52q8")
 playlist = ExtResource("25_2e78u")
 
-[node name="UnitsManager" type="Node" parent="Managers" unique_id=1791007188]
-script = ExtResource("19_025c5")
-
 [node name="BuildingsManager" type="Node" parent="Managers" unique_id=797405852]
 script = ExtResource("20_bw3ef")
 
@@ -131,6 +130,23 @@ team = NodePath("../../../Teams/NeutralTeam")
 [node name="City4" parent="Managers/BuildingsManager" unique_id=1582123888 node_paths=PackedStringArray("team") instance=ExtResource("19_a21j6")]
 position = Vector2(208, 112)
 team = NodePath("../../../Teams/NeutralTeam")
+
+[node name="UnitsManager" type="Node" parent="Managers" unique_id=1791007188]
+script = ExtResource("19_025c5")
+
+[node name="Soldier" parent="Managers/UnitsManager" unique_id=249402440 node_paths=PackedStringArray("team") instance=ExtResource("24_07dy8")]
+position = Vector2(272, 16)
+team = NodePath("../../../Teams/RedTeam")
+
+[node name="LightTank" parent="Managers/UnitsManager" unique_id=777024571 node_paths=PackedStringArray("team") instance=ExtResource("25_3gp1u")]
+z_index = 1
+position = Vector2(304, 16)
+team = NodePath("../../../Teams/RedTeam")
+
+[node name="LightTank2" parent="Managers/UnitsManager" unique_id=405216063 node_paths=PackedStringArray("team") instance=ExtResource("25_3gp1u")]
+z_index = 2
+position = Vector2(272, -16)
+team = NodePath("../../../Teams/RedTeam")
 
 [node name="UIController" parent="." unique_id=1381616140 instance=ExtResource("26_mcic2")]
 visible = false

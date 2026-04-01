@@ -12,7 +12,7 @@ func setup(p_grid: Grid) -> void:
 func init_units() -> void:
 	for unit in get_children():
 		if unit is Unit:
-			var cell_pos: Vector2i = Vector2i(unit.position / Vector2(Const.CELL_SIZE))
+			var cell_pos: Vector2i = Vector2i(floor(unit.position / Vector2(Const.CELL_SIZE)))
 			init_unit(unit, cell_pos)
 
 
