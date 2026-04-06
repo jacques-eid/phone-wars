@@ -109,4 +109,4 @@ func cost_penalty(unit_profile: UnitProfile) -> float:
 
 func repetition_penalty(unit_type: UnitType.Values) -> float:
 	var count: int = ai_controller.get_unit_type_count(unit_type)
-	return count * 15 
+	return count * 15

@@ -117,6 +117,8 @@ func connect_buildings() -> void:
 
 func building_owner_changed() -> void:
 	for team: Team in teams:
+		if team.neutral_team():
+			continue
 		if buildings_manager.get_hq_count(team) == 0:
 			_on_exit_level()
 
