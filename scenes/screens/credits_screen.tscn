@@ -1,0 +1,71 @@
+[gd_scene format=3 uid="uid://cmvnpwj8hqb81"]
+
+[ext_resource type="Script" uid="uid://db2ggu0ohleu8" path="res://scenes/screens/credits_screen.gd" id="1_cy3sl"]
+
+[node name="CreditsScreen" type="Control" unique_id=993310624]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cy3sl")
+
+[node name="Background" type="ColorRect" parent="." unique_id=901125133]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="CreditsRoot" type="Control" parent="." unique_id=543986215]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="RichTextLabel" parent="CreditsRoot" unique_id=1515153542]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 6
+bbcode_enabled = true
+text = "[b]Phone wars[/b]
+
+A game by Jacques Eid
+
+
+
+Special Thanks to
+
+
+
+[b]Art and graphics[/b]
+
+
+           Alb_pixel            Kenney assets 
+
+
+[b]Musics[/b]
+
+
+Hydrogene
+
+
+[b]Audio[/b]
+
+
+        Chequered Ink         Subspaceaudio        
+
+
+[i]Thanks for playing[/i]"
+fit_content = true
+horizontal_alignment = 1
+vertical_alignment = 1

@@ -11,6 +11,7 @@ extends Control
 
 # Use load to prevent circular references in preloading scenes
 @onready var level1_scene: PackedScene = load("res://scenes/levels/level1.tscn")
+@onready var credits_scene: PackedScene = load("res://scenes/screens/credits_screen.tscn")
 
 
 func _ready() -> void:
@@ -26,7 +27,7 @@ func _on_play_button_pressed() -> void:
 
 
 func _on_credits_button_pressed() -> void:
-	print("transition to credits screen")
+	get_tree().change_scene_to_packed(credits_scene)
 
 
 func _on_exit_button_pressed() -> void:
