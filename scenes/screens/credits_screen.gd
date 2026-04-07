@@ -10,9 +10,9 @@ extends Control
 var scroll_speed: float = 50.0
 var is_running: bool = true
 
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-
 	credits_root.position.y = get_viewport_rect().size.y
 
 

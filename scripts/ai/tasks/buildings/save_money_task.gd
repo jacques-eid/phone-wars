@@ -6,7 +6,7 @@ func _tick(_delta: float) -> Status:
 	var top_result: AIBuyResult = blackboard.get_var("top_result")
 
 	# Don't try to save
-	if ai_controller.team.funds > 1000:
+	if ai_controller.team.funds > 700:
 		return SUCCESS
 
 	if top_result.score > score_save():

@@ -14,6 +14,9 @@ func _run_async() -> void:
 	ai_controller.selected_unit = top_result.unit
 	ai_controller.selected_unit.select()
 	
+
+	print('executing: ', top_result.type)
+
 	match top_result.type:
 		AIActionType.Values.ATTACK:
 			_run(handle_attack, top_result)

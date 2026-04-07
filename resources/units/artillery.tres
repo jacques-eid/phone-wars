@@ -33,8 +33,7 @@ region = Rect2(20, 78, 32, 32)
 
 [sub_resource type="Resource" id="Resource_vfaig"]
 script = ExtResource("2_pm6xt")
-road_cost = 1.5
-grass_cost = 2.0
+grass_cost = 1.3
 forest_cost = 3.0
 metadata/_custom_type_script = "uid://ek5inq6a6e24"
 
@@ -51,7 +50,7 @@ script = ExtResource("1_v1own")
 icon = SubResource("AtlasTexture_pm6xt")
 move_sound = ExtResource("4_lk4qu")
 type = 3
-movement_points = 5
+movement_points = 4
 movement_profile = SubResource("Resource_vfaig")
 capture_capacity = 0
 cost = 600

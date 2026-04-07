@@ -23,6 +23,9 @@ func _tick(_delta: float) -> Status:
 	results.append(move_result)
 	blackboard.set_var("results", results)
 
+	for result in results:
+		print('result: ', result)
+
 	return SUCCESS
 
 # Compute the score to attack an enemy unit:
@@ -169,6 +172,10 @@ func select_best_unit_to_merge(units: Array[Unit]) -> Array:
 		# Save low units first
 		if unit.is_low_health():
 			score += 20
+
+		# Prefer merging with exhausted units
+		if not unit.exhausted:
+			score -= 15
 
 		if score > best_score:
 			best_score = score

@@ -19,6 +19,8 @@ metadata/_custom_type_script = "uid://dhqeb02d40my3"
 
 [sub_resource type="Resource" id="Resource_fys5i"]
 script = ExtResource("2_xl6ow")
+light_defense = 0.3
+reinforced_defense = 0.2
 metadata/_custom_type_script = "uid://c1aqkr7x3kn1d"
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_s4u0f"]
@@ -30,7 +32,7 @@ region = Rect2(21, 129, 30, 29)
 
 [sub_resource type="Resource" id="Resource_c6rbn"]
 script = ExtResource("2_4hb17")
-grass_cost = 2.5
+grass_cost = 1.5
 forest_cost = 3.0
 metadata/_custom_type_script = "uid://ek5inq6a6e24"
 
