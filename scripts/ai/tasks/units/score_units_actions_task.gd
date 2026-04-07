@@ -41,7 +41,7 @@ func score_attack(unit: Unit) -> AIActionResult:
 		return result
 
 	var best_targets: Array[Unit]
-	var secondary_targets: Array[Unit]
+	var secondary_targets: Dictionary # Unit - damage diff
 
 	for target: Unit in targets:
 		var defender_terrain_defense: float = ai_controller.get_terrain_defense(target.cell)
@@ -54,20 +54,19 @@ func score_attack(unit: Unit) -> AIActionResult:
 
 		if combat_result.defender_killed:
 			best_targets.append(target)
+			continue
 
-		if combat_result.damage > combat_result.counter_damage:
-			secondary_targets.append(target)
+		secondary_targets[target] = combat_result.damage - combat_result.counter_damage
 
 	if len(best_targets) != 0:
 		result.target_unit = select_best_unit_to_attack(best_targets)
 		result.score = 100 + unit.type()
 		return result
 
-	if len(secondary_targets) == 0:
-		return result
-		
-	result.target_unit = select_best_unit_to_attack(secondary_targets)
-	result.score = 50 + unit.type()
+	var units: Array[Unit]
+	units.assign(secondary_targets.keys())
+	result.target_unit = select_best_unit_to_attack(units)
+	result.score = 50 + unit.type() + secondary_targets[result.target_unit] * 5
 	return result
 
 

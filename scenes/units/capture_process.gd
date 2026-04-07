@@ -54,4 +54,4 @@ func clear_capture() -> void:
 
 
 func can_finish_next_turn(unit: Unit) -> bool:
-	return unit.capture_capacity() > progress
+	return unit.capture_capacity() >= progress
