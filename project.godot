@@ -35,7 +35,10 @@ window/stretch/mode="canvas_items"
 [file_customization]
 
 folder_colors={
+"res://addons/": "pink",
+"res://ai/": "purple",
 "res://assets/": "orange",
+"res://data/": "red",
 "res://scenes/": "green",
 "res://scripts/": "blue",
 "res://tilesets/": "yellow"

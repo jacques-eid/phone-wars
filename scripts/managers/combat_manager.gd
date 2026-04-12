@@ -23,11 +23,8 @@ static func resolve_combat(
 
 
 static func compute_damage(attacker: Unit, attacker_health: float, defender: Unit, terrain_defense: float) -> float:
-	var base_dmg: float = attacker.get_attack_dmg(defender.type())
+	var base_dmg: float = CombatConfig.get_flat_attack_damage(attacker.type(), defender.type()) / 10.0
 	base_dmg *= attacker_health / 10.0
-
-	var defense: float = defender.get_defense_vs(attacker.type())
-	base_dmg *= (1.0 - defense / 10.0)
 
 	base_dmg *= (1.0 - terrain_defense / 10.0)
 	return max(1.0, int(base_dmg))

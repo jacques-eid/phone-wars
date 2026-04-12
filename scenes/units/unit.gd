@@ -295,28 +295,20 @@ func type() -> UnitType.Values:
 	return unit_profile.type
 
 
-func get_attack_dmg(defender_type: UnitType.Values) -> float:
-	return unit_profile.attack_profile.get_attack_dmg(defender_type)
-
-
-func get_defense_vs(attacker_type: UnitType.Values) -> float:
-	return unit_profile.defense_profile.get_defense_vs(attacker_type)
-
-
 func min_attack_range() -> int:
-	return unit_profile.attack_profile.min_range
+	return unit_profile.weapon.min_range
 
 
 func max_attack_range() -> int:
-	return unit_profile.attack_profile.max_range
+	return unit_profile.weapon.max_range
 
 
 func can_attack_after_movement() -> bool:
-	return not unit_profile.attack_profile.is_range
+	return not is_range()
 
 
 func is_range() -> bool:
-	return unit_profile.attack_profile.is_range
+	return unit_profile.weapon.max_range > 1
 
 
 func weapon() -> Weapon:

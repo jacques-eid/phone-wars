@@ -33,6 +33,7 @@ func _ready() -> void:
 	units_manager.setup(grid)
 	buildings_manager.setup()
 
+	init_config()
 	init_teams()
 
 	ui_controller.game_paused.connect(_on_game_paused)
@@ -41,6 +42,10 @@ func _ready() -> void:
 
 	call_deferred("connect_buildings")
 	
+
+func init_config() -> void:
+	CombatConfig.load_from_file('data/combat_matrix.txt')
+
 
 func init_teams() -> void:
 	for child in get_node("Teams").get_children():

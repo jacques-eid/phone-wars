@@ -2,8 +2,6 @@
 
 [ext_resource type="Texture2D" uid="uid://2n7ysxwl4vma" path="res://assets/sprites/units/phone_wars_units.png" id="1_popoq"]
 [ext_resource type="Script" uid="uid://c5bqt1boq7g83" path="res://scripts/resources/units/unit_profile.gd" id="1_v1own"]
-[ext_resource type="Script" uid="uid://dhqeb02d40my3" path="res://scripts/resources/units/attack_profile.gd" id="1_vfaig"]
-[ext_resource type="Script" uid="uid://c1aqkr7x3kn1d" path="res://scripts/resources/units/defense_profile.gd" id="2_3s1md"]
 [ext_resource type="Script" uid="uid://ek5inq6a6e24" path="res://scripts/resources/units/movement_profile.gd" id="2_pm6xt"]
 [ext_resource type="AudioStream" uid="uid://budpuvoond1pr" path="res://assets/sounds/units/vehicle_movement.wav" id="4_lk4qu"]
 [ext_resource type="Script" uid="uid://cvmuc2m44de5v" path="res://scripts/resources/weapons/canon.gd" id="5_8w3g1"]
@@ -11,21 +9,6 @@
 [ext_resource type="AudioStream" uid="uid://c5i6f65t1551c" path="res://assets/sounds/canons/sfx_wpn_cannon2.wav" id="7_nwbrd"]
 [ext_resource type="PackedScene" uid="uid://beq2l8e6oxb7t" path="res://scenes/vfx/hit/artillery_hit.tscn" id="8_lk4qu"]
 [ext_resource type="AudioStream" uid="uid://ltr7ohyg5gno" path="res://assets/sounds/canons/sfx_exp_short_hard6.wav" id="9_c66p6"]
-
-[sub_resource type="Resource" id="Resource_8w3g1"]
-script = ExtResource("1_vfaig")
-min_range = 2
-max_range = 4
-dmg_vs_light = 7.0
-dmg_vs_reinforced = 6.0
-is_range = true
-metadata/_custom_type_script = "uid://dhqeb02d40my3"
-
-[sub_resource type="Resource" id="Resource_bx86g"]
-script = ExtResource("2_3s1md")
-light_defense = 0.2
-reinforced_defense = 0.1
-metadata/_custom_type_script = "uid://c1aqkr7x3kn1d"
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pm6xt"]
 atlas = ExtResource("1_popoq")
@@ -54,7 +37,5 @@ movement_points = 4
 movement_profile = SubResource("Resource_vfaig")
 capture_capacity = 0
 cost = 600
-attack_profile = SubResource("Resource_8w3g1")
-defense_profile = SubResource("Resource_bx86g")
 weapon = SubResource("Resource_jvtwx")
 metadata/_custom_type_script = "uid://c5bqt1boq7g83"

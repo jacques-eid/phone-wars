@@ -1,0 +1,5 @@
+Attacker / Defender,Infantry,Recon,Light tank,Artillery
+Infantry,55,35,20,25
+Recon,75,45,20,40
+Light tank,75,55,45,60
+Artillery,80,70,65,65
