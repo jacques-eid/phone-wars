@@ -11,8 +11,7 @@ func _enter() -> void:
 func _run_async() -> void:
 	var top_result: AIActionResult = blackboard.get_var("top_result")
 
-	ai_controller.selected_unit = top_result.unit
-	ai_controller.selected_unit.select()
+	ai_controller.select_unit(top_result.unit)
 	
 
 	print('executing: ', top_result.type)

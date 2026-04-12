@@ -26,6 +26,7 @@
 [ext_resource type="PackedScene" uid="uid://baity5p4rgu1j" path="res://scenes/ui/controller/ui_controller.tscn" id="26_mcic2"]
 [ext_resource type="Script" uid="uid://dnrk6k26be4ly" path="res://scripts/services/fx_service.gd" id="27_0p1sx"]
 [ext_resource type="PackedScene" uid="uid://bqqubrlum3m1c" path="res://scenes/services/music_service.tscn" id="29_01mkw"]
+[ext_resource type="PackedScene" uid="uid://cn2bw7lnney7k" path="res://scenes/ui/debug/debug_layer.tscn" id="30_bw3ef"]
 [ext_resource type="Script" uid="uid://d1wjv47jtbmh4" path="res://scripts/services/economy_service.gd" id="30_wkw6o"]
 [ext_resource type="Script" uid="uid://cat2b24w7wkt2" path="res://scripts/controllers/camera_controller.gd" id="31_78o28"]
 [ext_resource type="PackedScene" uid="uid://dgusrtqifvaos" path="res://scenes/component/indicators.tscn" id="32_bx7ib"]
@@ -152,6 +153,9 @@ position = Vector2(320, 184)
 limit_enabled = false
 
 [node name="Indicators" parent="." unique_id=1060672958 instance=ExtResource("32_bx7ib")]
+
+[node name="DebugLayer" parent="." unique_id=845672494 instance=ExtResource("30_bw3ef")]
+layer = 2
 
 [editable path="Teams/RedTeam"]
 [editable path="Teams/BlueTeam"]

@@ -25,8 +25,7 @@ func selection_attempt(cell: Vector2i) -> SelectionResult.Values:
 	var unit: Unit = units_manager.get_unit_at(cell)
 	if unit != null:
 		if not unit.exhausted and unit.team == team:
-			selected_unit = unit
-			selected_unit.select()
+			select_unit(unit)
 			return SelectionResult.Values.UNIT
 		return SelectionResult.Values.NONE
 
@@ -48,13 +47,6 @@ func selected_cell_pos() -> Vector2i:
 		return selected_building.cell
 
 	return Vector2i.ZERO
-
-
-func deselect_unit() -> void:
-	if selected_unit == null:
-		return
-	selected_unit.deselect()
-	selected_unit = null
 
 
 func deselect_building() -> void:

@@ -15,7 +15,6 @@ var team: Team
 var units_manager: UnitsManager
 var buildings_manager: BuildingsManager
 var terrain_manager: TerrainManager
-
 var selected_unit: Unit = null
 var selected_building: Building = null
 # TODO: Check to refacto this target_unit
@@ -56,6 +55,21 @@ func get_default_focus_point() -> Vector2:
 			return building.position
 
 	return Vector2.ZERO
+
+
+func select_unit(unit: Unit) -> void:
+	selected_unit = unit
+	selected_unit.select()
+	DebugManager.update_selected_unit(unit)
+
+
+func deselect_unit() -> void:
+	if selected_unit == null:
+		return
+		
+	selected_unit.deselect()
+	selected_unit = null
+	DebugManager.update_selected_unit(null)
 
 
 func move_unit_to_cell(cell: Vector2i) -> MoveUnitCommand:
@@ -174,7 +188,7 @@ func exhaust_unit() -> void:
 	_confirm_movement()
 
 	selected_unit.exhaust()
-	selected_unit = null
+	deselect_unit()
 
 
 func heal_units_on_friendly_buildings() -> void:

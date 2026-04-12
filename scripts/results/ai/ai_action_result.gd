@@ -10,4 +10,4 @@ var target_cell: Vector2i
 
 
 func _to_string() -> String:
-    return "unit: %s - type: %s - %s" % [unit.debug_name, type, super._to_string()]
+    return "unit: %s - type: %s - %s" % [unit.debug_name, AIActionType.get_name_from_type(type), super._to_string()]

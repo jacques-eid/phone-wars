@@ -23,9 +23,6 @@ func _tick(_delta: float) -> Status:
 	results.append(move_result)
 	blackboard.set_var("results", results)
 
-	for result in results:
-		print('result: ', result)
-
 	return SUCCESS
 
 # Compute the score to attack an enemy unit:
@@ -152,6 +149,9 @@ func score_merge(unit: Unit) -> AIActionResult:
 	result.type = AIActionType.Values.MERGE
 	
 	var units: Array[Unit] = ai_controller.find_mergeable_units(unit)
+	if len(units) == 0:
+		return result
+
 	var array: Array = select_best_unit_to_merge(units)
 	result.target_unit = array[0]
 	result.score = array[1]
