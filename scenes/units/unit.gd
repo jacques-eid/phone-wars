@@ -153,10 +153,6 @@ func reset_movement_points() -> void:
 	movement_points = max_movement_points()
 
 
-func get_terrain_cost(terrain: TerrainType.Values) -> float:
-	return unit_profile.movement_profile.get_cost(terrain)
-
-
 func is_max_health() -> bool:
 	return actual_health >= max_health()
 

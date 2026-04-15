@@ -18,10 +18,10 @@ class FlatDamage:
 	var dmg: float
 
 
-static var combat_matrix: Array[CombatStats]
+var combat_matrix: Array[CombatStats]
 
 
-static func load_from_file(filename: String) -> void:
+func load_from_file(filename: String) -> void:
 	combat_matrix.clear()
 
 	var file: FileAccess = FileAccess.open("res://%s"%filename, FileAccess.READ)
@@ -46,7 +46,7 @@ static func load_from_file(filename: String) -> void:
 
 
 
-static func get_flat_attack_damage(attacker: UnitType.Values, defender: UnitType.Values) -> float:		
+func get_flat_attack_damage(attacker: UnitType.Values, defender: UnitType.Values) -> float:
 	var attacker_idx: int = combat_matrix.find_custom(func(cs: CombatStats): return cs.attacker == attacker)
 	if attacker_idx == -1:
 		push_error("attacker [%s] does not exist in combat matrix" % UnitType.get_name_from_type(attacker))

@@ -1,7 +1,6 @@
 [gd_resource type="Resource" script_class="UnitProfile" format=3 uid="uid://b3us040i1wb4o"]
 
 [ext_resource type="Script" uid="uid://c5bqt1boq7g83" path="res://scripts/resources/units/unit_profile.gd" id="1_prx0d"]
-[ext_resource type="Script" uid="uid://ek5inq6a6e24" path="res://scripts/resources/units/movement_profile.gd" id="2_4hb17"]
 [ext_resource type="AudioStream" uid="uid://budpuvoond1pr" path="res://assets/sounds/units/vehicle_movement.wav" id="3_2nnox"]
 [ext_resource type="AudioStream" uid="uid://c5i6f65t1551c" path="res://assets/sounds/canons/sfx_wpn_cannon2.wav" id="6_bfofu"]
 [ext_resource type="Script" uid="uid://cvmuc2m44de5v" path="res://scripts/resources/weapons/canon.gd" id="6_fys5i"]
@@ -15,12 +14,6 @@ load_path = "res://.godot/imported/phone_wars_units.png-174a511c6b23dc251dd678d3
 [sub_resource type="AtlasTexture" id="AtlasTexture_4hb17"]
 atlas = SubResource("CompressedTexture2D_s4u0f")
 region = Rect2(21, 129, 30, 29)
-
-[sub_resource type="Resource" id="Resource_c6rbn"]
-script = ExtResource("2_4hb17")
-grass_cost = 1.5
-forest_cost = 3.0
-metadata/_custom_type_script = "uid://ek5inq6a6e24"
 
 [sub_resource type="Resource" id="Resource_5fcdj"]
 script = ExtResource("6_fys5i")
@@ -36,7 +29,6 @@ icon = SubResource("AtlasTexture_4hb17")
 move_sound = ExtResource("3_2nnox")
 type = 2
 movement_points = 6
-movement_profile = SubResource("Resource_c6rbn")
 capture_capacity = 0
 cost = 700
 weapon = SubResource("Resource_5fcdj")

@@ -1,6 +1,7 @@
 class_name UnitType
 
 enum Values {
+	NONE,
 	INFANTRY,
 	RECON,
 	LIGHT_TANK,
@@ -20,10 +21,10 @@ static func get_name_from_type(val: Values) -> String:
 			return "Artillery"
 	
 	push_error("Unknown unit type: %d" % val)
-	return "NONE"  # default fallback
+	return "NONE"
 
 
-static func get_type_from_name(name: String) -> UnitType.Values:
+static func get_type_from_name(name: String) -> Values:
 	match name.to_lower():
 		"infantry":
 			return Values.INFANTRY
@@ -35,7 +36,7 @@ static func get_type_from_name(name: String) -> UnitType.Values:
 			return Values.LIGHT_TANK
 
 	push_error("Unknown unit type: %s" % name)
-	return Values.INFANTRY
+	return Values.NONE
 
 
 static func is_light_type(val: Values) -> bool:

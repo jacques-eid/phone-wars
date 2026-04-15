@@ -24,6 +24,7 @@ config/icon="res://icon.svg"
 Const="*res://scripts/globals/const.gd"
 AudioService="*uid://bq66fyhh6afgc"
 DebugManager="*uid://ckgtycqmy0lin"
+GameConfig="*uid://ddwtva6ofebcb"
 
 [display]
 
