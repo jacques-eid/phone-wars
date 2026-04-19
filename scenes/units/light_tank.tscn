@@ -4,6 +4,7 @@
 [ext_resource type="Shader" uid="uid://blpj1ewfserni" path="res://resources/shaders/team_tint.gdshader" id="1_maipi"]
 [ext_resource type="Texture2D" uid="uid://2n7ysxwl4vma" path="res://assets/sprites/units/phone_wars_units.png" id="2_apagf"]
 [ext_resource type="Resource" uid="uid://b3us040i1wb4o" path="res://resources/units/light_tank.tres" id="2_y3s57"]
+[ext_resource type="Resource" uid="uid://bbywb0anqvjmq" path="res://resources/weapons/light_tank_canon.tres" id="3_5pdsc"]
 [ext_resource type="PackedScene" uid="uid://cot0bb48uebej" path="res://scenes/component/hp_label_component.tscn" id="3_y3s57"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_5pdsc"]
@@ -175,7 +176,9 @@ _data = {
 
 [node name="LightTank" type="Area2D" unique_id=777024571]
 script = ExtResource("1_apagf")
+type = 3
 unit_profile = ExtResource("2_y3s57")
+weapon = ExtResource("3_5pdsc")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1490138758]
 material = SubResource("ShaderMaterial_5pdsc")

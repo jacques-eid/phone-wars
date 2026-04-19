@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="ProductionList" format=3 uid="uid://ctvpo8h4vkosa"]
+
+[ext_resource type="Script" uid="uid://ebollv83fo6u" path="res://scripts/resources/buildings/production_entry.gd" id="1_e5jya"]
+[ext_resource type="Resource" uid="uid://ci1bjji27j03c" path="res://resources/units/soldier.tres" id="2_m3e7q"]
+[ext_resource type="Resource" uid="uid://dhg03x03melnx" path="res://resources/units/recon.tres" id="3_7xw44"]
+[ext_resource type="Resource" uid="uid://hveb37yyjbfa" path="res://resources/units/artillery.tres" id="4_hix53"]
+[ext_resource type="Resource" uid="uid://b3us040i1wb4o" path="res://resources/units/light_tank.tres" id="5_hj6um"]
+[ext_resource type="Script" uid="uid://btjj8lg6rqlhs" path="res://scripts/resources/buildings/production_list.gd" id="6_jjnqf"]
+
+[sub_resource type="Resource" id="Resource_nu04p"]
+script = ExtResource("1_e5jya")
+unit_type = 1
+unit_profile = ExtResource("2_m3e7q")
+metadata/_custom_type_script = "uid://ebollv83fo6u"
+
+[sub_resource type="Resource" id="Resource_hwrbk"]
+script = ExtResource("1_e5jya")
+unit_type = 2
+unit_profile = ExtResource("3_7xw44")
+metadata/_custom_type_script = "uid://ebollv83fo6u"
+
+[sub_resource type="Resource" id="Resource_njqtt"]
+script = ExtResource("1_e5jya")
+unit_type = 4
+unit_profile = ExtResource("4_hix53")
+metadata/_custom_type_script = "uid://ebollv83fo6u"
+
+[sub_resource type="Resource" id="Resource_m4cv5"]
+script = ExtResource("1_e5jya")
+unit_type = 3
+unit_profile = ExtResource("5_hj6um")
+metadata/_custom_type_script = "uid://ebollv83fo6u"
+
+[resource]
+script = ExtResource("6_jjnqf")
+entries = Array[ExtResource("1_e5jya")]([SubResource("Resource_nu04p"), SubResource("Resource_hwrbk"), SubResource("Resource_njqtt"), SubResource("Resource_m4cv5")])
+metadata/_custom_type_script = "uid://btjj8lg6rqlhs"

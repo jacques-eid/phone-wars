@@ -23,10 +23,10 @@ func score_save() -> float:
 
 
 	for enemy: Unit in enemies:
-		if enemy.type() == UnitType.Values.ARTILLERY:
+		if enemy.type == UnitType.Values.ARTILLERY:
 			score += 30
 
-		if enemy.type() == UnitType.Values.LIGHT_TANK:
+		if enemy.type == UnitType.Values.LIGHT_TANK:
 			score += 40
 
 	return score

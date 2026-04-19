@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://c0ghc8sqosbe7" path="res://scenes/buildings/building.gd" id="1_rp2fc"]
 [ext_resource type="Resource" uid="uid://cwbhord7rf6lu" path="res://resources/buildings/base.tres" id="2_kv37l"]
 [ext_resource type="Shader" uid="uid://blpj1ewfserni" path="res://resources/shaders/team_tint.gdshader" id="2_qxjns"]
-[ext_resource type="Resource" uid="uid://ctvpo8h4vkosa" path="res://resources/buildings/base_production_list.tres" id="3_06d20"]
+[ext_resource type="Resource" uid="uid://ctvpo8h4vkosa" path="res://resources/buildings/base_productions.tres" id="3_06d20"]
 [ext_resource type="Texture2D" uid="uid://p7s204aqq84r" path="res://assets/sprites/buildings/buildings.png" id="3_qxjns"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_kv37l"]

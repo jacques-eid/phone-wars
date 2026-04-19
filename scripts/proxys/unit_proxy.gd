@@ -17,7 +17,7 @@ func load_from_unit(unit: Unit) -> void:
 	animation_player = unit.animation_player.duplicate(true)
 	weapon_muzzle = unit.weapon_muzzle.duplicate(true)
 	facing = unit.facing
-	weapon = unit.weapon().duplicate(true)
+	weapon = unit.weapon.duplicate(true)
 	
 	add_child(animated_sprite)
 	add_child(animation_player)

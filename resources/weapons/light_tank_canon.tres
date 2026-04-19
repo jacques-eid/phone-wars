@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="Canon" format=3 uid="uid://bbywb0anqvjmq"]
+
+[ext_resource type="PackedScene" uid="uid://b2aw0hvtvslvo" path="res://scenes/vfx/fire/light_tank_shell.tscn" id="1_lc85p"]
+[ext_resource type="AudioStream" uid="uid://c5i6f65t1551c" path="res://assets/sounds/canons/sfx_wpn_cannon2.wav" id="2_irk4t"]
+[ext_resource type="PackedScene" uid="uid://cpxh5sn6y7ihe" path="res://scenes/vfx/hit/tank_hit.tscn" id="3_1dm7n"]
+[ext_resource type="AudioStream" uid="uid://ltr7ohyg5gno" path="res://assets/sounds/canons/sfx_exp_short_hard6.wav" id="4_on4xr"]
+[ext_resource type="Script" uid="uid://cvmuc2m44de5v" path="res://scripts/resources/weapons/canon.gd" id="5_0tthf"]
+
+[resource]
+script = ExtResource("5_0tthf")
+fire_scene = ExtResource("1_lc85p")
+hit_scene = ExtResource("3_1dm7n")
+fire_sound = ExtResource("2_irk4t")
+hit_sound = ExtResource("4_on4xr")
+metadata/_custom_type_script = "uid://cvmuc2m44de5v"

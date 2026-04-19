@@ -14,7 +14,7 @@
 [ext_resource type="TileSet" uid="uid://45ako5jwxjpx" path="res://tilesets/game_tileset_tres.tres" id="11_rbirq"]
 [ext_resource type="PackedScene" uid="uid://ci7d8ddulm6b5" path="res://scenes/teams/team.tscn" id="12_n3opb"]
 [ext_resource type="Resource" uid="uid://118m3pansjhp" path="res://resources/teams/red_team.tres" id="13_3tgvs"]
-[ext_resource type="PackedScene" uid="uid://mu0vq50rfsva" path="res://scenes/units/soldier.tscn" id="13_v1tfe"]
+[ext_resource type="PackedScene" uid="uid://mu0vq50rfsva" path="res://scenes/units/infantry.tscn" id="13_v1tfe"]
 [ext_resource type="PackedScene" uid="uid://csvvf54hn6ta3" path="res://scenes/units/recon.tscn" id="14_h65yf"]
 [ext_resource type="PackedScene" uid="uid://cbb2legf80c0p" path="res://scenes/buildings/base.tscn" id="14_qrvgh"]
 [ext_resource type="PackedScene" uid="uid://dsbo56tbuh626" path="res://scenes/units/light_tank.tscn" id="15_8kiat"]
@@ -94,23 +94,19 @@ playlist = ExtResource("2_viv5u")
 [node name="UnitsManager" type="Node" parent="Managers" unique_id=1341556319]
 script = ExtResource("19_px0mx")
 
-[node name="Soldier" parent="Managers/UnitsManager" unique_id=1636509689 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
+[node name="Infantry" parent="Managers/UnitsManager" unique_id=1636509689 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
 position = Vector2(216, 224)
 team = NodePath("../../../Teams/RedTeam")
 
-[node name="Soldier2" parent="Managers/UnitsManager" unique_id=666268999 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
+[node name="Infantry2" parent="Managers/UnitsManager" unique_id=666268999 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
 position = Vector2(464, 80)
 team = NodePath("../../../Teams/RedTeam")
 
-[node name="Soldier3" parent="Managers/UnitsManager" unique_id=249402440 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
+[node name="Infantry3" parent="Managers/UnitsManager" unique_id=1261344568 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
 position = Vector2(400, 80)
 team = NodePath("../../../Teams/RedTeam")
 
-[node name="Soldier5" parent="Managers/UnitsManager" unique_id=1261344568 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
-position = Vector2(400, 80)
-team = NodePath("../../../Teams/RedTeam")
-
-[node name="Soldier4" parent="Managers/UnitsManager" unique_id=1003911693 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
+[node name="Infantry4" parent="Managers/UnitsManager" unique_id=1003911693 node_paths=PackedStringArray("team") instance=ExtResource("13_v1tfe")]
 position = Vector2(464, 48)
 team = NodePath("../../../Teams/RedTeam")
 

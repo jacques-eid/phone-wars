@@ -57,7 +57,7 @@ func get_reachable_cells(unit: Unit) -> Array[Vector2i]:
 			var walkthrough: bool = false
 			# cannot walk on this terrain
 			var terrain: TerrainType.Values = terrain_manager.get_terrain_type(neighbor)
-			var step_cost = GameConfig.get_movement_cost(unit.type(), terrain)
+			var step_cost = GameConfig.get_movement_cost(unit.type, terrain)
 			if step_cost == INF:
 				continue
 

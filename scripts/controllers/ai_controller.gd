@@ -61,7 +61,7 @@ func get_units_to_play() -> Array[Unit]:
 func get_unit_type_count(unit_type: UnitType.Values) -> int:
 	var units: Array[Unit] = units_manager.get_friendly_units(team)
 
-	return units.filter(func(unit: Unit): return unit.type() == unit_type).size()
+	return units.filter(func(unit: Unit): return unit.type == unit_type).size()
 
 
 # Returns an array of owned buildings that can buy units

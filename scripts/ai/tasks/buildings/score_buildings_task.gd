@@ -30,12 +30,12 @@ func score_building_with_unit_profile(building: Building, production_entry: Prod
 	result.building = building
 	result.production_entry = production_entry
 	result.focus_point = building.global_position
-	result.score += unit_values(production_entry.unit_profile.type)
-	result.score += context_bonus(building, production_entry.unit_profile.type)
+	result.score += unit_values(production_entry.unit_type)
+	result.score += context_bonus(building, production_entry.unit_type)
 	result.score += position_value(building)
 	result.score -= danger_penalty(building)
-	result.score -= cost_penalty(production_entry.unit_profile)
-	result.score -= repetition_penalty(production_entry.unit_profile.type)
+	result.score -= cost_penalty(production_entry)
+	result.score -= repetition_penalty(production_entry.unit_type)
 
 	return result
 
@@ -103,8 +103,8 @@ func danger_penalty(_building: Building) -> float:
 
 
 # Add a small penaly for expensive units
-func cost_penalty(unit_profile: UnitProfile) -> float:
-	return unit_profile.cost / 100.0
+func cost_penalty(production_entry: ProductionEntry) -> float:
+	return production_entry.cost() / 100.0
 
 
 func repetition_penalty(unit_type: UnitType.Values) -> float:

@@ -18,7 +18,7 @@ func clear_unit_data() -> void:
 
 
 func with_unit(unit: Unit) -> void:
-	unit_type_label.text = UnitType.get_name_from_type(unit.type())
+	unit_type_label.text = UnitType.get_name_from_type(unit.type)
 	unit_hp_label.text = "%s" %int(unit.actual_health)
 	update_unit_icon(unit)
 	unit_container.show()

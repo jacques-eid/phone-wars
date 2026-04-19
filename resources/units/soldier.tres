@@ -3,27 +3,13 @@
 [ext_resource type="Texture2D" uid="uid://2n7ysxwl4vma" path="res://assets/sprites/units/phone_wars_units.png" id="3_as5rl"]
 [ext_resource type="AudioStream" uid="uid://bl23krmaholmt" path="res://assets/sounds/units/digital_footstep_grass_1.wav" id="4_n7jjr"]
 [ext_resource type="Script" uid="uid://c5bqt1boq7g83" path="res://scripts/resources/units/unit_profile.gd" id="5_lf731"]
-[ext_resource type="PackedScene" uid="uid://bro6ulb3ikndb" path="res://scenes/vfx/fire/bullet.tscn" id="6_x725v"]
-[ext_resource type="Script" uid="uid://b06l06gkgnqmh" path="res://scripts/resources/weapons/machine_gun_weapon.gd" id="7_as5rl"]
-[ext_resource type="AudioStream" uid="uid://bg872o3p1h4pe" path="res://assets/sounds/machine_gun/sfx_wpn_machinegun_loop1.wav" id="7_d0qr5"]
-[ext_resource type="PackedScene" uid="uid://d2excsidfcm7x" path="res://scenes/vfx/hit/bullet_hit.tscn" id="7_lf731"]
-[ext_resource type="AudioStream" uid="uid://cdkp3ahrnsfs0" path="res://assets/sounds/machine_gun/sfx_damage_hit9.wav" id="9_n7jjr"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_nd3el"]
 atlas = ExtResource("3_as5rl")
 region = Rect2(16, 30, 28, 32)
 
-[sub_resource type="Resource" id="Resource_lf731"]
-script = ExtResource("7_as5rl")
-fire_scene = ExtResource("6_x725v")
-hit_scene = ExtResource("7_lf731")
-fire_sound = ExtResource("7_d0qr5")
-hit_sound = ExtResource("9_n7jjr")
-metadata/_custom_type_script = "uid://b06l06gkgnqmh"
-
 [resource]
 script = ExtResource("5_lf731")
 icon = SubResource("AtlasTexture_nd3el")
 move_sound = ExtResource("4_n7jjr")
-weapon = SubResource("Resource_lf731")
 metadata/_custom_type_script = "uid://c5bqt1boq7g83"

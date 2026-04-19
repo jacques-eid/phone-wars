@@ -2,7 +2,7 @@
 
 [ext_resource type="TileSet" uid="uid://45ako5jwxjpx" path="res://tilesets/game_tileset_tres.tres" id="1_scvqk"]
 [ext_resource type="PackedScene" uid="uid://bqeqp2n1diaug" path="res://scenes/grids/grid.tscn" id="2_0gqcb"]
-[ext_resource type="PackedScene" uid="uid://mu0vq50rfsva" path="res://scenes/units/soldier.tscn" id="3_h1w33"]
+[ext_resource type="PackedScene" uid="uid://mu0vq50rfsva" path="res://scenes/units/infantry.tscn" id="3_h1w33"]
 [ext_resource type="PackedScene" uid="uid://ci7d8ddulm6b5" path="res://scenes/teams/team.tscn" id="4_qaq26"]
 [ext_resource type="Script" uid="uid://cky8p0fqqxnii" path="res://scripts/managers/input_manager.gd" id="5_11flk"]
 [ext_resource type="Script" uid="uid://cyj1lsu0epdxb" path="res://scripts/managers/level_manager.gd" id="5_qaq26"]

@@ -6,9 +6,7 @@ signal build_clicked(entry: ProductionEntry)
 
 
 @onready var entry_scene: PackedScene = load("res://scenes/ui/buildings/production_entry_panel.tscn")
-
 @onready var cancel_button: Button = $PanelContainer/MarginContainer/CancelButton
-
 @onready var production_list: VBoxContainer = $PanelContainer/MarginContainer/MarginContainer/ProductionList
 
 

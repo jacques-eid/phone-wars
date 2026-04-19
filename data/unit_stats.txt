@@ -1,0 +1,5 @@
+Unit/Data,movement_points,capture_capacity,health,cost,min_range,max_range
+Infantry,3,10,10,100,1,1
+Recon,7,0,10,400,1,1
+Light tank,6,0,10,700,1,1
+Artillery,4,0,10,600,2,4

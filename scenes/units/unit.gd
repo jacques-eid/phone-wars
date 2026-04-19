@@ -4,9 +4,11 @@ extends Area2D
 signal unit_moved()
 signal unit_killed(unit: Unit)
 
+@export var type: UnitType.Values
 @export var speed: float = 100.0
-@export var unit_profile: UnitProfile = null
+@export var unit_profile: UnitProfile
 @export var team: Team
+@export var weapon: Weapon
 
 @onready var animated_sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
@@ -17,6 +19,8 @@ signal unit_killed(unit: Unit)
 @onready var death_scene: PackedScene = preload("res://scenes/vfx/explosion.tscn")
 @onready var death_sound: AudioStream = preload("res://assets/sounds/units/sfx_die3.wav")
 
+
+var unit_stats: UnitStats
 var cell: Vector2i = Vector2i.ZERO
 var reachable_cells: Array[Vector2i]
 var exhausted: bool = false
@@ -48,17 +52,21 @@ func _ready() -> void:
 	z_index = Ordering.UNITS
 
 
+func apply_config(stats: UnitStats) -> void:
+	unit_stats = stats
+
+
 func setup() -> void:
 	set_team(team)
 	gain_health(max_health())
 	reset_movement_points()
 	
-	if unit_profile.capture_capacity > 0:
+	if can_capture():
 		set_capture_component()
 	
 	init_state_machine()
 	
-	debug_name = DebugHelper.generate_unit_name(type(), team.team_id)
+	debug_name = DebugHelper.generate_unit_name(type, team.team_id)
 
 
 func init_state_machine() -> void:
@@ -171,11 +179,6 @@ func can_capture_building(building: Building) -> bool:
 	return can_capture()
 
 
-func capture_capacity() -> int:
-	var ratio: float = actual_health / max_health()
-	return round(ratio*unit_profile.capture_capacity)
-
-
 func start_capture(building: Building) -> void:
 	if capture_process != null:
 		return
@@ -201,7 +204,7 @@ func can_merge_with_unit(unit: Unit) -> bool:
 		return false
 
 	# not the same type
-	if unit.type() != type():
+	if unit.type != type:
 		return false
 
 	# both of them are max health
@@ -230,7 +233,7 @@ func die() -> void:
 
 func play_attack(fx_service: FXService) -> void:
 	animation_player.play("attack")
-	unit_profile.weapon._play_fire(self, weapon_muzzle.global_position, fx_service.play_world_fx)
+	weapon._play_fire(self, weapon_muzzle.global_position, fx_service.play_world_fx)
 
 	await animation_player.animation_finished
 
@@ -262,21 +265,26 @@ func play_death() -> void:
 
 	await explosion.finished
 
-# Unit profile getters
+
+func capture_capacity() -> int:
+	var ratio: float = actual_health / max_health()
+	return round(ratio*unit_stats.capture_capacity)
+
+
 func max_movement_points() -> int:
-	return unit_profile.movement_points
+	return unit_stats.movement_points
 
 
 func max_health() -> int:
-	return unit_profile.health
+	return unit_stats.health
 
 
 func cost() -> int:
-	return unit_profile.cost
+	return unit_stats.cost
 
 
 func can_capture() -> bool:
-	return unit_profile.capture_capacity > 0
+	return unit_stats.capture_capacity > 0
 
 
 func icon() -> Texture2D:
@@ -287,16 +295,12 @@ func move_sound() -> AudioStream:
 	return unit_profile.move_sound
 
 
-func type() -> UnitType.Values:
-	return unit_profile.type
-
-
 func min_attack_range() -> int:
-	return unit_profile.weapon.min_range
+	return unit_stats.min_range
 
 
 func max_attack_range() -> int:
-	return unit_profile.weapon.max_range
+	return unit_stats.max_range
 
 
 func can_attack_after_movement() -> bool:
@@ -304,8 +308,4 @@ func can_attack_after_movement() -> bool:
 
 
 func is_range() -> bool:
-	return unit_profile.weapon.max_range > 1
-
-
-func weapon() -> Weapon:
-	return unit_profile.weapon
+	return unit_stats.max_range > 1

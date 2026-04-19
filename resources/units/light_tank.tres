@@ -2,11 +2,6 @@
 
 [ext_resource type="Script" uid="uid://c5bqt1boq7g83" path="res://scripts/resources/units/unit_profile.gd" id="1_prx0d"]
 [ext_resource type="AudioStream" uid="uid://budpuvoond1pr" path="res://assets/sounds/units/vehicle_movement.wav" id="3_2nnox"]
-[ext_resource type="AudioStream" uid="uid://c5i6f65t1551c" path="res://assets/sounds/canons/sfx_wpn_cannon2.wav" id="6_bfofu"]
-[ext_resource type="Script" uid="uid://cvmuc2m44de5v" path="res://scripts/resources/weapons/canon.gd" id="6_fys5i"]
-[ext_resource type="PackedScene" uid="uid://b2aw0hvtvslvo" path="res://scenes/vfx/fire/light_tank_shell.tscn" id="6_nku5t"]
-[ext_resource type="PackedScene" uid="uid://cpxh5sn6y7ihe" path="res://scenes/vfx/hit/tank_hit.tscn" id="7_2nnox"]
-[ext_resource type="AudioStream" uid="uid://ltr7ohyg5gno" path="res://assets/sounds/canons/sfx_exp_short_hard6.wav" id="7_5fcdj"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_s4u0f"]
 load_path = "res://.godot/imported/phone_wars_units.png-174a511c6b23dc251dd678d3d591444d.ctex"
@@ -15,21 +10,8 @@ load_path = "res://.godot/imported/phone_wars_units.png-174a511c6b23dc251dd678d3
 atlas = SubResource("CompressedTexture2D_s4u0f")
 region = Rect2(21, 129, 30, 29)
 
-[sub_resource type="Resource" id="Resource_5fcdj"]
-script = ExtResource("6_fys5i")
-fire_scene = ExtResource("6_nku5t")
-hit_scene = ExtResource("7_2nnox")
-fire_sound = ExtResource("6_bfofu")
-hit_sound = ExtResource("7_5fcdj")
-metadata/_custom_type_script = "uid://cvmuc2m44de5v"
-
 [resource]
 script = ExtResource("1_prx0d")
 icon = SubResource("AtlasTexture_4hb17")
 move_sound = ExtResource("3_2nnox")
-type = 2
-movement_points = 6
-capture_capacity = 0
-cost = 700
-weapon = SubResource("Resource_5fcdj")
 metadata/_custom_type_script = "uid://c5bqt1boq7g83"

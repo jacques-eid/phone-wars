@@ -3,22 +3,17 @@ class_name MovementConfig
 
 
 class MovementStats:
-	var unit_type: UnitType.Values
-	var costs: Array[MovementCost]
+	var costs: Dictionary[TerrainType.Values, float]
 
 	func _to_string() -> String:
-		var s: String = "unit [%s]\n"%UnitType.get_name_from_type(unit_type)
-		for mc in costs:
-			s += "terrain [%s] - costs [%s]\n"%[TerrainType.get_name_from_type(mc.terrain_type), mc.cost]
+		var s: String = ""
+		for mc in costs.keys():
+			s += "\nterrain [%s] - costs [%s]"%[TerrainType.get_name_from_type(mc), costs[mc]]
 
 		return s
 
-class MovementCost:
-	var terrain_type: TerrainType.Values
-	var cost: float
 
-
-var movement_matrix: Array[MovementStats]
+var movement_matrix: Dictionary[UnitType.Values, MovementStats]
 
 
 func load_from_file(filename: String) -> void:
@@ -33,28 +28,26 @@ func load_from_file(filename: String) -> void:
 		# empty line
 		if parts[0] == '':
 			continue
-		movement_stats.unit_type = UnitType.get_type_from_name(parts[0])
+		
+		var unit_type: UnitType.Values = UnitType.get_type_from_name(parts[0])
 
 		for i in range(1, parts.size()):
-			var movement_cost: MovementCost = MovementCost.new()
-			movement_cost.terrain_type = TerrainType.get_type_from_name(headers[i])
-			movement_cost.cost = float(parts[i])
-			if movement_cost.cost == -1:
-				movement_cost.cost = INF
-			movement_stats.costs.append(movement_cost)
+			var terrain_type: TerrainType.Values = TerrainType.get_type_from_name(headers[i])
+			var cost: float = float(parts[i])
+			if cost == -1:
+				cost = INF
+			movement_stats.costs[terrain_type] = cost
 
-		movement_matrix.append(movement_stats)
-		print('movement stats: %s' % movement_stats)
+		movement_matrix[unit_type] = movement_stats
+		print('movement stats for unit [%s]: %s' % [UnitType.get_name_from_type(unit_type), movement_stats])
 
 
 func get_movement_cost(unit_type: UnitType.Values, terrain_type: TerrainType.Values) -> float:
-	var unit_idx: int = movement_matrix.find_custom(func(ms: MovementStats): return ms.unit_type == unit_type)
-	if unit_idx == -1:
+	if not movement_matrix.has(unit_type):
 		push_error("unit [%s] does not exist in movement matrix" % UnitType.get_name_from_type(unit_type))
 
-	var movement_stats: MovementStats = movement_matrix[unit_idx]
-	var terrain_idx: int = movement_stats.costs.find_custom(func(mc: MovementCost): return mc.terrain_type == terrain_type)
-	if terrain_idx == -1:
+	var movement_stats: MovementStats = movement_matrix[unit_type]
+	if not movement_stats.costs.has(terrain_type):
 		push_error("terrain [%s] does not exist in movement stats for unit [%s]" % [TerrainType.get_name_from_type(terrain_type), UnitType.get_name_from_type(unit_type)])
 
-	return movement_stats.costs[terrain_idx].cost 
+	return movement_stats.costs[terrain_type] 

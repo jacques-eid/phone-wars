@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://c7etiwd3ueeh7" path="res://scenes/units/unit.gd" id="1_0xeeg"]
 [ext_resource type="Resource" uid="uid://hveb37yyjbfa" path="res://resources/units/artillery.tres" id="2_psvg6"]
 [ext_resource type="Shader" uid="uid://blpj1ewfserni" path="res://resources/shaders/team_tint.gdshader" id="2_yldir"]
+[ext_resource type="Resource" uid="uid://duik6eod1aw11" path="res://resources/weapons/artillery_canon.tres" id="3_auu6c"]
 [ext_resource type="Texture2D" uid="uid://2n7ysxwl4vma" path="res://assets/sprites/units/phone_wars_units.png" id="3_psvg6"]
 [ext_resource type="PackedScene" uid="uid://cot0bb48uebej" path="res://scenes/component/hp_label_component.tscn" id="4_auu6c"]
 
@@ -161,7 +162,9 @@ _data = {
 
 [node name="Artillery" type="Area2D" unique_id=246820909]
 script = ExtResource("1_0xeeg")
+type = 4
 unit_profile = ExtResource("2_psvg6")
+weapon = ExtResource("3_auu6c")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=980002060]
 material = SubResource("ShaderMaterial_qyqps")

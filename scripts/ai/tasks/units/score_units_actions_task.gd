@@ -60,13 +60,13 @@ func score_attack(unit: Unit) -> AIActionResult:
 
 	if len(best_targets) != 0:
 		result.target_unit = select_best_unit_to_attack(best_targets)
-		result.score = 100 + unit.type()
+		result.score = 100 + unit.type
 		return result
 
 	var units: Array[Unit]
 	units.assign(secondary_targets.keys())
 	result.target_unit = select_best_unit_to_attack(units)
-	result.score = 50 + unit.type() + secondary_targets[result.target_unit] * 5
+	result.score = 50 + unit.type + secondary_targets[result.target_unit] * 5
 	return result
 
 
@@ -77,7 +77,7 @@ func select_best_unit_to_attack(targets: Array[Unit]) -> Unit:
 	var best_target: Unit
 	var best_score: int = int(-INF)
 	for target: Unit in targets:
-		var score: int = target.type()
+		var score: int = target.type
 
 		# Prevent capture of buildings
 		if target.capture_process != null and target.capture_process.can_finish_next_turn(target):

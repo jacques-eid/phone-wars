@@ -7,10 +7,6 @@ extends Resource
 @export var hit_sound: AudioStream
 
 
-@export var min_range: int = 1
-@export var max_range: int = 1
-
-
 func _play_fire(_attacker: Node2D, _spawn_pos: Vector2, _play_fx_func: Callable) -> void:
 	pass
 

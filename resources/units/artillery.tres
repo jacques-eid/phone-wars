@@ -3,31 +3,13 @@
 [ext_resource type="Texture2D" uid="uid://2n7ysxwl4vma" path="res://assets/sprites/units/phone_wars_units.png" id="1_popoq"]
 [ext_resource type="Script" uid="uid://c5bqt1boq7g83" path="res://scripts/resources/units/unit_profile.gd" id="1_v1own"]
 [ext_resource type="AudioStream" uid="uid://budpuvoond1pr" path="res://assets/sounds/units/vehicle_movement.wav" id="4_lk4qu"]
-[ext_resource type="Script" uid="uid://cvmuc2m44de5v" path="res://scripts/resources/weapons/canon.gd" id="5_8w3g1"]
-[ext_resource type="PackedScene" uid="uid://f7hpnte1ike0" path="res://scenes/vfx/fire/artillery_shell.tscn" id="5_jvtwx"]
-[ext_resource type="AudioStream" uid="uid://c5i6f65t1551c" path="res://assets/sounds/canons/sfx_wpn_cannon2.wav" id="7_nwbrd"]
-[ext_resource type="PackedScene" uid="uid://beq2l8e6oxb7t" path="res://scenes/vfx/hit/artillery_hit.tscn" id="8_lk4qu"]
-[ext_resource type="AudioStream" uid="uid://ltr7ohyg5gno" path="res://assets/sounds/canons/sfx_exp_short_hard6.wav" id="9_c66p6"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pm6xt"]
 atlas = ExtResource("1_popoq")
 region = Rect2(20, 78, 32, 32)
 
-[sub_resource type="Resource" id="Resource_jvtwx"]
-script = ExtResource("5_8w3g1")
-fire_scene = ExtResource("5_jvtwx")
-hit_scene = ExtResource("8_lk4qu")
-fire_sound = ExtResource("7_nwbrd")
-hit_sound = ExtResource("9_c66p6")
-metadata/_custom_type_script = "uid://cvmuc2m44de5v"
-
 [resource]
 script = ExtResource("1_v1own")
 icon = SubResource("AtlasTexture_pm6xt")
 move_sound = ExtResource("4_lk4qu")
-type = 3
-movement_points = 4
-capture_capacity = 0
-cost = 600
-weapon = SubResource("Resource_jvtwx")
 metadata/_custom_type_script = "uid://c5bqt1boq7g83"

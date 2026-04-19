@@ -38,7 +38,7 @@ func play_attack_animation(attacker: Unit) -> void:
 
 	
 func play_defender_reaction(attacker: Unit, defender: Unit) -> void:
-	var weapon: Weapon = attacker.weapon()
+	var weapon: Weapon = attacker.weapon
 	weapon._play_impact(attacker.facing, defender, fx_service.play_world_fx)
 	await defender.play_hit_reaction()
 

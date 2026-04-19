@@ -3,6 +3,8 @@ extends Node
 
 var grid: Grid
 var units: Dictionary = {} # Vector2i -> Unit
+var units_factory: UnitFactory = UnitFactory.new()
+
 
 func setup(p_grid: Grid) -> void:
 	grid = p_grid
@@ -13,6 +15,7 @@ func init_units() -> void:
 	for unit in get_children():
 		if unit is Unit:
 			var cell_pos: Vector2i = Vector2i(floor(unit.position / Vector2(Const.CELL_SIZE)))
+			unit.apply_config(GameConfig.get_unit_stats(unit.type))
 			init_unit(unit, cell_pos)
 
 
@@ -35,7 +38,7 @@ func remove_unit(unit: Unit) -> void:
 
 
 func add_unit(entry: ProductionEntry, cell_pos: Vector2i, team: Team) -> void:
-	var unit: Unit = entry.unit_scene.instantiate() as Unit
+	var unit: Unit = units_factory.spawn(entry.unit_type)
 	add_child(unit)
 	unit.set_team(team)
 	init_unit(unit, cell_pos)

@@ -13,7 +13,7 @@ signal build_button_clicked(entry: ProductionEntry)
 
 
 func load_from_entry(entry: ProductionEntry, controller: TeamController) -> void:
-	unit_name.text = UnitType.get_name_from_type(entry.unit_profile.type)
+	unit_name.text = UnitType.get_name_from_type(entry.unit_type)
 	unit_cost.text = "%s"%entry.cost()
 	unit_icon.texture = entry.unit_profile.icon.duplicate()
 	controller.team.replace_unit_colors(unit_icon.material)
