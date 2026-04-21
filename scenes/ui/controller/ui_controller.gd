@@ -15,7 +15,8 @@ signal clear_attackable()
 
 signal game_paused()
 signal game_resumed()
-
+signal save_game()
+signal load_game()
 signal exit_level()
 
 
@@ -38,6 +39,7 @@ const RESET_SIGNAL = "reset_signal"
 @onready var game_hud: GameHUD = $GameHUD
 @onready var settings_hud: SettingsHUD = $SettingsHud
 @onready var team_display: TeamDisplay = $TeamDisplay
+@onready var toast: Toast = $Toast
 @onready var production_panel: ProductionPanel = $ProductionPanel
 
 @onready var start_turn_animation: StartTurnAnimation = $Animations/StartTurnAnimation
@@ -99,6 +101,8 @@ func setup(p_level_manager: LevelManager) -> void:
 
 
 	settings_hud.resume_button_clicked.connect(_on_resume_clicked)
+	settings_hud.save_button_clicked.connect(func(): save_game.emit())
+	settings_hud.load_button_clicked.connect(func(): load_game.emit())
 	settings_hud.exit_button_clicked.connect(func(): exit_level.emit())
 
 	production_panel.cancel_button_clicked.connect(_on_cancel_clicked)
@@ -172,17 +176,20 @@ func _on_build_clicked(entry: ProductionEntry) -> void:
 
 
 func _on_settings_clicked() -> void:
-	game_hud.game_hud.hide_game_hud()
+	game_hud.hide_game_hud()
 	team_display.animate_out()
 	settings_hud.show()
 	game_paused.emit()
 
 
-func _on_resume_clicked() -> void:
+func _on_resume_clicked(toast_message: String) -> void:
 	settings_hud.hide()
 	team_display.animate_in()
 	game_hud.show_game_hud()
 	game_resumed.emit()
+
+	if toast_message != "":
+		toast.show_toast(toast_message)
 
 
 func _on_idle_clicked() -> void:
@@ -318,8 +325,8 @@ func switch_to_previous_state() -> void:
 	state_machine.change_active_state(state_machine.get_previous_active_state())
 
 
-func show_start_turn_intro(team: Team, new_funds: int) -> void:
-	await start_turn_orchestrator.execute(team, new_funds)
+func show_start_turn_intro(team: Team, new_funds: int, from_load: bool) -> void:
+	await start_turn_orchestrator.execute(team, new_funds, from_load)
 	
 
 func show_attack_indicator() -> void:

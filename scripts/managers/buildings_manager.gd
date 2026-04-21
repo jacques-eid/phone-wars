@@ -2,7 +2,7 @@ class_name BuildingsManager
 extends Node
 
 var grid: Grid
-var buildings: Dictionary = {} # Vector2i -> Unit
+var buildings: Dictionary[Vector2i, Building] = {}
 
 func setup() -> void:
 	init_buildings()

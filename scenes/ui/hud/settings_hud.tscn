@@ -25,12 +25,22 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme_override_constants/separation = 42
+theme_override_constants/separation = 20
 
 [node name="ResumeButton" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1421305253]
 layout_mode = 2
 theme_type_variation = &"MainMenuButton"
 text = "Resume"
+
+[node name="SaveButton" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1256854565]
+layout_mode = 2
+theme_type_variation = &"MainMenuButton"
+text = "Save"
+
+[node name="LoadButton" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1389103180]
+layout_mode = 2
+theme_type_variation = &"MainMenuButton"
+text = "Load"
 
 [node name="ExitButton" type="Button" parent="PanelContainer/VBoxContainer" unique_id=1412731729]
 layout_mode = 2

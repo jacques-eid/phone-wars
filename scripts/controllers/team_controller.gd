@@ -95,7 +95,7 @@ func choose_best_attack_position(cell: Vector2i) -> Vector2i:
 
 
 func capture_building() -> void:
-	var unit_pos: Vector2i = selected_unit.cell
+	var unit_pos: Vector2i = selected_unit.transient_cell
 	var building: Building = buildings_manager.get_building_at(unit_pos)
 	if building == null:
 		return
@@ -115,10 +115,11 @@ func capture_building() -> void:
 
 
 func merge_units() -> void:
-	var unit_pos: Vector2i = selected_unit.cell
+	var unit_pos: Vector2i = selected_unit.transient_cell
 	var merged_unit: Unit = units_manager.get_unit_at(unit_pos)
 
 	if merged_unit == null:
+		push_error("no unit found at position [%s]"%unit_pos)
 		return
 
 	var money_gain: int = units_manager.merge_units(selected_unit, merged_unit)
@@ -137,7 +138,7 @@ func perform_combat() -> void:
 	var attacker: Unit = selected_unit
 	var defender: Unit = target_unit
 	var defender_terrain_defense: float = get_terrain_defense(defender.cell)
-	var attacker_terrain_defense: float = get_terrain_defense(attacker.cell)
+	var attacker_terrain_defense: float = get_terrain_defense(attacker.transient_cell)
 	var result = CombatManager.resolve_combat(
 		attacker, 
 		defender, 
@@ -176,7 +177,7 @@ func buy_unit(entry: ProductionEntry) -> void:
 		
 	var cell: Vector2i = selected_building.cell
 	team.funds -= entry.cost()
-	units_manager.add_unit(entry, cell, team)
+	units_manager.add_unit(entry.unit_type, cell, team)
 
 	gameplay_event.emit(GameplayEvent.Values.FUNDS_SPENT, team)
 	await animation_finished

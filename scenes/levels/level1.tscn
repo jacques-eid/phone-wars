@@ -73,11 +73,13 @@ face_direction = 1
 funds = 0
 
 [node name="BlueTeam" parent="Teams" unique_id=704522067 instance=ExtResource("12_p5q6g")]
+id = 2
 team_profile = ExtResource("20_3e3xw")
 team_type = 1
 funds = 0
 
 [node name="NeutralTeam" parent="Teams" unique_id=103368924 instance=ExtResource("12_p5q6g")]
+id = 3
 team_profile = ExtResource("22_5ol6i")
 funds = 0
 

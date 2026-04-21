@@ -14,7 +14,7 @@ func execute(result: CaptureResult) -> void:
 	await play_attack_animation()
 	play_building_reaction()
 	await play_capture_animation(result)
-	await capture_dialog.animate_out()
+	capture_dialog.animate_out()
 	clear_dialog()
 
 

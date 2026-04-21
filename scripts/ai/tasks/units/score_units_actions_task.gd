@@ -41,10 +41,11 @@ func score_attack(unit: Unit) -> AIActionResult:
 		return result
 
 	var best_targets: Array[Unit]
-	var secondary_targets: Dictionary # Unit - damage diff
+	var secondary_targets: Dictionary[Unit, float] # Unit - damage diff
 
 	for target: Unit in targets:
 		var defender_terrain_defense: float = ai_controller.get_terrain_defense(target.cell)
+		# TODO: To be fixed because we don't use the proper attack cell
 		var attacker_terrain_defense: float = ai_controller.get_terrain_defense(unit.cell)
 		var combat_result: CombatResult = CombatManager.resolve_combat(
 			unit,

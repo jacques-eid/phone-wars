@@ -2,7 +2,7 @@ class_name UnitsManager
 extends Node
 
 var grid: Grid
-var units: Dictionary = {} # Vector2i -> Unit
+var units: Dictionary[Vector2i, Unit] = {}
 var units_factory: UnitFactory = UnitFactory.new()
 
 
@@ -27,6 +27,13 @@ func init_unit(unit: Unit, cell_pos: Vector2i) -> void:
 	unit.setup()
 
 
+func clear_units() -> void:
+	for unit: Unit in units.values():
+		unit.queue_free()
+
+	units.clear()
+
+
 func _on_unit_killed(unit: Unit) -> void:
 	remove_unit(unit)
 	
@@ -37,12 +44,14 @@ func remove_unit(unit: Unit) -> void:
 	unit.queue_free()
 
 
-func add_unit(entry: ProductionEntry, cell_pos: Vector2i, team: Team) -> void:
-	var unit: Unit = units_factory.spawn(entry.unit_type)
+func add_unit(unit_type: UnitType.Values, cell_pos: Vector2i, team: Team) -> Unit:
+	var unit: Unit = units_factory.spawn(unit_type)
 	add_child(unit)
 	unit.set_team(team)
 	init_unit(unit, cell_pos)
 	unit.exhaust()
+
+	return unit
 
 
 func get_units_with_filter(callable: Callable) -> Array[Unit]:
@@ -82,6 +91,14 @@ func get_unit_at(cell_position: Vector2i) -> Unit:
 	return units.get(cell_position, null) as Unit
 
 
+func get_unit_from_transient(cell_positon: Vector2i) -> Unit:
+	var idx: int = units.values().find_custom(func(u: Unit): return u.transient_cell == cell_positon) 
+	if idx == -1:
+		return null
+		
+	return units.values()[idx]
+
+
 func get_units_positions(p_units: Array[Unit]) -> Array[Vector2i]:
 	var cells: Array[Vector2i] = []
 
@@ -89,10 +106,6 @@ func get_units_positions(p_units: Array[Unit]) -> Array[Vector2i]:
 		cells.append(unit.cell)
 
 	return cells
-
-
-func has_unit(unit: Unit) -> bool:
-	return units.get(unit.cell, null) != null
 
 
 func compute_unit_path(unit: Unit, target_cell: Vector2i) -> Pathfinding.Path:
@@ -103,6 +116,7 @@ func compute_unit_path(unit: Unit, target_cell: Vector2i) -> Pathfinding.Path:
 func move_unit(unit: Unit, start_cell: Vector2i, target_cell: Vector2i) -> void:
 	units.erase(start_cell)
 	units[target_cell] = unit
+	unit.cell = target_cell
 
 
 func reset_units(team: Team) -> void:
@@ -165,8 +179,8 @@ func filter_attackable_units(unit_context: UnitContext, cells: Array[Vector2i]) 
 	var filtered_units: Array[Unit] = []
 	
 	for unit: Unit in units.values():
-		if (unit.cell in cells and 
-			unit.cell != unit_context.grid_pos and
+		if (unit.transient_cell in cells and 
+			unit.transient_cell != unit_context.grid_pos and
 			not unit_context.team.is_same_team(unit.team)):
 				filtered_units.append(unit)
 
@@ -178,7 +192,7 @@ func can_attack_cell_without_moving(unit_context: UnitContext, cell: Vector2i) -
 	var targets: Array[Unit] = get_units_in_direct_attack_range(unit_context)
 
 	for unit in targets:
-		if unit.cell == cell:
+		if unit.transient_cell == cell:
 			return true
 
 	return false
@@ -250,7 +264,7 @@ func get_attack_positions_after_movement(unit: Unit, target_cell: Vector2i) -> A
 
 	for cell: Vector2i in reachable_cells:
 		# Filter out cells that could be reachable due to merging conditions
-		if cell in units.keys() and cell != unit.cell:
+		if cell in units.keys() and cell != unit.transient_cell:
 			continue
 
 		unit_context.grid_pos = cell

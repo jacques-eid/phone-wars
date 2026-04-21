@@ -41,7 +41,7 @@ func selection_attempt(cell: Vector2i) -> SelectionResult.Values:
 
 func selected_cell_pos() -> Vector2i:
 	if selected_unit != null:
-		return selected_unit.cell
+		return selected_unit.transient_cell
 
 	if selected_building != null:
 		return selected_building.cell
@@ -72,7 +72,7 @@ func handle_cell_tap(cell: Vector2i) -> CellTapResult.Values:
 
 
 func handle_long_press(cell: Vector2i) -> LongPressResult:
-	var unit: Unit = units_manager.get_unit_at(cell)
+	var unit: Unit = units_manager.get_unit_from_transient(cell)
 	var building: Building = buildings_manager.get_building_at(cell)
 
 	var lpr: LongPressResult = LongPressResult.new()
@@ -121,7 +121,7 @@ func capture_available() -> bool:
 	if selected_unit == null:
 		return false
 
-	var unit_pos: Vector2i = selected_unit.cell
+	var unit_pos: Vector2i = selected_unit.transient_cell
 	var building: Building = buildings_manager.get_building_at(unit_pos)
 	if building == null:
 		return false
@@ -134,7 +134,7 @@ func merge_available() -> bool:
 	if selected_unit == null:
 		return false
 	
-	var unit_pos: Vector2i = selected_unit.cell
+	var unit_pos: Vector2i = selected_unit.transient_cell
 	var unit: Unit = units_manager.get_unit_at(unit_pos)
 	if unit == null or unit == selected_unit:
 		return false
@@ -160,7 +160,7 @@ func estimate_damage() -> EstimatedDamageResult:
 	edr.defender = target_unit
 
 	var defender_terrain_defense: float = get_terrain_defense(target_unit.cell)
-	var attacker_terrain_defense: float = get_terrain_defense(selected_unit.cell)
+	var attacker_terrain_defense: float = get_terrain_defense(selected_unit.transient_cell)
 	var result: CombatResult = CombatManager.resolve_combat(
 		selected_unit, 
 		target_unit, 
@@ -195,6 +195,6 @@ func _confirm_movement() -> void:
 		return
 
 	var first_move_unit_command: MoveUnitCommand = move_unit_commands.pop_front()
-	units_manager.move_unit(selected_unit, first_move_unit_command.start_cell, selected_unit.cell)
+	units_manager.move_unit(selected_unit, first_move_unit_command.start_cell, selected_unit.transient_cell)
 
 	move_unit_commands.clear()

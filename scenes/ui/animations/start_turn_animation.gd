@@ -13,7 +13,10 @@ func _ready() -> void:
 	reset_banner_position()
 
 
-func play(team: Team) -> void:
+func play(team: Team, from_load: bool) -> void:
+	if from_load:
+		title_label.text = "Resume Turn:"
+	
 	set_team_label(team)
 	team.replace_ui_colors(banner.material)
 	await get_tree().process_frame
@@ -25,6 +28,7 @@ func play(team: Team) -> void:
 	await animate_banner_out()
 
 	reset_banner_position()
+	title_label.text = "New Turn:"
 
 
 func set_team_label(team: Team) -> void:

@@ -7,7 +7,7 @@ func _setup() -> void:
 	unit = agent
 
 
-func _enter(_params: Dictionary = {}) -> void:
+func _enter() -> void:
 	unit.idling()
 
 

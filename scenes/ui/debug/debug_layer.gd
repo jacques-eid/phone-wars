@@ -30,7 +30,7 @@ func update_unit_info(unit: Unit) -> void:
 		unit_label.text = ""
 		return 
 
-	unit_label.text = "%s\nHP: %d - Move: %d - Team: %d" % [unit.debug_name, unit.actual_health, unit.movement_points, unit.team.team_id]
+	unit_label.text = "%s\nHP: %d - Move: %d - Team: %d" % [unit.debug_name, unit.actual_health, unit.movement_points, unit.team.id]
 
 
 func refresh_ai_logs() -> void:

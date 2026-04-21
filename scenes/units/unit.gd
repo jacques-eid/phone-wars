@@ -22,6 +22,7 @@ signal unit_killed(unit: Unit)
 
 var unit_stats: UnitStats
 var cell: Vector2i = Vector2i.ZERO
+var transient_cell: Vector2i = Vector2i.ZERO
 var reachable_cells: Array[Vector2i]
 var exhausted: bool = false
 var capture_process: CaptureProcess
@@ -66,7 +67,8 @@ func setup() -> void:
 	
 	init_state_machine()
 	
-	debug_name = DebugHelper.generate_unit_name(type, team.team_id)
+	debug_name = DebugHelper.generate_unit_name(type, team.id)
+	transient_cell = cell
 
 
 func init_state_machine() -> void:
@@ -134,9 +136,9 @@ func idling() -> void:
 
 
 func face_towards(cell_pos: Vector2i) -> void:
-	if cell_pos.x < cell.x:
+	if cell_pos.x < transient_cell.x:
 		facing = FaceDirection.Values.LEFT
-	elif cell_pos.x > cell.x:
+	elif cell_pos.x > transient_cell.x:
 		facing = FaceDirection.Values.RIGHT
 
 	animated_sprite.flip_h = facing == FaceDirection.Values.RIGHT
@@ -170,7 +172,7 @@ func is_low_health() -> bool:
 
 
 func can_capture_building(building: Building) -> bool:
-	if building.cell != cell:
+	if building.cell != transient_cell:
 		return false
 
 	if team.is_same_team(building.team):

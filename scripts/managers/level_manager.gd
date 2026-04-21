@@ -37,9 +37,18 @@ func _ready() -> void:
 
 	ui_controller.game_paused.connect(_on_game_paused)
 	ui_controller.game_resumed.connect(_on_game_resumed)
+	ui_controller.save_game.connect(_on_save_game)
+	ui_controller.load_game.connect(_on_load_game)
 	ui_controller.exit_level.connect(_on_exit_level)
 
 	call_deferred("connect_buildings")
+
+	var from_load: bool = false
+	if SaveManager.pending_data:
+		SaveManager.load_from_save(self)
+		from_load = true
+
+	start_turn(from_load)
 
 
 func init_teams() -> void:
@@ -54,18 +63,21 @@ func init_teams() -> void:
 				team.controller.focus_on.connect(_on_focus_on)
 
 	active_team = teams[0]
-	start_turn()
 	
 
-func start_turn() -> void:
+func start_turn(from_load: bool = false) -> void:
 	ui_controller.switch_team(active_team)
 	var new_income: int = economy_service.calculate_income(buildings_manager, active_team)
 
 	ui_controller.lock()
 	input_manager.lock()
-	await ui_controller.show_start_turn_intro(active_team, active_team.funds+new_income)
+	var new_funds: int = active_team.funds
+	if not from_load:
+		new_funds += new_income
+	await ui_controller.show_start_turn_intro(active_team, new_funds, from_load)
 	
-	economy_service.add_money(active_team, new_income)
+	if not from_load:
+		economy_service.add_money(active_team, new_income)
 	
 	await active_team.controller._play_turn()
 
@@ -93,6 +105,14 @@ func _on_game_paused() -> void:
 
 func _on_game_resumed() -> void:
 	input_manager.unlock()
+
+
+func _on_save_game() -> void:
+	SaveManager.save_game(self)
+
+
+func _on_load_game() -> void:
+	get_tree().change_scene_to_file(SaveManager.load_game())
 
 
 func next_team(current_team: Team) -> Team:

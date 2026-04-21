@@ -46,6 +46,11 @@ layout_mode = 2
 theme_type_variation = &"MainMenuButton"
 text = "Play"
 
+[node name="LoadButton" type="Button" parent="VBoxContainer" unique_id=1159632508]
+layout_mode = 2
+theme_type_variation = &"MainMenuButton"
+text = "Load"
+
 [node name="CreditsButton" type="Button" parent="VBoxContainer" unique_id=1887158772]
 layout_mode = 2
 theme_type_variation = &"MainMenuButton"

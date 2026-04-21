@@ -7,7 +7,7 @@ enum Type {
 	NEUTRAL,
 }
 
-@export var team_id: int = 1
+@export var id: int = 1
 @export var team_profile: TeamProfile
 @export var team_type: Type = Type.NEUTRAL
 @export var face_direction: FaceDirection.Values = FaceDirection.Values.LEFT

@@ -10,11 +10,7 @@ func _enter() -> void:
 
 func _run_async() -> void:
 	var top_result: AIActionResult = blackboard.get_var("top_result")
-
 	ai_controller.select_unit(top_result.unit)
-	
-
-	print('executing: ', top_result.type)
 
 	match top_result.type:
 		AIActionType.Values.ATTACK:

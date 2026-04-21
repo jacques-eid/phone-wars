@@ -50,7 +50,7 @@ func show_damage_popup(defender: Unit, damage: float) -> void:
 
 func units_face_each_other(attacker: Unit, defender: Unit) -> void:
 	attacker.face_towards(defender.cell)
-	defender.face_towards(attacker.cell)
+	defender.face_towards(attacker.transient_cell)
 
 
 

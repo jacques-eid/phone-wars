@@ -2,7 +2,7 @@ extends Node
 
 @export var sfx_bus: String = "SFX"
 
-var player_instances: Dictionary = {} # player unique id -> player
+var player_instances: Dictionary[int, AudioStreamPlayer2D] = {}
 
 func play_sfx(stream: AudioStream, world_pos: Vector2):
 	if not stream:

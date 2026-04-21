@@ -76,10 +76,12 @@ team_type = 0
 face_direction = 1
 
 [node name="BlueTeam" parent="Teams" unique_id=704522067 instance=ExtResource("12_n3opb")]
+id = 2
 team_profile = ExtResource("19_k53m2")
 team_type = 0
 
 [node name="NeutralTeam" parent="Teams" unique_id=103368924 instance=ExtResource("12_n3opb")]
+id = 3
 team_profile = ExtResource("20_n3opb")
 
 [node name="Managers" type="Node" parent="." unique_id=1967347818]

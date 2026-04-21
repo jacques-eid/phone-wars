@@ -11,10 +11,10 @@ func _init(sta: StartTurnAnimation, td: TeamDisplay) -> void:
 	team_display = td
 
 
-func execute(team: Team, new_funds: int) -> void:
+func execute(team: Team, new_funds: int, from_load: bool) -> void:
 	team_display.animate_out()
 	
-	await start_turn_animation.play(team)
+	await start_turn_animation.play(team, from_load)
 
 	team_display.set_new_team(team)
 	await team_display.animate_in()
