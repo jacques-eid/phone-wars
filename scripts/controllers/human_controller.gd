@@ -71,6 +71,28 @@ func handle_cell_tap(cell: Vector2i) -> CellTapResult.Values:
 	return CellTapResult.Values.ENTER_ATTACK_MODE
 
 
+func handle_double_tap(cell: Vector2i) -> CellDoubleTapResult.Values:
+	if can_move_to_cell(cell) or selected_unit.cell == cell:
+		if can_move_to_cell(cell):
+			move_unit_commands.append(await move_unit_to_cell(cell))
+
+		if merge_available():
+			return CellDoubleTapResult.Values.MERGE
+
+		if capture_available():
+			return CellDoubleTapResult.Values.CAPTURE
+
+		return CellDoubleTapResult.Values.NONE
+	
+
+	if not can_attack_without_moving(cell):
+		var best_cell: Vector2i = choose_best_attack_position(cell)
+		move_unit_commands.append(await move_unit_to_cell(best_cell))
+
+	set_target_unit(cell)
+	return CellDoubleTapResult.Values.ATTACK
+
+
 func handle_long_press(cell: Vector2i) -> LongPressResult:
 	var unit: Unit = units_manager.get_unit_from_transient(cell)
 	var building: Building = buildings_manager.get_building_at(cell)

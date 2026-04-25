@@ -9,6 +9,7 @@ func _setup() -> void:
 	ui_controller = agent
 
 	add_event_handler(ui_controller.CELL_TAP, _on_cell_tap)
+	add_event_handler(ui_controller.CELL_DOUBLE_TAP, _on_cell_double_tap)
 	add_event_handler(ui_controller.LONG_PRESS, _on_long_press)
 	add_event_handler(ui_controller.LONG_PRESS_RELEASE, _on_long_press_release)
 	add_event_handler(ui_controller.CANCEL_CLICKED, _on_cancel_clicked)
@@ -40,6 +41,20 @@ func _on_cell_tap(cargo: Variant) -> bool:
 
 	var cell: Vector2i = cargo as Vector2i
 	ui_controller.handle_cell_tap_async(cell)
+	return true
+
+
+func _on_cell_double_tap(cargo: Variant) -> bool:
+	if not cargo is Vector2i:
+		return true
+
+
+	ui_controller.action_running_state.clear_selections = true
+	ui_controller.state_machine.dispatch(ui_controller.ACTION_RUNNING_SIGNAL)
+
+	var cell: Vector2i = cargo as Vector2i
+	ui_controller.handle_cell_double_tap_async(cell)
+
 	return true
 
 

@@ -2,6 +2,7 @@ class_name Grid
 extends Node2D
 
 signal cell_short_tap(cell_position: Vector2i)
+signal cell_double_tap(cell_position: Vector2i)
 signal cell_long_press(cell_position: Vector2i)
 signal cell_long_press_release(cell_position: Vector2i)
 
@@ -17,6 +18,7 @@ func setup(input_manager: InputManager, p_units_manager: UnitsManager, p_terrain
 
 	# subscribe to input events
 	input_manager.short_tap.connect(_on_short_tap)
+	input_manager.double_tap.connect(_on_double_tap)
 	input_manager.long_press.connect(_on_long_press)
 	input_manager.long_press_release.connect(_on_long_press_release)
 
@@ -24,6 +26,11 @@ func setup(input_manager: InputManager, p_units_manager: UnitsManager, p_terrain
 func _on_short_tap(world_pos: Vector2) -> void:
 	var cell_pos: Vector2i = terrain_manager.world_to_cell(world_pos)
 	cell_short_tap.emit(cell_pos)
+
+
+func _on_double_tap(world_pos: Vector2) -> void:
+	var cell_pos: Vector2i = terrain_manager.world_to_cell(world_pos)
+	cell_double_tap.emit(cell_pos)
 
 
 func _on_long_press(world_pos: Vector2) -> void:

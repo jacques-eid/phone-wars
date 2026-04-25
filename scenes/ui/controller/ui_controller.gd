@@ -24,6 +24,7 @@ const ATTACK_CLICKED = "attack_clicked"
 const BUILD_CLICKED = "build_clicked"
 const CANCEL_CLICKED = "cancel_clicked"
 const CELL_TAP = "cell_tap"
+const CELL_DOUBLE_TAP = "cell_double_tap"
 const LONG_PRESS = "long_press"
 const LONG_PRESS_RELEASE = "long_press_release"
 
@@ -87,6 +88,7 @@ func setup(p_level_manager: LevelManager) -> void:
 	start_turn_orchestrator = StartTurnOrchestrator.new(start_turn_animation, team_display,)
 
 	grid.cell_short_tap.connect(_on_cell_tap)
+	grid.cell_double_tap.connect(_on_cell_double_tap)
 	grid.cell_long_press.connect(_on_long_press)
 	grid.cell_long_press_release.connect(_on_long_press_release)
 
@@ -147,6 +149,13 @@ func _on_cell_tap(cell: Vector2i) -> void:
 	state_machine.dispatch(CELL_TAP, cell)
 
 
+func _on_cell_double_tap(cell: Vector2i) -> void:
+	if not can_interact():
+		return
+
+	state_machine.dispatch(CELL_DOUBLE_TAP, cell)
+
+
 func _on_long_press(cell: Vector2i) -> void:
 	if not can_interact():
 		return
@@ -204,9 +213,11 @@ func _on_capture_clicked() -> void:
 	if not can_interact():
 		return
 
+	lock()
 	action_running_state.clear_selections = true
 	state_machine.dispatch(ACTION_RUNNING_SIGNAL)
 	await active_controller.capture_building()
+	unlock()
 	state_machine.dispatch(RESET_SIGNAL)
 
 
@@ -378,7 +389,13 @@ func handle_long_press(cell: Vector2i) -> void:
 
 
 func handle_cell_tap_async(cell: Vector2i) -> void:
-	var result: CellTapResult.Values = await active_controller.handle_cell_tap(cell)
+	if not active_controller is HumanController:
+		return
+		 
+	var human_controller: HumanController = active_controller as HumanController
+	lock()
+	var result: CellTapResult.Values = await human_controller.handle_cell_tap(cell)
+	unlock()
 	match result:
 		CellTapResult.Values.ENTER_ATTACK_MODE:
 			state_machine.dispatch(ATTACK_SIGNAL)
@@ -388,8 +405,33 @@ func handle_cell_tap_async(cell: Vector2i) -> void:
 			switch_to_previous_state()
 
 
+
+func handle_cell_double_tap_async(cell: Vector2i) -> void:
+	if not active_controller is HumanController:
+		return
+		 
+	var human_controller: HumanController = active_controller as HumanController
+	lock()
+	var result: CellDoubleTapResult.Values = await human_controller.handle_double_tap(cell)
+	unlock()
+
+	match result:
+		CellDoubleTapResult.Values.NONE:
+			_on_idle_clicked()
+		CellDoubleTapResult.Values.CAPTURE:
+			await _on_capture_clicked()
+		CellDoubleTapResult.Values.ATTACK:
+			await handle_attack_async()
+		CellDoubleTapResult.Values.MERGE:
+			state_machine.dispatch(RESET_SIGNAL)
+			await get_tree().process_frame
+			await _on_merge_clicked()
+
+
 func handle_attack_async() -> void:
+	lock()
 	await active_controller.perform_combat()
+	unlock()
 	state_machine.dispatch(RESET_SIGNAL)
 
 
